@@ -7,6 +7,7 @@
 #define MAX_PIN_LEN 11 //có thể thay đổi nếu cần thiết (dư 1 kí \0)
 #define MAX_DAILY_TRANSACTION 10 //tùy vào ý của thầy cô
 #define MAX_TRASACTION_LEN 51 // giới hạn độ dài tin nhắn mỗi giao dịch (dư 1 kí \0)
+#define INFORM_LEN 101
 
 
 
@@ -16,7 +17,7 @@ typedef struct Account
     char Pin[MAX_PIN_LEN];
     unsigned long long Balance;
     int TransactionCount;
-    char TransactionHistory[MAX_TRASACTION_LEN];
+    char TransactionHistory[MAX_TRASACTION_LEN][INFORM_LEN];
 } *Account;
 
 
@@ -27,8 +28,21 @@ typedef struct TreeNode
     struct TreeNode *right;
 } *node;
 
+//Hàm xóa bộ nhớ đệm khi người dùng nhập dư kí tự
+int clear_buffer()
+{
+    //c là int vì EOF là -1
+    int c;
+    int temp = 0;
 
+    while (c = getchar() != '\n' && c != EOF )
+    {
+        temp = 1;
+    }
+    return temp;
+}
 
+//Hàm thêm chỉ số vào Account
 Account append_account(char *AN, char *PI, unsigned long long BL)
 {
     Account temp = (Account)malloc(sizeof(struct Account));
@@ -41,6 +55,7 @@ Account append_account(char *AN, char *PI, unsigned long long BL)
     return temp;
 }
 
+//Hàm thêm nhánh vào Tree
 node CreateNode (Account d)
 {
     // hàm malloc để cấp phát bộ nhớ heap, (node) để ép kểu, sizeof(struct TreeNode) kích thước xin cấp
@@ -51,6 +66,7 @@ node CreateNode (Account d)
     return temp;
 }
 
+//Hàm tạo Tree từ nhánh
 node CreateTree (node root, node a)
 {
     //Điểm dừng của quá trình đệ quy
@@ -73,6 +89,7 @@ node CreateTree (node root, node a)
     return root;
 }
 
+//Hàm đọc file
 node input(node root)
 {
     FILE *f = fopen("input.txt", "r");
@@ -103,6 +120,7 @@ node input(node root)
     return root;
 }
 
+//Hàm tìm kiếm Node trong Tree
 node findNode(node root, char *target)
 {
     //Nếu root = NULL thì nghĩa là đã tìm hết Tree nhưng không tìm thấy
@@ -116,6 +134,7 @@ node findNode(node root, char *target)
     else return findNode(root -> left, target);
 }
 
+//Hàm chọn số tiền gửi đi
 long long  chonsotiengui(node target, node myAccount)
 {
     //Chọn hạn mức tối đa
@@ -125,8 +144,7 @@ long long  chonsotiengui(node target, node myAccount)
     
     
     long long arr[8] = {0 ,100000, 200000, 500000, 1000000, 2000000, 3000000, 0};
-    printf("Chọn số tiền bạn muốn gửi: \n");
-    printf("CHỈ NHẬN MỆNH GIÁ 50.000 đồng, 100.000 đồng, 200.000 đồng, 500.000 đồng\n\n");
+    printf("CHỈ NHẬN MỆNH GIÁ 50.000 VND, 100.000 VND, 200.000 VND, 500.000 VND\n\n");
     
     //In menu số tiền được chọn
     int i = 0;
@@ -136,86 +154,152 @@ long long  chonsotiengui(node target, node myAccount)
         else if (i == 7) printf("%d. Số khác\n\n", i);
         else
         {
-            printf("%d. %lld đồng       ",i,arr[i]);
+            printf("%d. %lld VND       ",i,arr[i]);
             if (i == 2 || i == 5) printf("\n\n");
         }
     }
-    
-    
-    
+
+    printf("Chọn số tiền bạn muốn gửi: ");
+    scanf("%d", &i);
+    int clear = clear_buffer();
     if (i == 0) return 0;
     else if (i == 7)
     {
-        printf("Hạn mức tối đa là : %lld đồng\n\n", hanmuctoida);
+        printf("Hạn mức tối đa là : %lld VND\n\n", hanmuctoida);
 
         int tempEntry = 3;
-        long long temp = 0;
-        while (temp % 50000 != 0 || temp > hanmuctoida)
+        long long temp;
+        do
         {
             if (tempEntry == 0)
             {
-                "*** QUÁ SÔ LẦN NHẬP ***\n\n";
+                printf("*** QUÁ SÔ LẦN NHẬP ***\n\n");
                 return 0;
             }
 
-            printf("Vui lòng nhập bội số của 50.000 đồng (Bạn có %d lần nhập): ", tempEntry);
+            printf("Vui lòng nhập bội số của 50.000 VND (Bạn có %d lần nhập): ", tempEntry);
             scanf(" %lld", &temp);
+            int clear = clear_buffer();
             tempEntry -= 1;
-        }
+        } while (temp % 50000 != 0 || temp > hanmuctoida || temp <= 0);
     }
+    else if (i < 0 || i > 7) return 0;
+    else return arr[i];
 }
 
+//Chức năng gửi tiền
 void guitien(node root, node myAccount)
 {
     char account[MAX_ACC_LEN];
     char yesno = 'Y';
     int AccountEntryCount = 3 ;
 
-    while (yesno == 'Y' && AccountEntryCount > 0)
+    do 
     {
-        printf("Nhập số tài khoản bạn muốn gửi tiền (Bạn có %d lần nhập): ", AccountEntryCount);
-        scanf(" %s", account);
+        printf("Nhập số tài khoản bạn muốn gửi tiền (Bạn còn %d lần nhập): ", AccountEntryCount);
+        scanf(" %20s", account);
+        int clear = clear_buffer();
         AccountEntryCount -= 1;
 
 
-        node temp = findNode(root, account);
-        if (temp != NULL)
+        node targetAccount = findNode(root, account);
+        if (targetAccount != NULL)
         {
-            chonsotiengui(temp, myAccount);
+            int sotiengui = chonsotiengui(targetAccount, myAccount);
+
+            if (sotiengui == 0) return;
+
+
+            else if  (sotiengui != 0)
+            {
+                if (myAccount == targetAccount)
+                {
+                    char message[81]; //Trừ hao 20 kí tự ghi +VND
+                    int message_Entry_Count = 3;
+                    int clear = 0;
+
+                    do
+                    {
+                        if (clear == 1) printf("*** QUÁ 100 KÍ TỰ ***\n\n");
+
+                        printf("Nhập lời nhắn với 80 kí tự (Bạn còn %d lần nhập): ", message_Entry_Count);
+                        message_Entry_Count -= 1;
+
+                        scanf(" %80s", message); //Trừ hao 20 kí tự ghi +VND
+                        clear = clear_buffer();
+                    } while (clear == 1 && message_Entry_Count > 0);
+
+                    if (message_Entry_Count == 0)
+                    {
+                        printf("*** QUÁ SỐ LẦN NHẬP LỜI NHẮN ***\n\n");
+                        return;
+                    }
+
+                    //Kiểm tra số lượng giao dịch có vượt qua mốc tối đa không
+                    if (myAccount ->Data ->TransactionCount < MAX_TRASACTION_LEN)
+                    {
+                        int current_index = myAccount -> Data -> TransactionCount;
+
+                        //Cộng tiền vào tài khoản
+                        myAccount-> Data-> Balance += sotiengui;
+
+                        //Thêm lời nhắn vào thông báo
+                        sprintf(myAccount ->Data ->TransactionHistory[current_index], "+%lld VND: %s",sotiengui, message);
+
+                        //Cộng số lần giao dịch
+                        myAccount-> Data-> TransactionCount += 1;
+
+                        printf("\n\n>>> GIAO DỊCH THÀNH CÔNG\n\n");
+                        return;
+                    }
+                    else
+                    {
+                        printf("*** GIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA TRONG LỊCH SỰ GIAO DỊCH ***\n\n");
+                        return;
+                    }
+
+                }
+            }
         }
         else
         {
             printf("\n\n*** Không tìm thấy Số tài khoản ***\n\n");
             printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
             scanf(" %c", &yesno);
+            int clear = clear_buffer();
         }
-    }
-    printf("*** QUÁ SỐ LẦN NHẬP TÀI KHOẢN ***\n\n");
+    } while (yesno == 'Y' && AccountEntryCount > 0);
+    if (AccountEntryCount == 0) printf("*** QUÁ SỐ LẦN NHẬP TÀI KHOẢN ***\n\n");
 }
 
+
+//Menu
 void menu(node root, node myAccount)
 {
     int option = 0;
     printf("1. Gửi tiền\n\n");
     scanf(" %d" , &option);
+    int clear = clear_buffer();
     if (option == 1) 
     {
-        printf("Gửi tiền");
         guitien(root, myAccount);
+        return;
     }
 }
 
-void dangnhap(node root)
+//Hàm đăng nhập với vai trò khách
+void GuestLogin(node root)
 {
     char target[MAX_ACC_LEN], yesno ='Y';
-    int loginCount = 2;
+    int loginCount = 3;
 
-    while (yesno == 'Y' && loginCount > 0)
+    do 
     {
         //nhập account
         printf("Vui lòng nhập Số tài khoản của bạn (Bạn còn %d lần nhập tài khoản): ", loginCount);
         loginCount -= 1;
-        scanf(" %s", target);
+        scanf(" %20s", target);
+        int clear = clear_buffer();
         
         
         node temp = findNode(root, target);
@@ -224,14 +308,14 @@ void dangnhap(node root)
         if (temp != NULL)
         {
             //Nhập pin
-            char mapin[MAX_PIN_LEN] "";
+            char mapin[MAX_PIN_LEN];
             int pinEntryCount = 3;
-            while (strcmp(temp ->Data -> Pin, mapin ) !=0 && pinEntryCount>0) 
+            do
             {
                 printf("Vui lòng nhập lại mã Pin (Bạn còn %d lần nhập)): ", pinEntryCount);
-                scanf(" %s",mapin);
+                scanf(" %10s",mapin);
                 pinEntryCount-=1;
-            }
+            } while (strcmp(temp ->Data -> Pin, mapin ) !=0 && pinEntryCount>0);
 
 
             //Kiểm tra mã pin
@@ -251,10 +335,9 @@ void dangnhap(node root)
             //Kiểm tra số lần nhập
             if (pinEntryCount == 0) 
             {
-                printf("HẾT SỐ LẦN NHẬP MÃ PIN\n\n");
+                printf("\n\n*** HẾT SỐ LẦN NHẬP MÃ PIN ***\n\n");
                 return;
             }
-            
         }
         else
         {
@@ -262,9 +345,42 @@ void dangnhap(node root)
             printf("\n\n*** Không tìm thấy Số tài khoản ***\n\n");
             printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
             scanf(" %c", &yesno);
-        }
-    }
+            clear = clear_buffer();
+        } 
+    } while (yesno == 'Y' && loginCount > 0);
+
     if (loginCount == 0) printf("** QUÁ SỐ LẦN NHẬP TÀI KHOẢN **\n\n");
+}
+
+//Hàm đăng nhập với vai trò Lập trình viên
+void AdministratorLogin(char *shutdown)
+{
+    (*shutdown) = 'Y'; 
+}
+
+//Hàm bật máy ATM
+void khoidong(node root)
+{
+    char ROLE;
+    char shutdown = 'N';
+
+    do
+    {
+    printf("======================================================\n\n");
+    printf("* CHÀO MỪNG QUÝ KHÁCH ĐẾN VỚI NGÂN HÀNG ĐẠT KHÔNG CHÍN*\n\n");
+    printf("======================================================\n\n");
+
+    //chọn vai trò
+    printf("Vai trò của bạn là gì [A/G]: ");
+    scanf(" %1c", &ROLE);
+    if (ROLE == 'G') GuestLogin(root);
+
+    else if (ROLE == 'A') AdministratorLogin(&shutdown);
+
+    } while (shutdown != 'Y');
+
+
+    printf("Kết thúc chương trình");
 }
 
 int main()
@@ -272,9 +388,5 @@ int main()
     SetConsoleOutputCP(CP_UTF8);
     node root = NULL;
     root = input(root);
-    printf("======================================================\n\n");
-    printf("* CHÀO MỪNG QUÝ KHÁCH ĐẾN VỚI NGÂN HÀNG ĐẠT KHÔNG CHÍN*\n\n");
-    printf("======================================================\n\n");
-    dangnhap(root);
-    printf("Kết thúc chương trình");
+    khoidong(root);
 }
