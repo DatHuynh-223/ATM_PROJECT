@@ -7,9 +7,11 @@
 #define MAX_PIN_LEN 11 //có thể thay đổi nếu cần thiết (dư 1 kí \0)
 #define MAX_DAILY_TRANSACTION 10 //tùy vào ý của thầy cô
 #define MAX_TRASACTION_LEN 51 // giới hạn độ dài tin nhắn mỗi giao dịch (dư 1 kí \0)
-#define INFORM_LEN 101
-
-
+#define INFORM_LEN 135 //Thõa được số lượng từ trong message
+#define GIAODICHPHIEN 100
+//Danh sách giao dịch của admin
+char TransactionList[GIAODICHPHIEN][135];
+int admin_index = 0;
 
 typedef struct Account
 {
@@ -26,7 +28,7 @@ typedef struct TreeNode
     struct Account *Data;
     struct TreeNode *left;
     struct TreeNode *right;
-} *node;
+} *node;    
 
 //Hàm xóa bộ nhớ đệm khi người dùng nhập dư kí tự
 int clear_buffer()
@@ -35,7 +37,7 @@ int clear_buffer()
     int c;
     int temp = 0;
 
-    while (c = getchar() != '\n' && c != EOF )
+    while ((c = getchar()) != '\n' && c != EOF )
     {
         temp = 1;
     }
@@ -182,6 +184,7 @@ long long  chonsotiengui(node target, node myAccount)
             int clear = clear_buffer();
             tempEntry -= 1;
         } while (temp % 50000 != 0 || temp > hanmuctoida || temp <= 0);
+        return temp;
     }
     else if (i < 0 || i > 7) return 0;
     else return arr[i];
@@ -212,30 +215,48 @@ void guitien(node root, node myAccount)
 
             else if  (sotiengui != 0)
             {
+                char message[81]; //Trừ hao 50 kí tự ghi +VND
+                int message_Entry_Count = 3;
+                int clear = 0;
+
+
+                //Nhập lời nhắn nạp tiền
+                do
+                {
+                    if (clear == 1) printf("*** QUÁ 80 KÍ TỰ ***\n\n");
+
+                    printf("Nhập lời nhắn với 80 kí tự (Bạn còn %d lần nhập): ", message_Entry_Count);
+                    message_Entry_Count -= 1;
+
+                    //Vì scanf sẽ dừng nếu gặp dấu cách khiến buffer hiểu lầm rằng dư kí tự --> cho phép \n
+                    scanf(" %80[^\n]", message); //Trừ hao 50 kí tự ghi +VND
+                    clear = clear_buffer();
+                } while (clear == 1 && message_Entry_Count > 0);
+
+        
+                if (clear == 1)
+                {
+                    printf("*** QUÁ SỐ LẦN NHẬP LỜI NHẮN ***\n\n");
+                    return;
+                }
+
+                //Kiểm tra số lần giao dịch phiên
+                if (admin_index > GIAODICHPHIEN)
+                {
+                    printf("*** QUÁ SỐ LẦN GIAO DỊCH PHIÊN ***\n\n");
+                    return;
+                }
+
+                //Kiểm tra số lần giao dịch trong ngày
+                if (myAccount-> Data->TransactionCount  > MAX_DAILY_TRANSACTION)
+                {
+                    printf("*** QUÁ SỐ LẦN GIAO DỊCH TRONG NGÀY ***\n\n");
+                    return;
+                }
+                
                 if (myAccount == targetAccount)
                 {
-                    char message[81]; //Trừ hao 20 kí tự ghi +VND
-                    int message_Entry_Count = 3;
-                    int clear = 0;
-
-                    do
-                    {
-                        if (clear == 1) printf("*** QUÁ 100 KÍ TỰ ***\n\n");
-
-                        printf("Nhập lời nhắn với 80 kí tự (Bạn còn %d lần nhập): ", message_Entry_Count);
-                        message_Entry_Count -= 1;
-
-                        scanf(" %80s", message); //Trừ hao 20 kí tự ghi +VND
-                        clear = clear_buffer();
-                    } while (clear == 1 && message_Entry_Count > 0);
-
-                    if (message_Entry_Count == 0)
-                    {
-                        printf("*** QUÁ SỐ LẦN NHẬP LỜI NHẮN ***\n\n");
-                        return;
-                    }
-
-                    //Kiểm tra số lượng giao dịch có vượt qua mốc tối đa không
+                    //Kiểm tra số lượng giao dịch đối với lịch sử giao dịch
                     if (myAccount ->Data ->TransactionCount < MAX_TRASACTION_LEN)
                     {
                         int current_index = myAccount -> Data -> TransactionCount;
@@ -244,7 +265,11 @@ void guitien(node root, node myAccount)
                         myAccount-> Data-> Balance += sotiengui;
 
                         //Thêm lời nhắn vào thông báo
-                        sprintf(myAccount ->Data ->TransactionHistory[current_index], "+%lld VND: %s",sotiengui, message);
+                        sprintf(myAccount ->Data ->TransactionHistory[current_index], "+%lld VND|ND: %s",sotiengui, message);
+
+                        //Thêm vào danh sách admin
+                        strcpy(TransactionList[admin_index], myAccount ->Data ->TransactionHistory[current_index]);
+                        admin_index +=1;
 
                         //Cộng số lần giao dịch
                         myAccount-> Data-> TransactionCount += 1;
@@ -254,10 +279,46 @@ void guitien(node root, node myAccount)
                     }
                     else
                     {
-                        printf("*** GIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA TRONG LỊCH SỰ GIAO DỊCH ***\n\n");
+                        printf(">>>\n\nGIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA TRONG LỊCH SỰ GIAO DỊCH\n\n");
+                        return;
+                    }
+                }
+                else
+                {
+                    //Kiểm tra số lần giao dịch đối với lịch sử My Account
+                    if (myAccount ->Data ->TransactionCount >= MAX_TRASACTION_LEN)
+                    {
+                        printf(">>>\n\nGIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA TRONG LỊCH SỰ GIAO DỊCH ĐỐI VỚI TÀI KHOẢN CỦA BẠN\n\n");
                         return;
                     }
 
+                    //Kiểm tra số lần giao dịch đối với lịch sử TargetAccount
+                    if (targetAccount ->Data ->TransactionCount >= MAX_TRASACTION_LEN)
+                    {
+                        printf(">>>\n\nGIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA TRONG LỊCH SỰ GIAO DỊCH ĐỐI VỚI TÀI KHOẢN GỬI ĐẾN\n\n");
+                        return;
+                    }
+
+                    int targetAccount_current_index = targetAccount -> Data -> TransactionCount;
+                    int myAccount_current_index = myAccount -> Data -> TransactionCount;
+
+                    //Cộng tiền vào tài khoản
+                    targetAccount-> Data-> Balance += sotiengui;
+
+                    //Thêm lời nhắn vào thông báo
+                    sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "Gửi %lld VND đến tài khoản %s", sotiengui, targetAccount->Data->AccountNumber);
+                    sprintf(targetAccount ->Data ->TransactionHistory[targetAccount_current_index], "+%lld VND|ND: %s từ %s",sotiengui, message, myAccount ->Data ->AccountNumber); //Tối đa là 130 kí tự
+
+                    //Thêm vào danh sách giao dịch admin
+                    strcpy(TransactionList[admin_index], myAccount ->Data ->TransactionHistory[myAccount_current_index]);
+                    admin_index +=1;
+
+                    //Cộng số lần giao dịch
+                    myAccount-> Data-> TransactionCount += 1;
+                    targetAccount-> Data-> TransactionCount += 1;
+
+                    printf("\n\n>>> GIAO DỊCH THÀNH CÔNG\n\n");
+                    return;
                 }
             }
         }
@@ -271,7 +332,6 @@ void guitien(node root, node myAccount)
     } while (yesno == 'Y' && AccountEntryCount > 0);
     if (AccountEntryCount == 0) printf("*** QUÁ SỐ LẦN NHẬP TÀI KHOẢN ***\n\n");
 }
-
 
 //Menu
 void menu(node root, node myAccount)
@@ -321,12 +381,6 @@ void GuestLogin(node root)
             //Kiểm tra mã pin
             if (strcmp(temp ->Data -> Pin, mapin) ==0) 
             {
-                //Kiểm tra số lần giao dịch trong ngày
-                if (temp-> Data->TransactionCount  >= MAX_DAILY_TRANSACTION)
-                {
-                    printf("*** QUÁ SỐ LẦN GIAO DỊCH TRONG NGÀY ***\n\n");
-                    return;
-                }
                 printf("Vào menu\n\n");
                 menu(root, temp);
                 return;
@@ -385,7 +439,9 @@ void khoidong(node root)
 
 int main()
 {
+    //Cho phép in tiếng việt trong terminal
     SetConsoleOutputCP(CP_UTF8);
+
     node root = NULL;
     root = input(root);
     khoidong(root);
