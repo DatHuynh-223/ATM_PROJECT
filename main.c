@@ -372,7 +372,7 @@ void GuestLogin(node root)
             int pinEntryCount = 3;
             do
             {
-                printf("Vui lòng nhập lại mã Pin (Bạn còn %d lần nhập)): ", pinEntryCount);
+                printf("Vui lòng nhập mã Pin (Bạn còn %d lần nhập)): ", pinEntryCount);
                 scanf(" %10s",mapin);
                 pinEntryCount-=1;
             } while (strcmp(temp ->Data -> Pin, mapin ) !=0 && pinEntryCount>0);
