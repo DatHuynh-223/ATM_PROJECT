@@ -334,7 +334,7 @@ void guitien(node root, node myAccount)
 }
 
 //Hàm chọn số tiền chuyển đi
-long long  chonsotienchuyen(node target, node myAccount)
+long long  chonsotienchuyen()
 {
     //Hạn mức tối đa
     long long hanmuctoida = 100000000;
@@ -411,7 +411,7 @@ void chuyentien(node root, node myAccount)
             node targetAccount = findNode(root, account);
             if (targetAccount != NULL)
             {
-                long long sotienchuyen = chonsotienchuyen(targetAccount, myAccount);
+                long long sotienchuyen = chonsotienchuyen();
 
                 if (sotienchuyen == 0) return;
 
@@ -491,7 +491,7 @@ void chuyentien(node root, node myAccount)
                     targetAccount-> Data-> Balance += sotienchuyen;
 
                     //Thêm lời nhắn vào thông báo
-                    sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "Chuyển %lld VND đến tài khoản %s", sotienchuyen, targetAccount->Data->AccountNumber);
+                    sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "SD: %llu|-%lld VND|ND: %s", myAccount ->Data ->Balance ,sotienchuyen);
                     sprintf(targetAccount ->Data ->TransactionHistory[targetAccount_current_index], "+%lld VND|ND: %s từ %s",sotienchuyen, message, myAccount ->Data ->AccountNumber); //Tối đa là 130 kí tự
 
                     //Thêm vào danh sách giao dịch admin
@@ -518,12 +518,126 @@ void chuyentien(node root, node myAccount)
     if (AccountEntryCount == 0) printf("*** QUÁ SỐ LẦN NHẬP TÀI KHOẢN ***\n\n");
 }
 
+//Hàm chọn số tiền rút
+long long  chonsotienrut()
+{
+    //Chọn hạn mức tối đa
+    long long hanmuctoida = 10000000;
+    
+    
+    long long arr[8] = {0 ,100000, 200000, 500000, 1000000, 2000000, 3000000, 0};
+    
+    //In menu số tiền được chọn
+    int i = 0;
+    for (i = 0; i < 8; i++)
+    {
+        if (i == 0) printf("%d. Quay về menu        ", i);
+        else if (i == 7) printf("%d. Số khác\n\n", i);
+        else
+        {
+            printf("%d. %lld VND       ",i,arr[i]);
+            if (i == 2 || i == 5) printf("\n\n");
+        }
+    }
+
+    printf("Chọn số tiền bạn muốn rút: ");
+    scanf("%d", &i);
+    int clear = clear_buffer();
+    if (i == 0) return 0;
+    else if (i == 7)
+    {
+        printf("Hạn mức tối đa là : %lld VND\n\n", hanmuctoida);
+
+        int tempEntry = 3;
+        long long temp;
+        do
+        {
+            if (tempEntry == 0)
+            {
+                printf("*** QUÁ SÔ LẦN NHẬP ***\n\n");
+                return 0;
+            }
+
+            printf("Vui lòng nhập bội số của 50.000 VND (Bạn có %d lần nhập): ", tempEntry);
+            scanf(" %lld", &temp);
+            int clear = clear_buffer();
+            tempEntry -= 1;
+        } while (temp % 50000 != 0 || temp > hanmuctoida || temp <= 0);
+        return temp;
+    }
+    else if (i < 0 || i > 7) return 0;
+    else return arr[i];
+}
+
+//Chức năng chuyển tiền
+void ruttien(node root, node myAccount)
+{
+    long long sotienrut = chonsotienrut();
+
+    if (sotienrut == 0) return;
+
+
+    else if  (sotienrut != 0)
+    {
+        char message[81]; //Trừ hao 50 kí tự ghi +VND
+        int message_Entry_Count = 3;
+        int clear = 0;
+
+        //Kiểm tra số tiền tài khoản nguồn
+        if (myAccount ->Data ->Balance < sotienrut)
+        {
+            printf("*** SỐ DƯ TÀI KHOẢN KHÔNG ĐỦ ĐỂ THỰC HIỆN GIAO DỊCH ***\n\n");
+            return;
+        }
+
+        //Kiểm tra số lần giao dịch phiên
+        if (admin_index >= GIAODICHPHIEN)
+        {
+            printf("*** QUÁ SỐ LẦN GIAO DỊCH PHIÊN ***\n\n");
+            return;
+        }
+
+        //Kiểm tra số lần giao dịch trong ngày
+        if (myAccount-> Data->TransactionCount  >= MAX_DAILY_TRANSACTION)
+        {
+            printf("*** QUÁ SỐ LẦN GIAO DỊCH TRONG NGÀY ***\n\n");
+            return;
+        }
+        
+
+        //Kiểm tra số lần giao dịch đối với lịch sử My Account
+        if (myAccount ->Data ->TransactionCount >= MAX_TRASACTION_LEN)
+        {
+            printf(">>>\n\nGIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA TRONG LỊCH SỰ GIAO DỊCH ĐỐI VỚI TÀI KHOẢN CỦA BẠN\n\n");
+            return;
+        }
+
+        int myAccount_current_index = myAccount -> Data -> TransactionCount;
+
+        //Trừ tiền vào myAccount
+        myAccount ->Data -> Balance -= sotienrut;
+
+
+        //Thêm lời nhắn vào thông báo
+        sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "SD: %llu|-%lld| ND: Rút tiền tại ATM", myAccount ->Data ->Balance, sotienrut); //132
+
+        //Thêm vào danh sách giao dịch admin
+        strcpy(TransactionList[admin_index], myAccount ->Data ->TransactionHistory[myAccount_current_index]);
+        admin_index +=1;
+
+        //Cộng số lần giao dịch
+        myAccount-> Data-> TransactionCount += 1;
+
+        printf("\n\n>>> GIAO DỊCH THÀNH CÔNG\n\n");
+        return;
+    }
+}
 
 //Menu
 void menu(node root, node myAccount)
 {
     //Mảng con trỏ, Nhược điểm: Không sửa được, Ưu điểm: Cấp phát đúng bộ nhớ cần thiết
-    char *option[] = {"0. Hủy giao dịch","1. Gửi tiền", "2. Chuyển tiền"};
+    char *option[] = {"0. Hủy giao dịch","1. Gửi tiền", "2. Chuyển tiền", "3. Rút tiền"};
 
     int optionCount = sizeof(option)/ sizeof(option[0]);
 
@@ -544,6 +658,11 @@ void menu(node root, node myAccount)
     else if (i == 2)
     {
         chuyentien(root, myAccount);
+        return;
+    }
+    else if (i == 3)
+    {
+        ruttien(root, myAccount);
         return;
     }
     else return;
