@@ -7,10 +7,10 @@
 #define MAX_PIN_LEN 11 //có thể thay đổi nếu cần thiết (dư 1 kí \0)
 #define MAX_DAILY_TRANSACTION 10 //tùy vào ý của thầy cô
 #define MAX_TRASACTION_LEN 51 // giới hạn độ dài tin nhắn mỗi giao dịch (dư 1 kí \0)
-#define INFORM_LEN 135 //Thõa được số lượng từ trong message
+#define INFORM_LEN 150 //Thõa được số lượng từ trong message
 #define GIAODICHPHIEN 100
 //Danh sách giao dịch của admin
-char TransactionList[GIAODICHPHIEN][135];
+char TransactionList[GIAODICHPHIEN][150];
 int admin_index = 0;
 
 typedef struct Account
@@ -265,7 +265,7 @@ void guitien(node root, node myAccount)
                         myAccount-> Data-> Balance += sotiengui;
 
                         //Thêm lời nhắn vào thông báo
-                        sprintf(myAccount ->Data ->TransactionHistory[current_index], "+%lld VND|ND: %s",sotiengui, message);
+                        sprintf(myAccount ->Data ->TransactionHistory[current_index], "SD: %llu|+%lld VND|ND: %s", myAccount ->Data ->Balance,sotiengui, message);
 
                         //Thêm vào danh sách admin
                         strcpy(TransactionList[admin_index], myAccount ->Data ->TransactionHistory[current_index]);
@@ -306,8 +306,8 @@ void guitien(node root, node myAccount)
                     targetAccount-> Data-> Balance += sotiengui;
 
                     //Thêm lời nhắn vào thông báo
-                    sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "Gửi %lld VND đến tài khoản %s", sotiengui, targetAccount->Data->AccountNumber);
-                    sprintf(targetAccount ->Data ->TransactionHistory[targetAccount_current_index], "+%lld VND|ND: %s từ %s",sotiengui, message, myAccount ->Data ->AccountNumber); //Tối đa là 130 kí tự
+                    sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "SD: %llu|ND: Gửi %lld VND đến tài khoản %s", myAccount ->Data ->Balance, sotiengui, targetAccount->Data->AccountNumber); //141 kí tự
+                    sprintf(targetAccount ->Data ->TransactionHistory[targetAccount_current_index], "SD: %llu|+%lld VND|ND: %s", targetAccount ->Data ->Balance,sotiengui, message); //124 kí tự
 
                     //Thêm vào danh sách giao dịch admin
                     strcpy(TransactionList[admin_index], myAccount ->Data ->TransactionHistory[myAccount_current_index]);
@@ -491,8 +491,8 @@ void chuyentien(node root, node myAccount)
                     targetAccount-> Data-> Balance += sotienchuyen;
 
                     //Thêm lời nhắn vào thông báo
-                    sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "SD: %llu|-%lld VND|ND: %s", myAccount ->Data ->Balance ,sotienchuyen);
-                    sprintf(targetAccount ->Data ->TransactionHistory[targetAccount_current_index], "+%lld VND|ND: %s từ %s",sotienchuyen, message, myAccount ->Data ->AccountNumber); //Tối đa là 130 kí tự
+                    sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "SD: %llu|-%lld VND|ND: %s", myAccount ->Data ->Balance ,sotienchuyen, message);
+                    sprintf(targetAccount ->Data ->TransactionHistory[targetAccount_current_index], "SD: %llu|+%lld VND|ND: %s", targetAccount ->Data ->Balance,sotienchuyen, message); //Tối đa là 130 kí tự
 
                     //Thêm vào danh sách giao dịch admin
                     strcpy(TransactionList[admin_index], myAccount ->Data ->TransactionHistory[myAccount_current_index]);
@@ -569,7 +569,7 @@ long long  chonsotienrut()
     else return arr[i];
 }
 
-//Chức năng chuyển tiền
+//Chức năng rút tiền
 void ruttien(node root, node myAccount)
 {
     long long sotienrut = chonsotienrut();
@@ -633,11 +633,53 @@ void ruttien(node root, node myAccount)
     }
 }
 
+//Chức năng xem tài khoản
+void xemtaikhoan(node myAccount)
+{
+    char *option[] = {"0. Hủy giao dịch","1. Xem số dư", "2. Xem lịch sử giao dịch"};
+    int optionCount = sizeof(option) / sizeof(option[0]);
+
+    int i;
+    for (i = 0; i< optionCount; i+=1)
+    {
+        printf("%s  ",option[i]);
+    }
+
+    int choice;
+    printf("\n\nVui lòng nhập lựa chọn của bạn: ");
+    scanf(" %d", &choice);
+    clear_buffer();
+
+    if (choice == 1)
+    {
+        printf("Số dư hiện tại: %llu\n\n", myAccount ->Data ->Balance);
+        return;
+    }
+    
+    if (choice == 2)
+    {
+        int index;
+        int max_transaction_history = myAccount ->Data ->TransactionCount;
+        if (max_transaction_history == 0) printf("Bạn chưa giao dịch trước đây");
+        else
+        {
+            for (index = 0; index <max_transaction_history; index +=1)
+            {
+                printf("%d. %s\n\n", index+1, myAccount ->Data ->TransactionHistory[index]);
+            }
+        }
+        printf("\n");
+        return;
+    }
+
+    return;
+}
+
 //Menu
 void menu(node root, node myAccount)
 {
     //Mảng con trỏ, Nhược điểm: Không sửa được, Ưu điểm: Cấp phát đúng bộ nhớ cần thiết
-    char *option[] = {"0. Hủy giao dịch","1. Gửi tiền", "2. Chuyển tiền", "3. Rút tiền"};
+    char *option[] = {"0. Hủy giao dịch","1. Gửi tiền", "2. Chuyển tiền", "3. Rút tiền", "4. Xem tài khoản"};
 
     int optionCount = sizeof(option)/ sizeof(option[0]);
 
@@ -647,23 +689,25 @@ void menu(node root, node myAccount)
         printf("%s\n\n",option[i]);
     }
 
+    int choice;
     printf("Nhập sự lựa chọn của bạn: ");
-    scanf(" %d" , &i);
+    scanf(" %d" , &choice);
     int clear = clear_buffer();
-    if (i == 1) 
+    if (choice == 1) 
     {
         guitien(root, myAccount);
-        return;
     }
-    else if (i == 2)
+    else if (choice == 2)
     {
         chuyentien(root, myAccount);
-        return;
     }
-    else if (i == 3)
+    else if (choice == 3)
     {
         ruttien(root, myAccount);
-        return;
+    }
+    else if (choice == 4)
+    {
+        xemtaikhoan(myAccount);
     }
     else return;
 }
