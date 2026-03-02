@@ -7,10 +7,10 @@
 #define MAX_PIN_LEN 11 //có thể thay đổi nếu cần thiết (dư 1 kí \0)
 #define MAX_DAILY_TRANSACTION 10 //tùy vào ý của thầy cô
 #define MAX_TRASACTION_LEN 51 // giới hạn độ dài tin nhắn mỗi giao dịch (dư 1 kí \0)
-#define INFORM_LEN 150 //Thõa được số lượng từ trong message
+#define INFORM_LEN 175 //Thõa được số lượng từ trong message
 #define GIAODICHPHIEN 100
 //Danh sách giao dịch của admin
-char TransactionList[GIAODICHPHIEN][150];
+char TransactionList[GIAODICHPHIEN][INFORM_LEN];
 int admin_index = 0;
 
 typedef struct Account
@@ -265,7 +265,7 @@ void guitien(node root, node myAccount)
                         myAccount-> Data-> Balance += sotiengui;
 
                         //Thêm lời nhắn vào thông báo
-                        sprintf(myAccount ->Data ->TransactionHistory[current_index], "SD: %llu|+%lld VND|ND: %s", myAccount ->Data ->Balance,sotiengui, message);
+                        sprintf(myAccount ->Data ->TransactionHistory[current_index], "%s|SD: %llu|+%lld VND|ND: %s", myAccount->Data ->AccountNumber ,myAccount ->Data ->Balance,sotiengui, message);
 
                         //Thêm vào danh sách admin
                         strcpy(TransactionList[admin_index], myAccount ->Data ->TransactionHistory[current_index]);
@@ -306,8 +306,8 @@ void guitien(node root, node myAccount)
                     targetAccount-> Data-> Balance += sotiengui;
 
                     //Thêm lời nhắn vào thông báo
-                    sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "SD: %llu|ND: Gửi %lld VND đến tài khoản %s", myAccount ->Data ->Balance, sotiengui, targetAccount->Data->AccountNumber); //141 kí tự
-                    sprintf(targetAccount ->Data ->TransactionHistory[targetAccount_current_index], "SD: %llu|+%lld VND|ND: %s", targetAccount ->Data ->Balance,sotiengui, message); //124 kí tự
+                    sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "%s|SD: %llu|ND: Gửi %lld VND đến tài khoản %s", myAccount ->Data ->AccountNumber,myAccount ->Data ->Balance, sotiengui, targetAccount->Data->AccountNumber); //141 kí tự
+                    sprintf(targetAccount ->Data ->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%lld VND|ND: %s",targetAccount->Data->Balance ,targetAccount ->Data ->Balance,sotiengui, message); //124 kí tự
 
                     //Thêm vào danh sách giao dịch admin
                     strcpy(TransactionList[admin_index], myAccount ->Data ->TransactionHistory[myAccount_current_index]);
@@ -491,8 +491,8 @@ void chuyentien(node root, node myAccount)
                     targetAccount-> Data-> Balance += sotienchuyen;
 
                     //Thêm lời nhắn vào thông báo
-                    sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "SD: %llu|-%lld VND|ND: %s", myAccount ->Data ->Balance ,sotienchuyen, message);
-                    sprintf(targetAccount ->Data ->TransactionHistory[targetAccount_current_index], "SD: %llu|+%lld VND|ND: %s", targetAccount ->Data ->Balance,sotienchuyen, message); //Tối đa là 130 kí tự
+                    sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "%s|SD: %llu|-%lld VND|ND: %s", myAccount ->Data ->AccountNumber ,myAccount ->Data ->Balance ,sotienchuyen, message);
+                    sprintf(targetAccount ->Data ->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%lld VND|ND: %s", targetAccount ->Data ->AccountNumber ,targetAccount ->Data ->Balance,sotienchuyen, message); //Tối đa là 130 kí tự
 
                     //Thêm vào danh sách giao dịch admin
                     strcpy(TransactionList[admin_index], myAccount ->Data ->TransactionHistory[myAccount_current_index]);
@@ -619,7 +619,7 @@ void ruttien(node root, node myAccount)
 
 
         //Thêm lời nhắn vào thông báo
-        sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "SD: %llu|-%lld| ND: Rút tiền tại ATM", myAccount ->Data ->Balance, sotienrut); //132
+        sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "%s|SD: %llu|-%lld| ND: Rút tiền tại ATM", myAccount ->Data ->AccountNumber ,myAccount ->Data ->Balance, sotienrut); //132
 
         //Thêm vào danh sách giao dịch admin
         strcpy(TransactionList[admin_index], myAccount ->Data ->TransactionHistory[myAccount_current_index]);
@@ -776,7 +776,39 @@ void GuestLogin(node root)
 //Hàm đăng nhập với vai trò Lập trình viên
 void AdministratorLogin(char *shutdown)
 {
-    (*shutdown) = 'Y'; 
+
+    char admin_pin[7] = "000000";
+    char Pin_Entry[7];
+    int Pin_Entry_Count = 3;
+    int clear;
+
+    //Nhập mã bảo mật
+    do 
+    {
+        printf("Vui lòng nhập mã bảo mật của Admin (Bạn còn %d lần nhập): ", Pin_Entry_Count);
+        scanf(" %6s", Pin_Entry);
+        clear = clear_buffer();
+        Pin_Entry_Count -= 1;
+    } while ((strcmp(Pin_Entry, admin_pin) != 0 || clear != 0) && Pin_Entry_Count > 0);
+
+    //Kiểm tra mã bảo mật
+    if (strcmp(Pin_Entry, admin_pin) == 0 && clear == 0)
+    {
+        int i = 0;
+
+        for (i = 0; i < admin_index; i+=1)
+        {
+            printf("%d. Số tài khoản: %s\n", i+1, TransactionList[i]);
+        }
+
+        //Chuyển thành shutdown
+        (*shutdown) = 'Y';
+    }
+    else
+    {
+        printf("*** QUÁ SỐ LẦN NHẬP MÃ BẢO MẬT ***\n\n");
+    }
+    return;
 }
 
 //Hàm bật máy ATM
