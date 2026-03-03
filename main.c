@@ -789,17 +789,20 @@ void AdministratorLogin(char *shutdown)
         scanf(" %6s", Pin_Entry);
         clear = clear_buffer();
         Pin_Entry_Count -= 1;
-    } while ((strcmp(Pin_Entry, admin_pin) != 0 || clear != 0) && Pin_Entry_Count > 0);
+    } while ((strcmp(Pin_Entry, admin_pin) != 0 || clear != 0) && Pin_Entry_Count > 0); //Tránh trường hợp người dùng nhập dư kí tự khiến buffer hiểu lầm rằng còn lần nhập nhưng thực tế đã hết lần nhập
 
     //Kiểm tra mã bảo mật
     if (strcmp(Pin_Entry, admin_pin) == 0 && clear == 0)
     {
+        FILE *f =  fopen("output.txt", "w");
         int i = 0;
 
         for (i = 0; i < admin_index; i+=1)
         {
-            printf("%d. Số tài khoản: %s\n", i+1, TransactionList[i]);
+            fprintf(f ,"%d. Số tài khoản: %s\n", i+1, TransactionList[i]);
         }
+
+        fclose(f);
 
         //Chuyển thành shutdown
         (*shutdown) = 'Y';
