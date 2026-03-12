@@ -828,17 +828,22 @@ void khoidong(node root)
 
     //chọn vai trò
     printf("Vai trò của bạn là gì [A/G]: ");
-    scanf(" %1c", &ROLE);
-    if (ROLE == 'G') GuestLogin(root);
-
-    else if (ROLE == 'A') AdministratorLogin(&shutdown);
+    scanf(" %c",&ROLE); 
+    int clean=clear_buffer(); 
+    if (clean == 0)
+	{
+        if (ROLE == 'G' || ROLE == 'g')      GuestLogin(root);
+        else if (ROLE == 'A' || ROLE == 'a') AdministratorLogin(&shutdown);
+        else                                 printf("Lỗi: Vui lòng chỉ nhập A hoặc G!\n");
+    }
+    else {
+        printf("Lỗi: Vui lòng chỉ nhập A hoặc G!\n");
+     }
 
     } while (shutdown != 'Y');
 
-
     printf("Kết thúc chương trình");
 }
-
 int main()
 {
     //Cho phép in tiếng việt trong terminal
