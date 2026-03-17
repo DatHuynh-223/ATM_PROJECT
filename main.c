@@ -852,7 +852,7 @@ void khoidong(node root)
 }
 int main()
 {
-    //Cho phép in ti?ng vi?t trong terminal
+    //Cho phép in ting vi?t trong terminal
     SetConsoleOutputCP(CP_UTF8);
 
     node root = NULL;
