@@ -828,7 +828,13 @@ void khoidong(node root)
 
     //chọn vai trò
     printf("Vai trò của bạn là gì [A/G]: ");
-    scanf(" %c",&ROLE); 
+    if (scanf("%c", &ROLE) != 1) {
+            continue; 
+        }
+    if (ROLE=='\n')
+    {
+    	continue;
+	} 
     int clean=clear_buffer(); 
     if (clean == 0)
 	{
