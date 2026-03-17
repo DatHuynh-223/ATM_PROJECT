@@ -723,11 +723,12 @@ void GuestLogin(node root)
         //nhập account
         printf("Vui lòng nhập Số tài khoản của bạn (Bạn còn %d lần nhập tài khoản): ", loginCount);
         loginCount -= 1;
-        scanf(" %20s", target);
-        int clear = clear_buffer();
-        
-        
-        node temp = findNode(root, target);
+        if (fgets(target,sizeof(target),stdin)==NULL) continue;
+        if (target[0]=='\n')	continue;
+        target[strcspn(target, "\n")] = 0;
+		clear_buffer();
+        clear_buffer();
+		node temp = findNode(root, target);
 
         //kiểm tra có tìm ra tài khoản hay không
         if (temp != NULL)
@@ -766,7 +767,7 @@ void GuestLogin(node root)
             printf("\n\n*** Không tìm thấy Số tài khoản ***\n\n");
             printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
             scanf(" %c", &yesno);
-            clear = clear_buffer();
+            clear_buffer();
         } 
     } while (yesno == 'Y' && loginCount > 0);
 
