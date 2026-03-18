@@ -200,11 +200,17 @@ void guitien(node root, node myAccount)
     do 
     {
         printf("Nhập số tài khoản bạn muốn gửi tiền (Bạn còn %d lần nhập): ", AccountEntryCount);
-        scanf(" %20s", account);
-        int clear = clear_buffer();
         AccountEntryCount -= 1;
-
-
+        if (fgets(account,sizeof(account),stdin)==NULL) continue;
+        int len=strlen(account);
+        if (account[len-1]=='\n')
+        {
+        	account[len-1]='\0';
+		}
+        else
+        {
+        	clear_buffer();
+		}
         node targetAccount = findNode(root, account);
         if (targetAccount != NULL)
         {
@@ -354,10 +360,27 @@ long long  chonsotienchuyen()
             if (i == 2 || i == 5) printf("\n\n");
         }
     }
-
-    printf("Chọn số tiền bạn muốn chuyển: ");
-    scanf("%d", &i);
-    int clear = clear_buffer();
+	char choose[100000];
+    int inputLimit=3;
+    do
+    {
+    	printf("Chọn số tiền bạn muốn chuyển (bạn còn %d ) : ",inputLimit);
+    	inputLimit-=1;
+    	if (fgets(choose,sizeof(choose),stdin)==NULL) continue;
+    	int len=strlen(choose);
+    	if (choose[0]=='\n') continue;
+    	if (choose[len-1]=='\n') 
+    	{
+    		choose[len-1]='\0';
+    		break;
+		}
+		else
+		{
+			clear_buffer();
+		}
+	}while (inputLimit>0);
+	if (inputLimit==0) return 0;
+	i=atoi(choose);
     if (i == 0) return 0;
     else if (i == 7)
     {
@@ -725,9 +748,15 @@ void GuestLogin(node root)
         loginCount -= 1;
         if (fgets(target,sizeof(target),stdin)==NULL) continue;
         if (target[0]=='\n')	continue;
-        target[strcspn(target, "\n")] = 0;
-		clear_buffer();
-        clear_buffer();
+        int len = strlen(target);
+        if (target[len - 1] == '\n') 
+        {
+            target[len - 1] = '\0'; 
+        } 
+        else 
+        {
+            clear_buffer();
+        }
 		node temp = findNode(root, target);
 
         //kiểm tra có tìm ra tài khoản hay không
@@ -739,8 +768,17 @@ void GuestLogin(node root)
             do
             {
                 printf("Vui lòng nhập mã Pin (Bạn còn %d lần nhập)): ", pinEntryCount);
-                scanf(" %10s",mapin);
                 pinEntryCount-=1;
+                if (fgets(mapin,sizeof(mapin),stdin)==NULL) continue;
+                int len=strlen(mapin);
+                if (mapin[len-1]=='\n')
+                {
+                	mapin[len-1]='\0';
+				}
+				else
+				{
+					clear_buffer();
+				}
             } while (strcmp(temp ->Data -> Pin, mapin ) !=0 && pinEntryCount>0);
 
 
@@ -787,9 +825,12 @@ void AdministratorLogin(char *shutdown)
     do 
     {
         printf("Vui lòng nhập mã bảo mật của Admin (Bạn còn %d lần nhập): ", Pin_Entry_Count);
-        scanf(" %6s", Pin_Entry);
-        clear = clear_buffer();
         Pin_Entry_Count -= 1;
+		if (fgets(Pin_Entry,sizeof(Pin_Entry),stdin)==NULL) continue;
+        if (Pin_Entry[0]=='\n')	continue;
+        Pin_Entry[strcspn(Pin_Entry, "\n")] = 0;
+        if (strlen(Pin_Entry)<6) continue;
+		clear=clear_buffer();
     } while ((strcmp(Pin_Entry, admin_pin) != 0 || clear != 0) && Pin_Entry_Count > 0); //Tránh trường hợp người dùng nhập dư kí tự khiến buffer hiểu lầm rằng còn lần nhập nhưng thực tế đã hết lần nhập
 
     //Kiểm tra mã bảo mật
