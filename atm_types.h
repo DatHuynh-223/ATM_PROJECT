@@ -1,13 +1,13 @@
-#ifndef ATM_CORE_H
-#define ATM_CORE_H
+#ifndef ATM_TYPES_H
+#define ATM_TYPES_H
 
-// 1. Nạp các thư viện chuẩn
+// 1. Thư viện chuẩn
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <windows.h> 
 
-// 2. Các hằng số (#define)
+// 2. Hằng số
 #define MAX_ACC_LEN 21
 #define MAX_PIN_LEN 11
 #define MAX_DAILY_TRANSACTION 10
@@ -15,12 +15,11 @@
 #define INFORM_LEN 175
 #define GIAODICHPHIEN 100
 
-// 3. Xử lý Biến toàn cục (Rất quan trọng)
-// Phải dùng chữ 'extern' để báo cho compiler biết biến này sẽ được định nghĩa ở file .c
+// 3. Khai báo biến toàn cục (Dùng extern để báo hiệu biến tồn tại ở file khác)
 extern char TransactionList[GIAODICHPHIEN][INFORM_LEN];
 extern int admin_index;
 
-// 4. Các cấu trúc dữ liệu (struct)
+// 4. Cấu trúc dữ liệu
 typedef struct Account {
     char AccountNumber[MAX_ACC_LEN];
     char Pin[MAX_PIN_LEN];
@@ -35,13 +34,15 @@ typedef struct TreeNode {
     struct TreeNode *right;
 } *node;    
 
-// 5. Khai báo nguyên mẫu hàm (Chỉ lấy dòng tên hàm và thêm dấu chấm phẩy)
+// 5. Khai báo nguyên mẫu hàm (Danh sách tất cả các hàm)
 int clear_buffer();
+node input(node root);
+
 Account append_account(char *AN, char *PI, unsigned long long BL);
 node CreateNode (Account d);
 node CreateTree (node root, node a);
-node input(node root);
 node findNode(node root, char *target);
+
 long long chonsotiengui(node target, node myAccount);
 void guitien(node root, node myAccount);
 long long chonsotienchuyen();
@@ -49,9 +50,11 @@ void chuyentien(node root, node myAccount);
 long long chonsotienrut();
 void ruttien(node root, node myAccount);
 void xemtaikhoan(node myAccount);
-void menu(node root, node myAccount);
+
 void GuestLogin(node root);
 void AdministratorLogin(char *shutdown);
+
+void menu(node root, node myAccount);
 void khoidong(node root);
 
 #endif
