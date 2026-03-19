@@ -1212,6 +1212,6 @@ void khoidong(node root)
         else if (ROLE == 'A') AdministratorLogin(&shutdown);
 
     } while (shutdown != 'Y');
-
+    printf("\nĐang tắt máy...\n");
     printf("\nKết thúc chương trình\n");
 }
