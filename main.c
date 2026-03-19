@@ -30,6 +30,68 @@ typedef struct TreeNode
     struct TreeNode *right;
 } *node;    
 
+
+//Hàm xóa bộ nhớ đệm khi người dùng nhập dư kí tự
+int clear_buffer();
+
+//Hàm thêm chỉ số vào Account
+Account append_account(char *AN, char *PI, unsigned long long BL);
+
+//Hàm thêm nhánh vào Tree
+node CreateNode (Account d);
+
+//Hàm tạo Tree từ nhánh
+node CreateTree (node root, node a);
+
+//Hàm đọc file
+node input(node root);
+
+//Hàm tìm kiếm Node trong Tree
+node findNode(node root, char *target);
+
+//Hàm chọn số tiền gửi đi
+long long chonsotiengui(node target, node myAccount);
+
+//Chức năng gửi tiền
+void guitien(node root, node myAccount);
+
+//Hàm chọn số tiền chuyển đi
+long long chonsotienchuyen();
+
+//Chức năng chuyển tiền
+void chuyentien(node root, node myAccount);
+
+//Hàm chọn số tiền rút
+long long chonsotienrut();
+
+//Chức năng rút tiền
+void ruttien(node root, node myAccount);
+
+//Chức năng xem tài khoản
+void xemtaikhoan(node myAccount);
+
+//Menu
+void menu(node root, node myAccount);
+
+//Hàm đăng nhập với vai trò khách
+void GuestLogin(node root);
+
+//Hàm đăng nhập với vai trò Lập trình viên
+void AdministratorLogin(char *shutdown);
+
+//Hàm bật máy ATM
+void khoidong(node root);
+
+int main()
+{
+    //Cho phép in tiếng việt trong terminal
+    SetConsoleOutputCP(CP_UTF8);
+
+    node root = NULL;
+    root = input(root);
+    khoidong(root);
+}
+
 //Hàm xóa bộ nhớ đệm khi người dùng nhập dư kí tự
 int clear_buffer()
 {
@@ -1152,15 +1214,4 @@ void khoidong(node root)
     } while (shutdown != 'Y');
 
     printf("\nKết thúc chương trình\n");
-}
-
-int main()
-{
-    //Cho phép in tiếng việt trong terminal
-    SetConsoleOutputCP(CP_UTF8);
-
-    node root = NULL;
-    root = input(root);
-    khoidong(root);
-    printf("hello");
 }
