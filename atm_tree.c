@@ -1,3 +1,4 @@
+//Xử lý Cây nhị phân
 #include "atm_types.h"
 Account append_account(char *AN, char *PI, unsigned long long BL)
 {
