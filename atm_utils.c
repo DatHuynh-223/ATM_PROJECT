@@ -1,3 +1,4 @@
+// Tiện ích và nhâp xuất
 #include "atm_types.h"
 int clear_buffer()
 {
