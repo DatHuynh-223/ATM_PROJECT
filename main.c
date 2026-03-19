@@ -1162,4 +1162,5 @@ int main()
     node root = NULL;
     root = input(root);
     khoidong(root);
+    printf("hello");
 }
