@@ -143,12 +143,16 @@ node CreateTree (node root, node a)
     int compare = strcmp(a-> Data->AccountNumber, root -> Data -> AccountNumber);
 
 
-    if (compare ==1) root -> right = CreateTree((*root).right, a);
+    if (compare >0) root -> right = CreateTree((*root).right, a);
     
-    else if (compare == -1) root -> left = CreateTree(root -> left,a);
+    else if (compare <0) root -> left = CreateTree(root -> left,a);
     
-    else printf("Lỗi trùng lặp số tài khoản %s\n", a-> Data ->AccountNumber);
-
+    else 
+    {
+        printf("Lỗi trùng lặp số tài khoản %s\n", a-> Data ->AccountNumber);
+        free(a->Data);
+        free(a);
+    }
     //trả về root ban đầu
     return root;
 }
@@ -156,7 +160,7 @@ node CreateTree (node root, node a)
 //Hàm đọc file
 node input(node root)
 {
-    FILE *f = fopen("input.txt", "r");
+    FILE *f = fopen("D:\\project\\New folder\\ATM_PROJECT\\input.txt", "r");
 
     if (f == NULL)
     {
@@ -1196,11 +1200,16 @@ void khoidong(node root)
                 printf("\n*** QUÁ SỐ LẦN NHẬP. TỰ ĐỘNG TẮT MÁY ĐỂ BẢO MẬT ***\n\n");
                 return; 
             }
-
-            printf("Vai trò của bạn là gì [A/G] (Bạn còn %d lần): ", roleEntryCount);
-            scanf(" %1c", &ROLE);
-            clear = clear_buffer();
             roleEntryCount -= 1;
+            printf("Vai trò của bạn là gì [A/G] (Bạn còn %d lần): ", roleEntryCount);
+            if (scanf("%c", &ROLE) != 1) {
+                continue; 
+            }
+            if (ROLE=='\n')
+            {
+            continue;
+            } 
+            clear = clear_buffer();
 
             if ((ROLE != 'A' && ROLE != 'G') || clear == 1)
             {
@@ -1212,6 +1221,4 @@ void khoidong(node root)
         else if (ROLE == 'A') AdministratorLogin(&shutdown);
 
     } while (shutdown != 'Y');
-    printf("\nĐang tắt máy...\n");
-    printf("\nKết thúc chương trình\n");
 }
