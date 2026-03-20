@@ -445,8 +445,16 @@ void guitien(node root, node myAccount)
                 {
                     printf("Bạn muốn nhập lại Số tài khoản không? [Y/N] (Bạn còn %d lần): ", ynEntryCount);
                 }
-                
-                scanf(" %c", &yesno);
+                if (scanf("%c", &yesno) != 1) 
+                {
+                    ynEntryCount--;
+                    continue; 
+                }
+                if (yesno=='\n')
+                {
+                    ynEntryCount--;
+                    continue;
+                } 
                 clear_yn = clear_buffer();
 
                 if ((yesno != 'Y' && yesno != 'N') || clear_yn == 1)
@@ -459,8 +467,7 @@ void guitien(node root, node myAccount)
                     }
                     printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
                 }
-            } while ((yesno != 'Y' && yesno != 'N') || clear_yn == 1);
-
+            } while (((yesno != 'Y' && yesno != 'N') || clear_yn == 1) && ynEntryCount > 0);
             if (yesno == 'N') return;
         }
     } while (yesno == 'Y' && AccountEntryCount > 0);
@@ -477,6 +484,7 @@ long long chonsotienchuyen()
     int i = 0;
     int clear = 0;
     int moneyEntryCount = 3;
+    char choose[100];
 
     do
     {
@@ -503,9 +511,46 @@ long long chonsotienchuyen()
             printf("Chọn số tiền bạn muốn chuyển (Bạn còn %d lần): ", moneyEntryCount);
         }
         
-        scanf("%d", &i);
-        clear = clear_buffer();
-
+        
+        if (fgets(choose,sizeof(choose),stdin)==NULL) continue;
+        
+        if (choose[0]=='\n')
+        {
+            moneyEntryCount -= 1;
+            if (moneyEntryCount > 0) printf("\n*** Bạn chưa nhập gì! ***\n");
+            continue;
+        }
+        
+        int len = strlen(choose);
+        clear = 0;
+        
+        if (choose[len-1]=='\n') 
+        {
+            choose[len-1]='\0';
+            len--;
+        }
+        else 
+        {
+            clear = clear_buffer(); 
+        }
+    
+        if (len > 1 || clear == 1)
+        {
+            moneyEntryCount -= 1;
+            if (moneyEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng CHỈ NHẬP 1 SỐ. ***\n");
+            continue; 
+        }
+        
+        if (choose[0]>='0' && choose[0] <='7')
+        {
+            i = choose[0]-'0';
+            break; 
+        }
+        else
+        {
+            moneyEntryCount -= 1;
+            if (moneyEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
+        }
         if (i < 0 || i > 7 || clear == 1)
         {
             moneyEntryCount -= 1;
@@ -980,66 +1025,67 @@ void menu(node root, node myAccount)
     char *option[] = {"0. Hủy giao dịch","1. Gửi tiền", "2. Chuyển tiền", "3. Rút tiền", "4. Xem tài khoản"};
     int optionCount = sizeof(option)/ sizeof(option[0]);
     
-    int choice;
-    int clear;
-    int menuEntryCount = 3;
-
-    do 
-    {
-        printf("\n");
-        int i;
-        for (i = 0; i< optionCount; i+=1)
-        {
-            printf("%s\n\n",option[i]);
-        }
-
-        if (menuEntryCount == 3)
-        {
-            printf("Nhập sự lựa chọn của bạn: ");
-        }
-        else
-        {
-            printf("Nhập sự lựa chọn của bạn (Bạn còn %d lần): ", menuEntryCount);
-        }
+        int choice=-1;
+        int menuEntryCount = 3;
+        char input[1000];
         
-        scanf(" %d" , &choice);
-        clear = clear_buffer();
-
-        if (choice < 0 || choice > 4 || clear == 1) 
+        while (menuEntryCount>0)
         {
-            menuEntryCount -= 1;
-            
-            if (menuEntryCount == 0)
+            printf("\n--- MENU GIAO DỊCH ---\n");
+            for (int i = 0; i < optionCount; i++) printf("%s\n", option[i]);
+            if (menuEntryCount == 3)    printf("Nhập sự lựa chọn của bạn: ");
+            else                        printf("Nhập lại (Bạn còn %d lần): ", menuEntryCount);
+            if (fgets(input,sizeof(input),stdin)==NULL) continue;
+            if (input[0]=='\n')
             {
-                printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
-                return;
+                menuEntryCount--;
+                if (menuEntryCount > 0) printf("\n*** Bạn chưa nhập gì. Vui lòng nhập từ 0 đến 4! ***\n");
+                continue;
             }
-            
-            printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ chọn số từ 0 đến 4. ***\n\n");
+            int len=strlen(input);
+            int clear=0;
+            if (input[len-1]=='\n')
+            {
+                input[len-1]='\0';
+                len--;
+            }
+            else
+            {
+                clear=clear_buffer();
+            }
+            if (len > 1 || clear == 1)
+            {
+                menuEntryCount--;
+                if (menuEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng CHỈ NHẬP 1 SỐ. ***\n");
+                continue; 
+            }
+            if (input[0]>='0' && input[0] <='4')
+            {
+                choice=input[0]-'0';
+                break;
+            }
+            else{
+                menuEntryCount--;
+                if (menuEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ chọn từ 0 đến 4. ***\n");
+            }
+        }
+        if ((menuEntryCount == 0) && (choice<0 || choice >4)) {
+            printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+            return;
+        }
+        //xử lý các lựa chọn
+        switch (choice)
+        {
+            case 1: guitien(root, myAccount); break;
+            case 2: chuyentien(root, myAccount); break;
+            case 3: ruttien(root, myAccount); break;
+            case 4: xemtaikhoan(myAccount); break;
+            case 0: 
+            default:
+                printf("\n Đã hủy giao dịch. \n");
+                 return;
         }
 
-    } while (choice < 0 || choice > 4 || clear == 1);
-
-    if (choice == 1) 
-    {
-        guitien(root, myAccount);
-    }
-    else if (choice == 2)
-    {
-        chuyentien(root, myAccount);
-    }
-    else if (choice == 3)
-    {
-        ruttien(root, myAccount);
-    }
-    else if (choice == 4)
-    {
-        xemtaikhoan(myAccount);
-    }
-    else if (choice == 0)
-    {
-        return; 
-    }
 }
 
 //Hàm đăng nhập với vai trò khách
