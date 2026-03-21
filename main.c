@@ -213,22 +213,23 @@ long long chonsotiengui(node target, node myAccount)
     int i = 0;
     int clear = 0;
     int moneyEntryCount = 3;
+    char choose[100];
 
+    printf("\nCHỈ NHẬN MỆNH GIÁ 50.000 VND, 100.000 VND, 200.000 VND, 500.000 VND\n\n");
+        
+    int j = 0;
+    for (j = 0; j < 8; j++)
+    {
+        if (j == 0) printf("%d. Quay về menu        ", j);
+        else if (j == 7) printf("%d. Số khác\n\n", j);
+        else
+        {
+            printf("%d. %lld VND       ",j,arr[j]);
+            if (j == 2 || j == 5) printf("\n\n");
+        }
+    }
     do 
     {
-        printf("\nCHỈ NHẬN MỆNH GIÁ 50.000 VND, 100.000 VND, 200.000 VND, 500.000 VND\n\n");
-        
-        int j = 0;
-        for (j = 0; j < 8; j++)
-        {
-            if (j == 0) printf("%d. Quay về menu        ", j);
-            else if (j == 7) printf("%d. Số khác\n\n", j);
-            else
-            {
-                printf("%d. %lld VND       ",j,arr[j]);
-                if (j == 2 || j == 5) printf("\n\n");
-            }
-        }
 
         if (moneyEntryCount == 3)
         {
@@ -239,23 +240,59 @@ long long chonsotiengui(node target, node myAccount)
             printf("Chọn số tiền bạn muốn gửi (Bạn còn %d lần): ", moneyEntryCount);
         }
         
-        scanf("%d", &i);
-        clear = clear_buffer();
+        
+        if (fgets(choose,sizeof(choose),stdin)==NULL) continue;
+        
+        if (choose[0]=='\n')
+        {
+            moneyEntryCount -= 1;
+            if (moneyEntryCount > 0) printf("\n*** Bạn chưa nhập gì! ***\n");
+            continue;
+        }
+        
+        int len = strlen(choose);
+        clear = 0;
+        
+        if (choose[len-1]=='\n') 
+        {
+            choose[len-1]='\0';
+            len--;
+        }
+        else 
+        {
+            clear = clear_buffer(); 
+        }
+    
+        if (len > 1 || clear == 1)
+        {
+            moneyEntryCount -= 1;
+            if (moneyEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng CHỈ NHẬP 1 SỐ. ***\n");
+            continue; 
+        }
+        
+        if (choose[0]>='0' && choose[0] <='7')
+        {
+            i = choose[0]-'0';
+            break; 
+        }
+        else
+        {
+            moneyEntryCount -= 1;
+            if (moneyEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
+        }
 
         if (i < 0 || i > 7 || clear == 1)
         {
             moneyEntryCount -= 1;
-            
-            if (moneyEntryCount == 0)
+            printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
+        }
+
+    } while (moneyEntryCount > 0);
+    if (moneyEntryCount == 0)
             {
                 printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
                 return 0;
             }
-            printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
-        }
-
-    } while (i < 0 || i > 7 || clear == 1);
-
     if (i == 0) return 0;
     else if (i == 7)
     {
@@ -290,6 +327,11 @@ long long chonsotiengui(node target, node myAccount)
             }
         } while (temp % 50000 != 0 || temp > hanmuctoida || temp <= 0 || clear == 1);
         return temp;
+    }
+    else if (i<0 || i>7 || clear == 1)
+    {
+        printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+        return 0;
     }
     else return arr[i];
 }
@@ -1029,10 +1071,10 @@ void menu(node root, node myAccount)
         int menuEntryCount = 3;
         char input[1000];
         
+        printf("\n--- MENU GIAO DỊCH ---\n");
+        for (int i = 0; i < optionCount; i++) printf("%s\n", option[i]);
         while (menuEntryCount>0)
         {
-            printf("\n--- MENU GIAO DỊCH ---\n");
-            for (int i = 0; i < optionCount; i++) printf("%s\n", option[i]);
             if (menuEntryCount == 3)    printf("Nhập sự lựa chọn của bạn: ");
             else                        printf("Nhập lại (Bạn còn %d lần): ", menuEntryCount);
             if (fgets(input,sizeof(input),stdin)==NULL) continue;
@@ -1267,4 +1309,6 @@ void khoidong(node root)
         else if (ROLE == 'A') AdministratorLogin(&shutdown);
 
     } while (shutdown != 'Y');
+        printf("\n*** MÁY ĐANG TẮT... CẢM ƠN QUÝ KHÁCH ĐÃ SỬ DỤNG DỊCH VỤ ***\n\n");
+        
 }
