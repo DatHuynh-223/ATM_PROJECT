@@ -233,11 +233,11 @@ long long chonsotiengui(node target, node myAccount)
 
         if (moneyEntryCount == 3)
         {
-            printf("Chọn số tiền bạn muốn gửi: ");
+            printf("Nhập lựa chọn của bạn : ");
         }
         else
         {
-            printf("Chọn số tiền bạn muốn gửi (Bạn còn %d lần): ", moneyEntryCount);
+            printf("Nhập lại lựa chọn của bạn  (Bạn còn %d lần): ", moneyEntryCount);
         }
         
         
@@ -356,9 +356,13 @@ void guitien(node root, node myAccount)
         
         AccountEntryCount -= 1;
 
-        //Nếu cuối là enter thì sẽ là kết thúc
         if (fgets(account,sizeof(account),stdin)==NULL) continue;
         int len=strlen(account);
+        if (account[0]=='\n')
+        {
+            printf("**** Bạn chưa nhập gì cả! **** \n");
+            continue;
+        }
         if (account[len-1]=='\n')
         {
         	account[len-1]='\0';
@@ -394,9 +398,27 @@ void guitien(node root, node myAccount)
                     }
                     
                     message_Entry_Count -= 1;
-                    scanf(" %80[^\n]", message);
-                    clear_msg = clear_buffer();
-                } while (clear_msg == 1 && message_Entry_Count > 0);
+                    if (fgets(message,sizeof(message),stdin)==NULL) continue;
+                    int len=strlen(message);
+                    if (message[len-1]=='\n')
+                    {
+                        message[len-1]='\0';
+                        len--;
+                    }
+                    else
+                    {
+                        clear_msg = clear_buffer();
+                    } 
+                    if (len>80)
+                    {
+                        if (message_Entry_Count>0) printf("Nhập quá 80 kí tự ,vui lòng nhập lại !!!");
+                        else
+                        {
+                            printf("Đã quá số lần nhập -.-");
+                        }
+                    }
+                }
+                while (clear_msg == 1 && message_Entry_Count > 0);
 
                 if (clear_msg == 1)
                 {
@@ -528,9 +550,7 @@ long long chonsotienchuyen()
     int moneyEntryCount = 3;
     char choose[100];
 
-    do
-    {
-        printf("\nCHỈ NHẬN MỆNH GIÁ 50.000 VND, 100.000 VND, 200.000 VND, 500.000 VND\n\n");
+    printf("\nCHỈ NHẬN MỆNH GIÁ 50.000 VND, 100.000 VND, 200.000 VND, 500.000 VND\n\n");
 
         int j = 0;
         for (j = 0; j < 8; j++)
@@ -544,6 +564,8 @@ long long chonsotienchuyen()
             }
         }
 
+    do
+    {
         if (moneyEntryCount == 3)
         {
             printf("Chọn số tiền bạn muốn chuyển: ");
@@ -605,7 +627,7 @@ long long chonsotienchuyen()
             printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
         }
 
-    } while (i < 0 || i > 7 || clear == 1);
+    } while (moneyEntryCount>0);
 
     if (i == 0) return 0;
     else if (i == 7)
@@ -663,9 +685,22 @@ void chuyentien(node root, node myAccount)
             printf("Nhập số tài khoản bạn muốn chuyển tiền (Bạn còn %d lần nhập): ", AccountEntryCount);
         }
         
-        scanf(" %20s", account);
-        int clear = clear_buffer();
         AccountEntryCount -= 1;
+        if (fgets(account,sizeof(account),stdin)==NULL) continue;
+        int len=strlen(account);
+        if (account[0]=='\n')
+        {
+            printf("**** Bạn chưa nhập gì cả! **** \n");
+            continue;
+        }
+        if (account[len-1]=='\n')
+        {
+        	account[len-1]='\0';
+		}
+        else
+        {
+        	clear_buffer();
+		}
 
         if (strcmp(account, myAccount->Data->AccountNumber) == 0)
         {
@@ -686,8 +721,16 @@ void chuyentien(node root, node myAccount)
                 {
                     printf("Bạn muốn nhập lại Số tài khoản không? [Y/N] (Bạn còn %d lần): ", ynEntryCount);
                 }
-                
-                scanf(" %c", &yesno);
+                if (scanf("%c", &yesno) != 1) 
+                {
+                    ynEntryCount--;
+                    continue; 
+                }
+                if (yesno=='\n')
+                {
+                    ynEntryCount--;
+                    continue;
+                } 
                 clear_yn = clear_buffer();
 
                 if ((yesno != 'Y' && yesno != 'N') || clear_yn == 1)
@@ -700,7 +743,7 @@ void chuyentien(node root, node myAccount)
                     }
                     printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
                 }
-            } while ((yesno != 'Y' && yesno != 'N') || clear_yn == 1);
+            } while (((yesno != 'Y' && yesno != 'N') || clear_yn == 1) && ynEntryCount > 0);
             
             if (yesno == 'N') return;
         }
@@ -719,22 +762,40 @@ void chuyentien(node root, node myAccount)
                     int clear_msg = 0;
 
                     do
-                    {
-                        if (clear_msg == 1) printf("\n*** QUÁ 80 KÍ TỰ ***\n\n");
+                {
+                    if (clear_msg == 1) printf("\n*** QUÁ 80 KÍ TỰ ***\n\n");
 
-                        if (message_Entry_Count == 3)
-                        {
-                            printf("Nhập lời nhắn với 80 kí tự: ");
-                        }
+                    if (message_Entry_Count == 3)
+                    {
+                        printf("Nhập lời nhắn với 80 kí tự: ");
+                    }
+                    else
+                    {
+                        printf("Nhập lời nhắn với 80 kí tự (Bạn còn %d lần nhập): ", message_Entry_Count);
+                    }
+                    
+                    message_Entry_Count -= 1;
+                    if (fgets(message,sizeof(message),stdin)==NULL) continue;
+                    int len=strlen(message);
+                    if (message[len-1]=='\n')
+                    {
+                        message[len-1]='\0';
+                        len--;
+                    }
+                    else
+                    {
+                        clear_msg = clear_buffer();
+                    } 
+                    if (len>80)
+                    {
+                        if (message_Entry_Count>0) printf("Nhập quá 80 kí tự ,vui lòng nhập lại !!!");
                         else
                         {
-                            printf("Nhập lời nhắn với 80 kí tự (Bạn còn %d lần nhập): ", message_Entry_Count);
+                            printf("Đã quá số lần nhập -.-");
                         }
-                        
-                        message_Entry_Count -= 1;
-                        scanf(" %80[^\n]", message); 
-                        clear_msg = clear_buffer();
-                    } while (clear_msg == 1 && message_Entry_Count > 0);
+                    }
+                }
+                while (clear_msg == 1 && message_Entry_Count > 0);
 
                     if (clear_msg == 1)
                     {
@@ -801,30 +862,39 @@ void chuyentien(node root, node myAccount)
                 int ynEntryCount = 3;
 
                 do 
+            {
+                if (ynEntryCount == 3)
                 {
-                    if (ynEntryCount == 3)
-                    {
-                        printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
-                    }
-                    else
-                    {
-                        printf("Bạn muốn nhập lại Số tài khoản không? [Y/N] (Bạn còn %d lần): ", ynEntryCount);
-                    }
-                    
-                    scanf(" %c", &yesno);
-                    clear_yn = clear_buffer();
+                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
+                }
+                else
+                {
+                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N] (Bạn còn %d lần): ", ynEntryCount);
+                }
+                if (scanf("%c", &yesno) != 1) 
+                {
+                    ynEntryCount--;
+                    continue; 
+                }
+                if (yesno=='\n')
+                {
+                    ynEntryCount--;
+                    continue;
+                } 
+                clear_yn = clear_buffer();
 
-                    if ((yesno != 'Y' && yesno != 'N') || clear_yn == 1)
+                if ((yesno != 'Y' && yesno != 'N') || clear_yn == 1)
+                {
+                    ynEntryCount -= 1;
+                    if (ynEntryCount == 0)
                     {
-                        ynEntryCount -= 1;
-                        if (ynEntryCount == 0)
-                        {
-                            printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
-                            return;
-                        }
-                        printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
+                        printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+                        return;
                     }
-                } while ((yesno != 'Y' && yesno != 'N') || clear_yn == 1);
+                    printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
+                }
+            } while (((yesno != 'Y' && yesno != 'N') || clear_yn == 1) && ynEntryCount > 0);
+
                 
                 if (yesno == 'N') return;
             }
@@ -1233,6 +1303,7 @@ void AdministratorLogin(char *shutdown)
     //Nhập mã bảo mật
     do 
     {
+        if (Pin_Entry_Count <3) printf("***** Nhập sai! *****\n");
         printf("Vui lòng nhập mã bảo mật của Admin (Bạn còn %d lần nhập): ", Pin_Entry_Count);
         Pin_Entry_Count -= 1;
 		if (fgets(Pin_Entry,sizeof(Pin_Entry),stdin)==NULL) continue;
@@ -1309,6 +1380,6 @@ void khoidong(node root)
         else if (ROLE == 'A') AdministratorLogin(&shutdown);
 
     } while (shutdown != 'Y');
-        printf("\n*** MÁY ĐANG TẮT... CẢM ƠN QUÝ KHÁCH ĐÃ SỬ DỤNG DỊCH VỤ ***\n\n");
+    printf("\n*** MÁY ĐANG TẮT... CẢM ƠN QUÝ KHÁCH ĐÃ SỬ DỤNG DỊCH VỤ ***\n\n");
         
 }
