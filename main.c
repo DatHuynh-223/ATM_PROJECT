@@ -913,48 +913,84 @@ long long chonsotienrut()
     int i = 0;
     int clear = 0;
     int moneyEntryCount = 3;
-
-    do
+    char choose[100];
+    int j = 0;
+    for (j = 0; j < 8; j++)
     {
-        printf("\n");
-        int j = 0;
-        for (j = 0; j < 8; j++)
+        if (j == 0) printf("%d. Quay về menu        ", j);
+        else if (j == 7) printf("%d. Số khác\n\n", j);
+        else
         {
-            if (j == 0) printf("%d. Quay về menu        ", j);
-            else if (j == 7) printf("%d. Số khác\n\n", j);
-            else
-            {
-                printf("%d. %lld VND       ",j,arr[j]);
-                if (j == 2 || j == 5) printf("\n\n");
-            }
+            printf("%d. %lld VND       ",j,arr[j]);
+            if (j == 2 || j == 5) printf("\n\n");
         }
+    }
+    do 
+    {
 
         if (moneyEntryCount == 3)
         {
-            printf("Chọn số tiền bạn muốn rút: ");
+            printf("Nhập lựa chọn của bạn : ");
         }
         else
         {
-            printf("Chọn số tiền bạn muốn rút (Bạn còn %d lần): ", moneyEntryCount);
+            printf("Nhập lại lựa chọn của bạn  (Bạn còn %d lần): ", moneyEntryCount);
         }
         
-        scanf("%d", &i);
-        clear = clear_buffer();
+        
+        if (fgets(choose,sizeof(choose),stdin)==NULL) continue;
+        
+        if (choose[0]=='\n')
+        {
+            moneyEntryCount -= 1;
+            if (moneyEntryCount > 0) printf("\n*** Bạn chưa nhập gì! ***\n");
+            continue;
+        }
+        
+        int len = strlen(choose);
+        clear = 0;
+        
+        if (choose[len-1]=='\n') 
+        {
+            choose[len-1]='\0';
+            len--;
+        }
+        else 
+        {
+            clear = clear_buffer(); 
+        }
+    
+        if (len > 1 || clear == 1)
+        {
+            moneyEntryCount -= 1;
+            if (moneyEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng CHỈ NHẬP 1 SỐ. ***\n");
+            continue; 
+        }
+        
+        if (choose[0]>='0' && choose[0] <='7')
+        {
+            i = choose[0]-'0';
+            break; 
+        }
+        else
+        {
+            moneyEntryCount -= 1;
+            if (moneyEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
+        }
 
         if (i < 0 || i > 7 || clear == 1)
         {
             moneyEntryCount -= 1;
-            
-            if (moneyEntryCount == 0)
+            printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
+        }
+
+    } while (moneyEntryCount > 0);
+    if (moneyEntryCount == 0)
             {
                 printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
                 return 0;
             }
-            printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
-        }
-
-    } while (i < 0 || i > 7 || clear == 1);
-
+            
     if (i == 0) return 0;
     else if (i == 7)
     {
@@ -962,6 +998,7 @@ long long chonsotienrut()
 
         int tempEntry = 3;
         long long temp;
+        char *tempstr=(char*)malloc(sizeof(char)*21);
         do
         {
             if (tempEntry == 3)
@@ -973,9 +1010,27 @@ long long chonsotienrut()
                 printf("Vui lòng nhập bội số của 50.000 VND (Bạn còn %d lần): ", tempEntry);
             }
             
-            scanf(" %lld", &temp);
-            clear = clear_buffer();
-
+            if (fgets(tempstr, sizeof(tempstr), stdin) == NULL) 
+            {
+                tempEntry--;
+                continue;
+            }
+            if (tempstr[0] == '\n') 
+            {
+                tempEntry--;
+                if (tempEntry > 0) printf("\n*** Bạn chưa nhập gì! ***\n");
+                continue;
+            }
+            int len = strlen(tempstr);
+            if (tempstr[len-1] == '\n') 
+            {
+                tempstr[len-1] = '\0';
+            }
+            else
+            {
+                clear = clear_buffer();
+            }
+            temp = atoll(tempstr);
             if (temp % 50000 != 0 || temp > hanmuctoida || temp <= 0 || clear == 1)
             {
                 tempEntry -= 1;
@@ -1065,41 +1120,78 @@ void xemtaikhoan(node myAccount)
     int choice;
     int clear;
     int accEntryCount = 3;
-
-    do
+    char *choose = (char*)malloc(sizeof(char)*21);
+    printf("\n");
+    int i;
+    for (i = 0; i< optionCount; i+=1)
     {
-        printf("\n");
-        int i;
-        for (i = 0; i< optionCount; i+=1)
-        {
-            printf("%s  ",option[i]);
-        }
+        printf("%s  ",option[i]);
+    }
+    do 
+    {
 
         if (accEntryCount == 3)
         {
-            printf("\n\nVui lòng nhập lựa chọn của bạn: ");
+            printf("\nNhập lựa chọn của bạn : ");
         }
         else
         {
-            printf("\n\nVui lòng nhập lựa chọn của bạn (Bạn còn %d lần): ", accEntryCount);
+            printf("Nhập lại lựa chọn của bạn  (Bạn còn %d lần): ", accEntryCount);
         }
         
-        scanf("%d", &choice);
-        clear = clear_buffer();
-
-        if (choice < 0 || choice > 2 || clear == 1)
+        
+        if (fgets(choose,sizeof(choose),stdin)==NULL) continue;
+        
+        if (choose[0]=='\n')
         {
             accEntryCount -= 1;
-            
-            if (accEntryCount == 0)
-            {
-                printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
-                return;
-            }
-            printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ chọn số từ 0 đến 2. ***\n\n");
+            if (accEntryCount > 0) printf("\n*** Bạn chưa nhập gì! ***\n");
+            continue;
+        }
+        
+        int len = strlen(choose);
+        clear = 0;
+        
+        if (choose[len-1]=='\n') 
+        {
+            choose[len-1]='\0';
+            len--;
+        }
+        else 
+        {
+            clear = clear_buffer(); 
+        }
+    
+        if (len > 1 || clear == 1)
+        {
+            accEntryCount -= 1;
+            if (accEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng CHỈ NHẬP 1 SỐ. ***\n");
+            continue; 
+        }
+        
+        if (choose[0]>='0' && choose[0] <='2')
+        {
+            choice= choose[0]-'0';
+            break; 
+        }
+        else
+        {
+            accEntryCount -= 1;
+            if (accEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 2. ***\n\n");
         }
 
-    } while (choice < 0 || choice > 2 || clear == 1);
+        if (choice < 0 || choice     > 2 || clear == 1)
+        {
+            accEntryCount -= 1;
+            printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
+        }
+
+    } while (accEntryCount > 0);
+    if (accEntryCount == 0)
+            {
+                printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+                return ;
+            }
 
     if (choice == 1)
     {
@@ -1265,24 +1357,40 @@ void GuestLogin(node root)
             int clear_yn;
             int ynEntryCount = 3; 
 
-            do 
+           do 
             {
-                if (ynEntryCount == 0)
+                if (ynEntryCount == 3)
                 {
-                    printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. KHỞI ĐỘNG LẠI CHƯƠNG TRÌNH ***\n\n");
-                    return; 
+                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
                 }
-
-                printf("Bạn muốn nhập lại Số tài khoản không? [Y/N] (Bạn còn %d lần): ", ynEntryCount);
-                scanf(" %c", &yesno);
+                else
+                {
+                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N] (Bạn còn %d lần): ", ynEntryCount);
+                }
+                if (scanf("%c", &yesno) != 1) 
+                {
+                    ynEntryCount--;
+                    continue; 
+                }
+                if (yesno=='\n')
+                {
+                    ynEntryCount--;
+                    continue;
+                } 
                 clear_yn = clear_buffer();
-                ynEntryCount -= 1;
 
                 if ((yesno != 'Y' && yesno != 'N') || clear_yn == 1)
                 {
+                    ynEntryCount -= 1;
+                    if (ynEntryCount == 0)
+                    {
+                        printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+                        return;
+                    }
                     printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
                 }
-            } while ((yesno != 'Y' && yesno != 'N') || clear_yn == 1);
+            } while (((yesno != 'Y' && yesno != 'N') || clear_yn == 1) && ynEntryCount > 0);
+
 
             if (yesno == 'N') return;
         } 
