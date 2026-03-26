@@ -9,11 +9,11 @@
 #include <ctype.h> // Cần cho hàm kiểm tra số isdigit()
 
 // 2. Các hằng số cấu hình hệ thống (Dễ dàng thay đổi sau này)
-#define MAX_ACC_LEN 21           // Độ dài STK tối đa
-#define MAX_PIN_LEN 11           // Độ dài mã PIN tối đa
-#define MAX_DAILY_TRANSACTION 10 // Số giao dịch tối đa/ngày
-#define MAX_TRASACTION_LEN 51    // Giới hạn số lượng giao dịch trong lịch sử
-#define INFORM_LEN 175           // Độ dài tối đa của một dòng thông tin giao dịch
+#define MAX_ACC_LEN 21           //có thể thay đổi nếu cần thiết (dư 1 kí \0)
+#define MAX_PIN_LEN 11          //có thể thay đổi nếu cần thiết (dư 1 kí \0)
+#define MAX_DAILY_TRANSACTION 10 //tùy vào ý của thầy cô
+#define MAX_TRANSACTION_LEN 51    // giới hạn độ dài tin nhắn mỗi giao dịch (dư 1 kí \0)
+#define INFORM_LEN 175           //Thõa được số lượng từ trong message
 #define GIAODICHPHIEN 100        // Tổng giao dịch trong một phiên làm việc của ATM
 
 // 3. Khai báo biến toàn cục (Sử dụng từ khóa extern)

@@ -1,9 +1,9 @@
 #ifndef TRANSACTIONS_H
 #define TRANSACTIONS_H
 
-#include "common.h"
-#include "account_manager.h"
-#include "utils.h"
+#include "../../common/common.h"
+#include "../accounts/account_manager.h"
+#include "../utils/utils.h"
 
 // Các hàm hỗ trợ chọn số tiền
 long long chonsotiengui(node target, node myAccount);

@@ -514,7 +514,7 @@ void guitien(node root, node myAccount)
                 
                 if (myAccount == targetAccount)
                 {
-                    if (myAccount->Data->TransactionCount < MAX_TRASACTION_LEN)
+                    if (myAccount->Data->TransactionCount < MAX_TRANSACTION_LEN)
                     {
                         int current_index = myAccount->Data->TransactionCount;
                         myAccount->Data->Balance += sotiengui;
@@ -535,12 +535,12 @@ void guitien(node root, node myAccount)
                 }
                 else
                 {
-                    if (myAccount->Data->TransactionCount >= MAX_TRASACTION_LEN)
+                    if (myAccount->Data->TransactionCount >= MAX_TRANSACTION_LEN)
                     {
                         printf("\n>>>\n\nGIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA ĐỐI VỚI TÀI KHOẢN CỦA BẠN\n\n");
                         return;
                     }
-                    if (targetAccount->Data->TransactionCount >= MAX_TRASACTION_LEN)
+                    if (targetAccount->Data->TransactionCount >= MAX_TRANSACTION_LEN)
                     {
                         printf("\n>>>\n\nGIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA ĐỐI VỚI TÀI KHOẢN GỬI ĐẾN\n\n");
                         return;
@@ -767,13 +767,13 @@ void chuyentien(node root, node myAccount)
                         return;
                     }
 
-                    if (myAccount->Data->TransactionCount >= MAX_TRASACTION_LEN)
+                    if (myAccount->Data->TransactionCount >= MAX_TRANSACTION_LEN)
                     {
                         printf("\n>>>\n\nGIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA ĐỐI VỚI TÀI KHOẢN CỦA BẠN\n\n");
                         return;
                     }
 
-                    if (targetAccount->Data->TransactionCount >= MAX_TRASACTION_LEN)
+                    if (targetAccount->Data->TransactionCount >= MAX_TRANSACTION_LEN)
                     {
                         printf("\n>>>\n\nGIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA ĐỐI VỚI TÀI KHOẢN GỬI ĐẾN\n\n");
                         return;
@@ -887,7 +887,7 @@ void ruttien(node root, node myAccount)
         
 
         //Kiểm tra số lần giao dịch đối với lịch sử My Account
-        if (myAccount ->Data ->TransactionCount >= MAX_TRASACTION_LEN)
+        if (myAccount ->Data ->TransactionCount >= MAX_TRANSACTION_LEN)
         {
             printf(">>>\n\nGIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA TRONG LỊCH SỰ GIAO DỊCH ĐỐI VỚI TÀI KHOẢN CỦA BẠN\n\n");
             return;

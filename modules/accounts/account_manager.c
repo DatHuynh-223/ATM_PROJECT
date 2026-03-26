@@ -54,7 +54,7 @@ node CreateTree (node root, node a)
 //Hàm đọc file
 node input(node root)
 {
-    FILE *f = fopen("input.txt", "r");
+    FILE *f = fopen("data/input.txt", "r");
 
     if (f == NULL)
     {

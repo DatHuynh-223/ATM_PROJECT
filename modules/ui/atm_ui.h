@@ -1,10 +1,10 @@
 #ifndef ATM_UI_H
 #define ATM_UI_H
 
-#include "common.h"
-#include "account_manager.h"
-#include "transactions.h"
-#include "utils.h"
+#include "../../common/common.h"
+#include "../accounts/account_manager.h"
+#include "../transactions/transactions.h"
+#include "../utils/utils.h"
 
 // Menu chính sau khi đăng nhập thành công
 void menu(node root, node myAccount);

@@ -1,8 +1,8 @@
 #ifndef ACCOUNT_MANAGER_H
 #define ACCOUNT_MANAGER_H
  
-#include "common.h"
-#include "utils.h"
+#include "../../common/common.h"
+#include "../utils/utils.h"
 
 // Định nghĩa cấu trúc dữ liệu Tài khoản
 typedef struct Account
@@ -11,7 +11,7 @@ typedef struct Account
     char Pin[MAX_PIN_LEN];
     unsigned long long Balance;
     int TransactionCount;
-    char TransactionHistory[MAX_TRASACTION_LEN][INFORM_LEN];
+    char TransactionHistory[MAX_TRANSACTION_LEN][INFORM_LEN];
 } *Account;
 // Định nghĩa cấu trúc dữ liệu Node của cây nhị phân tìm kiếm
 typedef struct TreeNode

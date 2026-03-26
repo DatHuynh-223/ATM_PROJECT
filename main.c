@@ -1,9 +1,9 @@
-#include "common.h"
-#include "account_manager.h"
-#include "atm_ui.h"
+#include "common/common.h"
+#include "modules/accounts/account_manager.h"
+#include "modules/ui/atm_ui.h"
 /* 
 ------RUN CODE------
-gcc main.c utils.c account_manager.c transactions.c atm_ui.c -o atm.exe 
+gcc main.c modules/accounts/account_manager.c modules/transactions/transactions.c utils/utils.c -o atm.exe
 ./atm.exe
 
 ------CHỨC NĂNG CÁC MODULE------
@@ -21,6 +21,7 @@ int admin_index = 0;
 
 int main()
 {
+    SetConsoleOutputCP(CP_UTF8);
     node root=NULL;
     root=input(root);
     if (root != NULL)

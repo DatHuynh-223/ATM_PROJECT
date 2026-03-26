@@ -201,7 +201,7 @@ void AdministratorLogin(char *shutdown)
     //Kiểm tra mã bảo mật
     if (strcmp(Pin_Entry, admin_pin) == 0 && clear == 0)
     {
-        FILE *f =  fopen("output.txt", "w");
+        FILE *f =  fopen("data/output.txt", "w");
         int i = 0;
 
         for (i = 0; i < admin_index; i+=1)
