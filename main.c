@@ -30,6 +30,8 @@ typedef struct TreeNode
     struct TreeNode *right;
 } *node;    
 
+// Hàm kiểm tra xem chuỗi có bị lẫn chữ cái/kí tự đặc biệt không
+int la_chuoi_so_hop_le(char *str);
 
 //Hàm xóa bộ nhớ đệm khi người dùng nhập dư kí tự
 int clear_buffer();
@@ -90,6 +92,16 @@ int main()
     node root = NULL;
     root = input(root);
     khoidong(root);
+}
+
+// Hàm kiểm tra xem chuỗi có bị lẫn chữ cái/kí tự đặc biệt không
+int la_chuoi_so_hop_le(char *str) {
+    for (int i = 0; i < strlen(str); i++) {
+        if (!isdigit(str[i])) {
+            return 0; // Trả về 0 (False) nếu phát hiện bất kì thứ gì không phải số từ 0-9
+        }
+    }
+    return 1; // Hợp lệ
 }
 
 //Hàm xóa bộ nhớ đệm khi người dùng nhập dư kí tự
@@ -168,22 +180,54 @@ node input(node root)
         return root;
     }
 
-    //tạo tmp1 lưu account number
-    char tmp1[MAX_ACC_LEN];
+    // Buffer rộng rãi để chứa trọn vẹn 1 dòng từ file (kể cả người dùng gõ siêu dài)
+    char buffer[256];
 
-    //tạo tmp2 lưu pin
-    char tmp2[MAX_PIN_LEN];
+    printf("\n--- TIEN HANH DOC FILE ---\n");
 
-    //tạo tmp3 lưu balance
-    unsigned long long tmp3;
+    while (fgets(buffer, sizeof(buffer), f) != NULL) {
+        char stk[50];
+        char pin[20];
+        char thong_tin_thua[50];
+        unsigned long long balance;
 
+        // Dùng sscanf để bóc tách dữ liệu từ buffer
+        // %49s và %19s là khiên chống tràn: Nếu chuỗi dài 1000 kí tự, nó cũng chỉ cắt lấy 49 kí tự
+        int so_luong_doc = sscanf(buffer, " %49s %19s %llu %49s", stk, pin, &balance, thong_tin_thua);
 
-    // Khi fscanf không nhận được giá trị nào thõa nên trả về -1
-    // Nếu đọc thành công sẽ trả về 1 nhưng có 3 phần tử sẽ trả về 3
-    while (fscanf(f, "%20s %10s %llu", tmp1, tmp2, &tmp3) == 3) 
-    {
-        Account temp = append_account(tmp1, tmp2, tmp3);
+        // 1. Kiểm tra xem có đủ 3 thông tin không (Đề phòng dòng bị thiếu)
+        if (so_luong_doc < 3) {
+            printf("[TU CHOI] Dong thieu du lieu: %s", buffer);
+            continue; // Bỏ qua, sang dòng tiếp theo
+        }
+
+        // Kiểm tra thừa thông tin không
+        if (so_luong_doc > 3) {
+            printf("[TU CHOI] Dong bi THUA du lieu (Rac: %s): %s", thong_tin_thua, buffer);
+            continue;
+        }
+
+        // 2. Kiểm tra Số tài khoản và PIN có bị lẫn chữ cái không
+        if (!la_chuoi_so_hop_le(stk) || !la_chuoi_so_hop_le(pin)) {
+            printf("[TU CHOI] STK hoac PIN chua ki tu la: STK=%s, PIN=%s\n", stk, pin);
+            continue; 
+        }
+
+        // 3. Kiểm tra độ dài (Ví dụ quy định STK không quá 14 số, PIN bằng 6 số)
+        if (strlen(stk) > MAX_ACC_LEN-1) {
+            printf("[TU CHOI] STK qua dai (Max 20): %s\n", stk);
+            continue;
+        }
+
+        if (strlen(pin) > MAX_PIN_LEN-1) {
+            printf("[TU CHOI] PIN qua dai (Max 10): %s\n", pin);
+            continue;
+        }
+
+        // Tiến hành đưa vào Danh sách liên kết hoặc Cây nhị phân ở đây
+        Account temp = append_account(stk, pin, balance);
         root = CreateTree(root,CreateNode(temp));
+        printf("[HOP LE] Them thanh cong: STK: %s | Du: %llu\n", stk, balance);
     }
     return root;
 }
