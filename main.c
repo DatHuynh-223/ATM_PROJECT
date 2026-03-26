@@ -160,7 +160,7 @@ node CreateTree (node root, node a)
 //Hàm đọc file
 node input(node root)
 {
-    FILE *f = fopen("D:\\project\\New folder\\ATM_PROJECT\\input.txt", "r");
+    FILE *f = fopen("input.txt", "r");
 
     if (f == NULL)
     {
@@ -301,6 +301,7 @@ long long chonsotiengui(node target, node myAccount)
         int tempEntry = 3;
         long long temp;
         do
+        
         {
             if (tempEntry == 3)
             {
