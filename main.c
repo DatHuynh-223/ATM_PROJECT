@@ -301,7 +301,6 @@ long long chonsotiengui(node target, node myAccount)
         int tempEntry = 3;
         long long temp;
         do
-        
         {
             if (tempEntry == 3)
             {
