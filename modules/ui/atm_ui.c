@@ -232,7 +232,7 @@ void khoidong(node root)
     do
     {
         printf("======================================================\n\n");
-        printf("* CHÀO MỪNG QUÝ KHÁCH ĐẾN VỚI NGÂN HÀNG ĐẠT KHÔNG CHÍN*\n\n");
+        printf("* CHÀO MỪNG QUÝ KHÁCH ĐẾN VỚI NGÂN HÀNG 3 THÀNH VIÊN*\n\n");
         printf("======================================================\n\n");
 
         roleEntryCount = 3;
