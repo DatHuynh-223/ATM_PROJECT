@@ -64,9 +64,6 @@ node input(node root)
 
     // Buffer rộng rãi để chứa trọn vẹn 1 dòng từ file (kể cả người dùng gõ siêu dài)
     char buffer[256];
-
-    printf("\n--- TIEN HANH DOC FILE ---\n");
-
     while (fgets(buffer, sizeof(buffer), f) != NULL) {
         char stk[50];
         char pin[20];
@@ -79,37 +76,31 @@ node input(node root)
 
         // 1. Kiểm tra xem có đủ 3 thông tin không (Đề phòng dòng bị thiếu)
         if (so_luong_doc < 3) {
-            printf("[TU CHOI] Dong thieu du lieu: %s", buffer);
             continue; // Bỏ qua, sang dòng tiếp theo
         }
 
         // Kiểm tra thừa thông tin không
         if (so_luong_doc > 3) {
-            printf("[TU CHOI] Dong bi THUA du lieu (Rac: %s): %s", thong_tin_thua, buffer);
             continue;
         }
 
         // 2. Kiểm tra Số tài khoản và PIN có bị lẫn chữ cái không
         if (!la_chuoi_so_hop_le(stk) || !la_chuoi_so_hop_le(pin)) {
-            printf("[TU CHOI] STK hoac PIN chua ki tu la: STK=%s, PIN=%s\n", stk, pin);
             continue; 
         }
 
         // 3. Kiểm tra độ dài (Ví dụ quy định STK không quá 14 số, PIN bằng 6 số)
         if (strlen(stk) > MAX_ACC_LEN-1) {
-            printf("[TU CHOI] STK qua dai (Max 20): %s\n", stk);
             continue;
         }
 
         if (strlen(pin) > MAX_PIN_LEN-1) {
-            printf("[TU CHOI] PIN qua dai (Max 10): %s\n", pin);
             continue;
         }
 
         // Tiến hành đưa vào Danh sách liên kết hoặc Cây nhị phân ở đây
         Account temp = append_account(stk, pin, balance);
         root = CreateTree(root,CreateNode(temp));
-        printf("[HOP LE] Them thanh cong: STK: %s | Du: %llu\n", stk, balance);
     }
     return root;
 }

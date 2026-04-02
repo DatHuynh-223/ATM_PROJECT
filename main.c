@@ -3,7 +3,7 @@
 #include "modules/ui/atm_ui.h"
 /* 
 ------RUN CODE------
-gcc main.c modules/accounts/account_manager.c modules/transactions/transactions.c utils/utils.c -o atm.exe
+gcc main.c modules/accounts/account_manager.c modules/transactions/transactions.c modules/ui/atm_ui.c modules/utils/utils.c -o atm.exe
 ./atm.exe
 
 ------CHỨC NĂNG CÁC MODULE------
