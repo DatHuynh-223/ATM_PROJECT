@@ -234,7 +234,6 @@ void khoidong(node root)
         printf("======================================================\n\n");
         printf("* CHÀO MỪNG QUÝ KHÁCH ĐẾN VỚI NGÂN HÀNG 3 THÀNH VIÊN*\n\n");
         printf("======================================================\n\n");
-
         roleEntryCount = 3;
 
         do 
@@ -245,6 +244,7 @@ void khoidong(node root)
                 return; 
             }
             roleEntryCount -= 1;
+            printf("\nA - Admin (Lập trình viên) | G - Guest (Khách hàng)\n");
             printf("Vai trò của bạn là gì [A/G] (Bạn còn %d lần): ", roleEntryCount);
             if (scanf("%c", &ROLE) != 1) {
                 continue; 
