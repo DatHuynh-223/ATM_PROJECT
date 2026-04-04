@@ -228,43 +228,70 @@ void khoidong(node root)
     char shutdown = 'N';
     int clear;
     int roleEntryCount;
-
-    do
+    int passEntryCount = 3;
+    char pass[7];
+    int KT=0;
+    printf("[NHẬP PASS CỦA ADMIN ĐỂ KHỞI ĐỘNG ATM ]\n");
+    while (passEntryCount >0)
     {
-        printf("======================================================\n\n");
-        printf("* CHÀO MỪNG QUÝ KHÁCH ĐẾN VỚI NGÂN HÀNG 3 THÀNH VIÊN*\n\n");
-        printf("======================================================\n\n");
-        roleEntryCount = 3;
-
-        do 
+        printf("Nhập pass: ");
+        passEntryCount-=1;
+        if (fgets(pass,sizeof(pass),stdin)==NULL) continue;
+        if (pass[0]=='\n')	continue;
+        pass[strcspn(pass, "\n")] = 0;
+        if (strcmp(pass, "000000") == 0)
         {
-            if (roleEntryCount == 0)
-            {
-                printf("\n*** QUÁ SỐ LẦN NHẬP. TỰ ĐỘNG TẮT MÁY ĐỂ BẢO MẬT ***\n\n");
-                return; 
-            }
-            roleEntryCount -= 1;
-            printf("\nA - Admin (Lập trình viên) | G - Guest (Khách hàng)\n");
-            printf("Vai trò của bạn là gì [A/G] (Bạn còn %d lần): ", roleEntryCount);
-            if (scanf("%c", &ROLE) != 1) {
-                continue; 
-            }
-            if (ROLE=='\n')
-            {
-            continue;
-            } 
-            clear = clear_buffer();
+            printf("\n*** PASS ĐÚNG! ***\n\n");
+            clear_buffer();
+            KT=1;
+            break;
+        }
+        else
+        {
+            printf("\n*** Pass không đúng! ***\n\n");
+        }   
+    }
+    if (KT)
+    {
+        do
+        {
+            printf("======================================================\n\n");
+            printf("* CHÀO MỪNG QUÝ KHÁCH ĐẾN VỚI NGÂN HÀNG 3 THÀNH VIÊN*\n\n");
+            printf("======================================================\n\n");
+            roleEntryCount = 3;
 
-            if ((ROLE != 'A' && ROLE != 'G') || clear == 1)
+            do 
             {
-                printf("Lỗi: Vui lòng chỉ nhập A hoặc G!\n\n");
-            }
-        } while ((ROLE != 'A' && ROLE != 'G') || clear == 1);
+                if (roleEntryCount == 0)
+                {
+                    printf("\n*** QUÁ SỐ LẦN NHẬP. TỰ ĐỘNG TẮT MÁY ĐỂ BẢO MẬT ***\n\n");
+                    return; 
+                }
+                roleEntryCount -= 1;
+                printf("\nA - Admin (Lập trình viên) | G - Guest (Khách hàng)\n");
+                printf("Vai trò của bạn là gì [A/G] (Bạn còn %d lần): ", roleEntryCount);
+                if (scanf("%c", &ROLE) != 1) {
+                    continue; 
+                }
+                if (ROLE=='\n')
+                {
+                continue;
+                } 
+                clear = clear_buffer();
 
-        if (ROLE == 'G') GuestLogin(root);
-        else if (ROLE == 'A') AdministratorLogin(&shutdown);
+                if ((ROLE != 'A' && ROLE != 'G') || clear == 1)
+                {
+                    printf("Lỗi: Vui lòng chỉ nhập A hoặc G!\n\n");
+                }
+            } while ((ROLE != 'A' && ROLE != 'G') || clear == 1);
 
-    } while (shutdown != 'Y');
-    printf("\n*** MÁY ĐANG TẮT... CẢM ƠN QUÝ KHÁCH ĐÃ SỬ DỤNG DỊCH VỤ ***\n\n");
-        
+            if (ROLE == 'G') GuestLogin(root);
+            else if (ROLE == 'A') AdministratorLogin(&shutdown);
+
+        } while (shutdown != 'Y');
+        printf("\n*** MÁY ĐANG TẮT... CẢM ƠN QUÝ KHÁCH ĐÃ SỬ DỤNG DỊCH VỤ ***\n\n");
+    }
+    else{
+        printf("\n*** QUÁ SỐ LẦN NHẬP PASS. TỰ ĐỘNG TẮT MÁY ĐỂ BẢO MẬT ***\n\n");
+    }
 }
