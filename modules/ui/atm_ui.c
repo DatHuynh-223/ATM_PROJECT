@@ -96,8 +96,6 @@ void GuestLogin(node root,char *shutdown )
     char stk_Admin[MAX_ACC_LEN]="06121234";
     char shutdown1='N';
     int KT=0;
-    printf("Nếu bạn là Admin, hãy nhập Số tài khoản của Admin để đăng nhập với vai trò Lập trình viên!\n");
-    printf("Nếu bạn là khách hàng, hãy nhập Số tài khoản của bạn để đăng nhập với vai trò Khách!\n");
     do 
     {
         if (KT) loginCount=3;
