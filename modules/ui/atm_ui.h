@@ -10,7 +10,7 @@
 void menu(node root, node myAccount);
 
 // Xử lý đăng nhập cho khách hàng (G - Guest)
-void GuestLogin(node root);
+void GuestLogin(node root,char *shutdown);
 
 // Xử lý đăng nhập cho quản trị viên (A - Admin)
 void AdministratorLogin(char *shutdown);

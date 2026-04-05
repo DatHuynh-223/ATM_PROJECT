@@ -1,5 +1,4 @@
 #include "transactions.h"
-
 // Các hàm hỗ trợ chọn số tiền
 
 //Hàm chọn số tiền gửi đi
@@ -413,6 +412,7 @@ long long chonsotienrut()
 //Chức năng gửi tiền
 void guitien(node root, node myAccount)
 {
+    FILE *f =  fopen("data/output.txt", "a");
     char account[MAX_ACC_LEN];
     char yesno = 'Y';
     int AccountEntryCount = 3 ;
@@ -521,6 +521,8 @@ void guitien(node root, node myAccount)
 
                         sprintf(myAccount->Data->TransactionHistory[current_index], "%s|SD: %llu|+%lld VND|ND: %s", myAccount->Data->AccountNumber ,myAccount->Data->Balance,sotiengui, message);
                         strcpy(TransactionList[admin_index], myAccount->Data->TransactionHistory[current_index]);
+                        fprintf(f ,"%d. Số tài khoản: %s\n", admin_index + 1, TransactionList[admin_index]);
+                        fflush(f);  
                         admin_index +=1;
                         myAccount->Data->TransactionCount += 1;
 
@@ -555,6 +557,8 @@ void guitien(node root, node myAccount)
                     sprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%lld VND|ND: %s", targetAccount->Data->AccountNumber, targetAccount->Data->Balance,sotiengui, message);
 
                     strcpy(TransactionList[admin_index], myAccount->Data->TransactionHistory[myAccount_current_index]);
+                    fprintf(f ,"%d. Số tài khoản: %s\n", admin_index + 1, TransactionList[admin_index]);
+
                     admin_index +=1;
                     myAccount->Data->TransactionCount += 1;
                     targetAccount->Data->TransactionCount += 1;
@@ -611,11 +615,13 @@ void guitien(node root, node myAccount)
     } while (yesno == 'Y' && AccountEntryCount > 0);
     
     if (AccountEntryCount == 0) printf("\n*** QUÁ SỐ LẦN NHẬP TÀI KHOẢN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+    fclose(f);
 }
 
 //Chức năng chuyển tiền
 void chuyentien(node root, node myAccount)
 {
+    FILE *f =  fopen("data/output.txt", "a");
     char account[MAX_ACC_LEN];
     char yesno = 'Y';
     int AccountEntryCount = 3 ;
@@ -789,6 +795,8 @@ void chuyentien(node root, node myAccount)
                     sprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%lld VND|ND: %s", targetAccount->Data->AccountNumber ,targetAccount->Data->Balance,sotienchuyen, message);
 
                     strcpy(TransactionList[admin_index], myAccount->Data->TransactionHistory[myAccount_current_index]);
+                    fprintf(f ,"%d. Số tài khoản: %s\n", admin_index + 1, TransactionList[admin_index]);
+                    fflush(f);
                     admin_index +=1;
 
                     myAccount->Data->TransactionCount += 1;
@@ -848,11 +856,13 @@ void chuyentien(node root, node myAccount)
     } while (yesno == 'Y' && AccountEntryCount > 0);
     
     if (AccountEntryCount == 0) printf("\n*** QUÁ SỐ LẦN NHẬP TÀI KHOẢN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+    fclose(f);
 }
 
 //Chức năng rút tiền
 void ruttien(node root, node myAccount)
 {
+    FILE *f =  fopen("data/output.txt", "a");
     long long sotienrut = chonsotienrut();
 
     if (sotienrut == 0) return;
@@ -904,6 +914,8 @@ void ruttien(node root, node myAccount)
 
         //Thêm vào danh sách giao dịch admin
         strcpy(TransactionList[admin_index], myAccount ->Data ->TransactionHistory[myAccount_current_index]);
+        fprintf(f ,"%d. Số tài khoản: %s\n", admin_index + 1, TransactionList[admin_index]);
+        fflush(f);
         admin_index +=1;
 
         //Cộng số lần giao dịch
@@ -912,6 +924,7 @@ void ruttien(node root, node myAccount)
         printf("\n\n>>> GIAO DỊCH THÀNH CÔNG\n\n");
         return;
     }
+    fclose(f);
 }
 
 //Chức năng xem tài khoản

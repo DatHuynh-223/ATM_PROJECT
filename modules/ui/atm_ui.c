@@ -6,82 +6,115 @@ void menu(node root, node myAccount)
     char *option[] = {"0. Hủy giao dịch","1. Gửi tiền", "2. Chuyển tiền", "3. Rút tiền", "4. Xem tài khoản"};
     int optionCount = sizeof(option)/ sizeof(option[0]);
     
-        int choice=-1;
-        int menuEntryCount = 3;
-        char input[1000];
-        
+    while (1)
+    {
         printf("\n--- MENU GIAO DỊCH ---\n");
         for (int i = 0; i < optionCount; i++) printf("%s\n", option[i]);
-        while (menuEntryCount>0)
+        
+        int menuEntryCount = 3;
+        int choice = -1;
+        char input[1000];
+        
+        while (menuEntryCount > 0)
         {
             if (menuEntryCount == 3)    printf("Nhập sự lựa chọn của bạn: ");
             else                        printf("Nhập lại (Bạn còn %d lần): ", menuEntryCount);
+            
             if (fgets(input,sizeof(input),stdin)==NULL) continue;
+            
             if (input[0]=='\n')
             {
                 menuEntryCount--;
                 if (menuEntryCount > 0) printf("\n*** Bạn chưa nhập gì. Vui lòng nhập từ 0 đến 4! ***\n");
                 continue;
             }
-            int len=strlen(input);
-            int clear=0;
-            if (input[len-1]=='\n')
+            
+            int len = strlen(input);
+            int clear = 0;
+            
+            if (input[len-1] == '\n')
             {
-                input[len-1]='\0';
+                input[len-1] = '\0';
                 len--;
             }
             else
             {
-                clear=clear_buffer();
+                clear = clear_buffer(); 
             }
+            
             if (len > 1 || clear == 1)
             {
                 menuEntryCount--;
                 if (menuEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng CHỈ NHẬP 1 SỐ. ***\n");
                 continue; 
             }
-            if (input[0]>='0' && input[0] <='4')
+            
+            if (input[0] >= '0' && input[0] <= '4')
             {
-                choice=input[0]-'0';
+                choice = input[0] - '0';
                 break;
             }
-            else{
+            else
+            {
                 menuEntryCount--;
                 if (menuEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ chọn từ 0 đến 4. ***\n");
             }
         }
-        if ((menuEntryCount == 0) && (choice<0 || choice >4)) {
+        
+        if ((menuEntryCount == 0) && (choice < 0 || choice > 4)) {
             printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
-            return;
+            return; 
         }
-        //xử lý các lựa chọn
+    
         switch (choice)
         {
-            case 1: guitien(root, myAccount); break;
-            case 2: chuyentien(root, myAccount); break;
-            case 3: ruttien(root, myAccount); break;
-            case 4: xemtaikhoan(myAccount); break;
+            case 1: 
+                guitien(root, myAccount); 
+                break;
+            case 2: 
+                chuyentien(root, myAccount); 
+                break;
+            case 3: 
+                ruttien(root, myAccount); 
+                break;
+            case 4: 
+                xemtaikhoan(myAccount); 
+                break;
             case 0: 
             default:
-                printf("\n Đã hủy giao dịch. \n");
-                 return;
+                printf("\n Đã hủy / Kết thúc giao dịch. \n");
+                return; 
         }
-
+    }
 }
 
 //Hàm đăng nhập với vai trò khách
-void GuestLogin(node root)
+void GuestLogin(node root,char *shutdown )
 {
     char target[MAX_ACC_LEN], yesno ='Y';
     int loginCount = 3;
-
+    char stk_Admin[MAX_ACC_LEN]="06121234";
+    char shutdown1='N';
+    int KT=0;
+    printf("Nếu bạn là Admin, hãy nhập Số tài khoản của Admin để đăng nhập với vai trò Lập trình viên!\n");
+    printf("Nếu bạn là khách hàng, hãy nhập Số tài khoản của bạn để đăng nhập với vai trò Khách!\n");
+    printf("!!!! Nếu bạn nhập sai số tài khoản quá %d máy sẽ tự động tắt để bảo mật thông tin khách hàng!\n\n", loginCount);
     do 
     {
+        if (KT) loginCount=3;
         printf("Vui lòng nhập Số tài khoản của bạn (Bạn còn %d lần nhập tài khoản): ", loginCount);
         loginCount -= 1;
 
-        if (fgets(target,sizeof(target),stdin)==NULL) continue;
-        if (target[0]=='\n')	continue;
+        if (fgets(target,sizeof(target),stdin)==NULL) 
+        {
+            printf("\n*** Bạn chưa nhập gì. Vui lòng nhập Số tài khoản! ***\n");
+            continue;
+        }
+        if (target[0]=='\n')	
+        {
+            printf("\n*** Bạn chưa nhập gì. Vui lòng nhập Số tài khoản! ***\n");
+            continue;
+        }
         int len = strlen(target);
         if (target[len - 1] == '\n') 
         {
@@ -91,18 +124,33 @@ void GuestLogin(node root)
         {
             clear_buffer();
         }
-
+        if (strcmp(target,stk_Admin)==0)
+        {
+            KT=1;
+            AdministratorLogin(&shutdown1);
+            (*shutdown)=shutdown1;
+            if (*shutdown == 'Y') {
+                return; 
+            }
+        }
+        else
+        {
         node temp = findNode(root, target);
 
         if (temp != NULL)
         {
+            KT=1;
             char mapin[MAX_PIN_LEN];
             int pinEntryCount = 3;
             do
             {
-                printf("Vui lòng nhập mã Pin (Bạn còn %d lần nhập)): ", pinEntryCount);
+                printf("Vui lòng nhập mã Pin (Bạn còn %d lần nhập): ", pinEntryCount);
                 pinEntryCount-=1;
-                if (fgets(mapin,sizeof(mapin),stdin)==NULL) continue;
+                if (fgets(mapin,sizeof(mapin),stdin)==NULL) 
+                {
+                    printf("\n*** Bạn chưa nhập gì. Vui lòng nhập Số tài khoản! ***\n");
+                    continue;
+                }
                 int len=strlen(mapin);
                 if (mapin[len-1]=='\n')
                 {
@@ -131,47 +179,10 @@ void GuestLogin(node root)
         {
             printf("\n\n*** Không tìm thấy Số tài khoản ***\n\n");
             
-            int clear_yn;
-            int ynEntryCount = 3; 
-
-           do 
-            {
-                if (ynEntryCount == 3)
-                {
-                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
-                }
-                else
-                {
-                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N] (Bạn còn %d lần): ", ynEntryCount);
-                }
-                if (scanf("%c", &yesno) != 1) 
-                {
-                    ynEntryCount--;
-                    continue; 
-                }
-                if (yesno=='\n')
-                {
-                    ynEntryCount--;
-                    continue;
-                } 
-                clear_yn = clear_buffer();
-
-                if ((yesno != 'Y' && yesno != 'N') || clear_yn == 1)
-                {
-                    ynEntryCount -= 1;
-                    if (ynEntryCount == 0)
-                    {
-                        printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
-                        return;
-                    }
-                    printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
-                }
-            } while (((yesno != 'Y' && yesno != 'N') || clear_yn == 1) && ynEntryCount > 0);
-
-
-            if (yesno == 'N') return;
+            GuestLogin(root,shutdown );
         } 
-    } while (yesno == 'Y' && loginCount > 0);
+        }
+    } while ( loginCount > 0);
 
     if (loginCount == 0) printf("** QUÁ SỐ LẦN NHẬP TÀI KHOẢN **\n\n");
 }
@@ -179,7 +190,7 @@ void GuestLogin(node root)
 //Hàm đăng nhập với vai trò Lập trình viên
 void AdministratorLogin(char *shutdown)
 {
-
+    printf(" \n\n=====================================================================MỪNG NGÀI TRỞ LẠI=====================================================================\n\n");
     char admin_pin[7] = "000000";
     char Pin_Entry[7];
     int Pin_Entry_Count = 3;
@@ -188,9 +199,8 @@ void AdministratorLogin(char *shutdown)
     //Nhập mã bảo mật
     do 
     {
-        if (Pin_Entry_Count <3) printf("***** Nhập sai! *****\n");
-        printf("Vui lòng nhập mã bảo mật của Admin (Bạn còn %d lần nhập): ", Pin_Entry_Count);
         Pin_Entry_Count -= 1;
+        printf("Vui lòng nhập mã bảo mật của Admin (Bạn còn %d lần nhập): ",Pin_Entry_Count);
 		if (fgets(Pin_Entry,sizeof(Pin_Entry),stdin)==NULL) continue;
         if (Pin_Entry[0]=='\n')	continue;
         Pin_Entry[strcspn(Pin_Entry, "\n")] = 0;
@@ -201,16 +211,6 @@ void AdministratorLogin(char *shutdown)
     //Kiểm tra mã bảo mật
     if (strcmp(Pin_Entry, admin_pin) == 0 && clear == 0)
     {
-        FILE *f =  fopen("data/output.txt", "w");
-        int i = 0;
-
-        for (i = 0; i < admin_index; i+=1)
-        {
-            fprintf(f ,"%d. Số tài khoản: %s\n", i+1, TransactionList[i]);
-        }
-
-        fclose(f);
-
         //Chuyển thành shutdown
         (*shutdown) = 'Y';
     }
@@ -224,74 +224,67 @@ void AdministratorLogin(char *shutdown)
 //Hàm bật máy ATM
 void khoidong(node root)
 {
-    char ROLE;
     char shutdown = 'N';
-    int clear;
-    int roleEntryCount;
+    int clear=0;
     int passEntryCount = 3;
     char pass[7];
+    char admin_pass[7]="000000";
     int KT=0;
-    printf("[NHẬP PASS CỦA ADMIN ĐỂ KHỞI ĐỘNG ATM ]\n");
-    while (passEntryCount >0)
+    printf("\n\n[=========================================================NHẬP MÃ BẢO MẬT CỦA ADMIN ĐỂ KHỞI ĐỘNG ATM========================================================= ]\n\n");
+    do 
     {
-        printf("Nhập pass: ");
-        passEntryCount-=1;
-        if (fgets(pass,sizeof(pass),stdin)==NULL) continue;
-        if (pass[0]=='\n')	continue;
-        pass[strcspn(pass, "\n")] = 0;
-        if (strcmp(pass, "000000") == 0)
+        if (passEntryCount <3) printf("*****  Vui lòng nhập lại mã bảo mật! *****\n");
+         passEntryCount -= 1;
+        printf("Vui lòng nhập mã bảo mật của Admin (Bạn còn %d lần nhập): ", passEntryCount);
+		if (fgets(pass,sizeof(pass),stdin)==NULL) 
         {
-            printf("\n*** PASS ĐÚNG! ***\n\n");
-            clear_buffer();
-            KT=1;
-            break;
+            printf("\n*** Bạn chưa nhập gì. ***\n");
+            continue;
         }
-        else
+        if (pass[0]=='\n')	
         {
-            printf("\n*** Pass không đúng! ***\n\n");
-        }   
+            printf("\n*** Bạn chưa nhập gì. ***\n");
+            continue;
+        }
+        int len = strlen(pass);
+        if (pass[len - 1] == '\n') 
+        {
+            pass[len - 1] = '\0'; 
+        } 
+        else 
+        {
+            clear = clear_buffer(); 
+        }
+        if (strlen(pass)<6 || strcmp(pass, admin_pass) != 0 ) 
+        {
+            printf("\n*** Mã bảo mật không chính xác . ***\n");
+            continue;
+        }
+        
+    } while ((strcmp(pass, admin_pass) != 0 || clear != 0) && passEntryCount > 0);
+    if (strcmp(pass, admin_pass) == 0 && clear == 0)
+    {
+        printf("\n\n[===========================================================KHỞI ĐỘNG THÀNH CÔNG HỆ THỐNG ===========================================================]\n\n");
+        KT=1;
+    }
+    else
+    {
+        printf("*** \n\nQUÁ SỐ LẦN NHẬP MÃ BẢO MẬT ***~\n\n");
     }
     if (KT)
     {
         do
         {
-            printf("======================================================\n\n");
-            printf("* CHÀO MỪNG QUÝ KHÁCH ĐẾN VỚI NGÂN HÀNG 3 THÀNH VIÊN*\n\n");
-            printf("======================================================\n\n");
-            roleEntryCount = 3;
+            printf("==========================================================================================================================================================\n\n");
+            printf("* %50sCHÀO MỪNG QUÝ KHÁCH ĐẾN VỚI NGÂN HÀNG 3 THÀNH VIÊN%50s*\n\n"," "," ");
+            printf("==========================================================================================================================================================\n\n");
 
-            do 
-            {
-                if (roleEntryCount == 0)
-                {
-                    printf("\n*** QUÁ SỐ LẦN NHẬP. TỰ ĐỘNG TẮT MÁY ĐỂ BẢO MẬT ***\n\n");
-                    return; 
-                }
-                roleEntryCount -= 1;
-                printf("\nA - Admin (Lập trình viên) | G - Guest (Khách hàng)\n");
-                printf("Vai trò của bạn là gì [A/G] (Bạn còn %d lần): ", roleEntryCount);
-                if (scanf("%c", &ROLE) != 1) {
-                    continue; 
-                }
-                if (ROLE=='\n')
-                {
-                continue;
-                } 
-                clear = clear_buffer();
-
-                if ((ROLE != 'A' && ROLE != 'G') || clear == 1)
-                {
-                    printf("Lỗi: Vui lòng chỉ nhập A hoặc G!\n\n");
-                }
-            } while ((ROLE != 'A' && ROLE != 'G') || clear == 1);
-
-            if (ROLE == 'G') GuestLogin(root);
-            else if (ROLE == 'A') AdministratorLogin(&shutdown);
-
+            GuestLogin(root,&shutdown);
+    
         } while (shutdown != 'Y');
         printf("\n*** MÁY ĐANG TẮT... CẢM ƠN QUÝ KHÁCH ĐÃ SỬ DỤNG DỊCH VỤ ***\n\n");
     }
     else{
-        printf("\n*** QUÁ SỐ LẦN NHẬP PASS. TỰ ĐỘNG TẮT MÁY ĐỂ BẢO MẬT ***\n\n");
+        printf("\n*** TỰ ĐỘNG TẮT MÁY ĐỂ BẢO MẬT ***\n\n");
     }
 }
