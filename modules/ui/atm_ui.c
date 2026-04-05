@@ -177,8 +177,6 @@ void GuestLogin(node root,char *shutdown )
         else
         {
             printf("\n\n*** Không tìm thấy Số tài khoản ***\n\n");
-            
-            GuestLogin(root,shutdown );
         } 
         }
     } while ( loginCount > 0);
