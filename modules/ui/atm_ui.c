@@ -188,7 +188,7 @@ void AdministratorLogin(char *shutdown)
     printf(" \n\n=====================================================================MỪNG NGÀI TRỞ LẠI=====================================================================\n\n");
     char admin_pin[7] = "000000";
     char Pin_Entry[7];
-    int Pin_Entry_Count = 3;
+    int Pin_Entry_Count = 2;
     int clear;
 
     //Nhập mã bảo mật
@@ -201,7 +201,7 @@ void AdministratorLogin(char *shutdown)
         Pin_Entry[strcspn(Pin_Entry, "\n")] = 0;
         if (strlen(Pin_Entry)<6) continue;
 		clear=clear_buffer();
-    } while ((strcmp(Pin_Entry, admin_pin) != 0 || clear != 0) && Pin_Entry_Count > 0); //Tránh trường hợp người dùng nhập dư kí tự khiến buffer hiểu lầm rằng còn lần nhập nhưng thực tế đã hết lần nhập
+    } while ((strcmp(Pin_Entry, admin_pin) != 0 || clear != 0) && Pin_Entry_Count >= 0); //Tránh trường hợp người dùng nhập dư kí tự khiến buffer hiểu lầm rằng còn lần nhập nhưng thực tế đã hết lần nhập
 
     //Kiểm tra mã bảo mật
     if (strcmp(Pin_Entry, admin_pin) == 0 && clear == 0)
