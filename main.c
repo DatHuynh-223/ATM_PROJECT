@@ -25,7 +25,8 @@ int admin_index = 0;
 
 int main()
 {
-    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8); 
+    SetConsoleCP(CP_UTF8);
     node root=NULL;
     root=input(root);
     if (root != NULL)
