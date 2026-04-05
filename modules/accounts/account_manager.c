@@ -119,3 +119,22 @@ node findNode(node root, char *target)
     else return findNode(root -> left, target);
 }
 
+//ghi du lieu vao file input
+void ghiFile(node root ,FILE *f)
+{
+    if (root != NULL)
+    {
+        ghiFile(root -> left, f);
+        fprintf(f, "%s %s %llu\n", root -> Data -> AccountNumber, root -> Data -> Pin, root -> Data -> Balance);
+        ghiFile(root -> right, f);
+    }
+}
+
+// cap nhat file input vao cuoi ngay
+void update_File(node root)
+{
+    FILE *f = fopen("data/input.txt", "w");
+    ghiFile(root, f);
+    fclose(f);
+    
+}

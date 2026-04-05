@@ -38,4 +38,9 @@ node input(node root);
 //Hàm tìm kiếm Node trong Tree
 node findNode(node root, char *target);
 
+//ghi du lieu vao file input
+void ghiFile(node root , FILE *f);
+
+//Cap nhat file input vao cuoi ngay
+void update_File(node root);
 #endif

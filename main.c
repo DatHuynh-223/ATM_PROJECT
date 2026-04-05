@@ -36,6 +36,7 @@ int main()
         printf("\n[CẢNH CÁO ] Hệ thống không có dữ liệu tài khoản để hoạt động.\n");
         printf("Vui lòng kiểm tra file 'input.txt'!\n");
     }
+    update_File(root);
     return 0;
 
 }
