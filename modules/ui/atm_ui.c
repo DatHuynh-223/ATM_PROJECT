@@ -98,7 +98,6 @@ void GuestLogin(node root,char *shutdown )
     int KT=0;
     printf("Nếu bạn là Admin, hãy nhập Số tài khoản của Admin để đăng nhập với vai trò Lập trình viên!\n");
     printf("Nếu bạn là khách hàng, hãy nhập Số tài khoản của bạn để đăng nhập với vai trò Khách!\n");
-    printf("!!!! Nếu bạn nhập sai số tài khoản quá %d máy sẽ tự động tắt để bảo mật thông tin khách hàng!\n\n", loginCount);
     do 
     {
         if (KT) loginCount=3;
