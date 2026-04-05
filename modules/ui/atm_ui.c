@@ -223,6 +223,11 @@ void AdministratorLogin(char *shutdown)
 //Hàm bật máy ATM
 void khoidong(node root)
 {
+    // xóa sạch output khi bắt đàau chạy 
+    FILE *f = fopen("data/output.txt", "w");
+    if (f != NULL) {
+        fclose(f); // Mở ra bằng "w" để xóa sạch rồi đóng lại ngay
+    }
     char shutdown = 'N';
     int clear=0;
     int passEntryCount = 3;
