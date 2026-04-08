@@ -207,19 +207,45 @@ void AdministratorLogin(char *shutdown)
     printf(" \n\n=====================================================================MỪNG NGÀI TRỞ LẠI=====================================================================\n\n");
     char admin_pin[7] = "000000";
     char Pin_Entry[7];
-    int Pin_Entry_Count = 2;
+    int Pin_Entry_Count = 3;
     int clear;
 
     //Nhập mã bảo mật
     do 
     {
+        if (Pin_Entry_Count ==0)
+        {
+            printf("\n *** Đây lần cuối để nhập mã bảo mật! ***\n");
+            printf("Vui lòng nhập mã bảo mật của Admin : ");
+        }
+        else if (Pin_Entry_Count ==3)
+        {
+            printf("Vui lòng nhập mã bảo mật của Admin : ");
+        }
+        else
+        {
+            printf("Vui lòng nhập mã bảo mật của Admin (Bạn còn %d lần nhập): ",Pin_Entry_Count);
+        }
         Pin_Entry_Count -= 1;
-        printf("Vui lòng nhập mã bảo mật của Admin (Bạn còn %d lần nhập): ",Pin_Entry_Count);
 		if (fgets(Pin_Entry,sizeof(Pin_Entry),stdin)==NULL) continue;
-        if (Pin_Entry[0]=='\n')	continue;
-        Pin_Entry[strcspn(Pin_Entry, "\n")] = 0;
-        if (strlen(Pin_Entry)<6) continue;
-		clear=clear_buffer();
+        if (Pin_Entry[0]=='\n')	
+        {
+            printf("\n*** Bạn chưa nhập gì. ***\n");
+            continue;
+        }
+        int len = strlen(Pin_Entry);
+        if (Pin_Entry[len - 1] == '\n') 
+        {
+            Pin_Entry[len - 1] = '\0'; 
+        } 
+        else 
+        {
+            clear = clear_buffer(); 
+        }
+        if (strcmp(Pin_Entry, admin_pin) != 0)
+        {
+            printf("\n*** Mã bảo mật không chính xác! ***\n");
+        }
     } while ((strcmp(Pin_Entry, admin_pin) != 0 || clear != 0) && Pin_Entry_Count >= 0); //Tránh trường hợp người dùng nhập dư kí tự khiến buffer hiểu lầm rằng còn lần nhập nhưng thực tế đã hết lần nhập
 
     //Kiểm tra mã bảo mật
