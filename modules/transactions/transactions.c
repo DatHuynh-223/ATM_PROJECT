@@ -9,6 +9,7 @@ long long chonsotiengui(node target, node myAccount)
     else hanmuctoida = 100000000;
     
     long long arr[8] = {0 ,100000, 200000, 500000, 1000000, 2000000, 3000000, 0};
+    char in[8][100]={"00","100.000","200.000","500.000","1.000.000","2.000.000","3.000.000","00"};
     int i = 0;
     int clear = 0;
     int moneyEntryCount = 3;
@@ -23,7 +24,7 @@ long long chonsotiengui(node target, node myAccount)
         else if (j == 7) printf("%d. Số khác\n\n", j);
         else
         {
-            printf("%d. %lld VND       ",j,arr[j]);
+            printf("%d. %s VND       ",j,in[j]);
             if (j == 2 || j == 5) printf("\n\n");
         }
     }
@@ -141,6 +142,7 @@ long long chonsotienchuyen()
     long long hanmuctoida = 100000000;
     
     long long arr[8] = {0 ,100000, 200000, 500000, 1000000, 2000000, 3000000, 0};
+    char in[8][100]={"00","100.000","200.000","500.000","1.000.000","2.000.000","3.000.000","00"};
     int i = 0;
     int clear = 0;
     int moneyEntryCount = 3;
@@ -155,7 +157,7 @@ long long chonsotienchuyen()
             else if (j == 7) printf("%d. Số khác\n\n", j);
             else
             {
-                printf("%d. %lld VND       ",j,arr[j]);
+                printf("%d. %s VND       ",j,in[j]);
                 if (j == 2 || j == 5) printf("\n\n");
             }
         }
@@ -269,6 +271,7 @@ long long chonsotienrut()
     long long hanmuctoida = 10000000;
     
     long long arr[8] = {0 ,100000, 200000, 500000, 1000000, 2000000, 3000000, 0};
+    char in[8][100]={"00","100.000","200.000","500.000","1.000.000","2.000.000","3.000.000","00"};
     int i = 0;
     int clear = 0;
     int moneyEntryCount = 3;
@@ -280,7 +283,7 @@ long long chonsotienrut()
         else if (j == 7) printf("%d. Số khác\n\n", j);
         else
         {
-            printf("%d. %lld VND       ",j,arr[j]);
+            printf("%d. %s VND       ",j,in[j]);
             if (j == 2 || j == 5) printf("\n\n");
         }
     }
@@ -519,7 +522,10 @@ void guitien(node root, node myAccount)
                         int current_index = myAccount->Data->TransactionCount;
                         myAccount->Data->Balance += sotiengui;
 
-                        sprintf(myAccount->Data->TransactionHistory[current_index], "%s|SD: %llu|+%lld VND|ND: %s", myAccount->Data->AccountNumber ,myAccount->Data->Balance,sotiengui, message);
+                        char sotien[30];
+                        strcpy(sotien,insert_cham(sotiengui));
+
+                        sprintf(myAccount->Data->TransactionHistory[current_index], "%s|SD: %llu|+%s VND|ND: %s", myAccount->Data->AccountNumber ,myAccount->Data->Balance,sotien, message);
                         strcpy(TransactionList[admin_index], myAccount->Data->TransactionHistory[current_index]);
                         fprintf(f ,"%d. Số tài khoản: %s\n", admin_index + 1, TransactionList[admin_index]);
                         fflush(f);  
@@ -552,9 +558,11 @@ void guitien(node root, node myAccount)
                     int myAccount_current_index = myAccount->Data->TransactionCount;
 
                     targetAccount->Data->Balance += sotiengui;
+                    char sotien[30];
+                    strcpy(sotien,insert_cham(sotiengui));
 
-                    sprintf(myAccount->Data->TransactionHistory[myAccount_current_index], "%s|SD: %llu|ND: Gửi %lld VND đến tài khoản %s", myAccount->Data->AccountNumber,myAccount->Data->Balance, sotiengui, targetAccount->Data->AccountNumber);
-                    sprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%lld VND|ND: %s", targetAccount->Data->AccountNumber, targetAccount->Data->Balance,sotiengui, message);
+                    sprintf(myAccount->Data->TransactionHistory[myAccount_current_index], "%s|SD: %llu|ND: Gửi %s VND đến tài khoản %s", myAccount->Data->AccountNumber,myAccount->Data->Balance, sotien, targetAccount->Data->AccountNumber);
+                    sprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%s VND|ND: %s", targetAccount->Data->AccountNumber, targetAccount->Data->Balance,sotien, message);
 
                     strcpy(TransactionList[admin_index], myAccount->Data->TransactionHistory[myAccount_current_index]);
                     fprintf(f ,"%d. Số tài khoản: %s\n", admin_index + 1, TransactionList[admin_index]);
@@ -791,8 +799,11 @@ void chuyentien(node root, node myAccount)
                     myAccount->Data->Balance -= sotienchuyen;
                     targetAccount->Data->Balance += sotienchuyen;
 
-                    sprintf(myAccount->Data->TransactionHistory[myAccount_current_index], "%s|SD: %llu|-%lld VND|ND: %s", myAccount->Data->AccountNumber ,myAccount->Data->Balance ,sotienchuyen, message);
-                    sprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%lld VND|ND: %s", targetAccount->Data->AccountNumber ,targetAccount->Data->Balance,sotienchuyen, message);
+                    char sotien[30];
+                    strcpy(sotien,insert_cham(sotienchuyen));
+
+                    sprintf(myAccount->Data->TransactionHistory[myAccount_current_index], "%s|SD: %llu|-%s VND|ND: %s", myAccount->Data->AccountNumber ,myAccount->Data->Balance ,sotien, message);
+                    sprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%s VND|ND: %s", targetAccount->Data->AccountNumber ,targetAccount->Data->Balance,sotien, message);
 
                     strcpy(TransactionList[admin_index], myAccount->Data->TransactionHistory[myAccount_current_index]);
                     fprintf(f ,"%d. Số tài khoản: %s\n", admin_index + 1, TransactionList[admin_index]);
@@ -907,10 +918,10 @@ void ruttien(node root, node myAccount)
 
         //Trừ tiền vào myAccount
         myAccount ->Data -> Balance -= sotienrut;
-
-
+        char sotien[30];
+        strcpy(sotien,insert_cham(sotienrut));
         //Thêm lời nhắn vào thông báo
-        sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "%s|SD: %llu|-%lld| ND: Rút tiền tại ATM", myAccount ->Data ->AccountNumber ,myAccount ->Data ->Balance, sotienrut); //132
+        sprintf(myAccount ->Data ->TransactionHistory[myAccount_current_index], "%s|SD: %llu|-%s VND| ND: Rút tiền tại ATM", myAccount ->Data ->AccountNumber ,myAccount ->Data ->Balance, sotien); //132
 
         //Thêm vào danh sách giao dịch admin
         strcpy(TransactionList[admin_index], myAccount ->Data ->TransactionHistory[myAccount_current_index]);

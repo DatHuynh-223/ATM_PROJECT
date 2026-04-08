@@ -85,20 +85,48 @@ void menu(node root, node myAccount)
                 printf("\n Đã hủy / Kết thúc giao dịch. \n");
                 return; 
         }
-        printf("\n Bạn có muốn tiếp tục giao dịch không? (Y/N)  :");
-        char yn;
-        scanf("%c", &yn);
-        int clear_yn = clear_buffer();
-        while ((yn != 'Y' && yn != 'N') || clear_yn ==1)
+        char yn='0';
+        int ynEntryCount = 3;
+        int clear_yn;
+        do 
         {
-            printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ chọn 'Y' hoặc 'N'. ***\n");
-            printf("Bạn có muốn tiếp tục giao dịch không? (Y/N)  :");
-            scanf("%c", &yn);
+            if (ynEntryCount == 3)
+            {
+                printf("Bạn có muốn thực hiện giao dịch khác không? [Y/N]: ");
+            }
+            else
+            {
+                printf("Bạn có muốn thực hiện giao dịch khác không? [Y/N] (Bạn còn %d lần): ", ynEntryCount);
+            }
+            if (scanf("%c", &yn) != 1) 
+            {
+                printf("\n *** Nhập không hợp lệ! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
+                ynEntryCount--;
+                continue; 
+            }
+            if (yn=='\n')
+            {
+                printf("\n *** Bạn chưa nhập gì! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
+                ynEntryCount--;
+                continue;
+            } 
             clear_yn = clear_buffer();
-        }
-        if (yn=='N')
+
+            if ((yn != 'Y' && yn != 'N') || clear_yn == 1)
+            {
+                ynEntryCount -= 1;
+                if (ynEntryCount == 0)
+                {
+                    printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+                    return;
+                }
+                printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
+            }
+        } while (((yn != 'Y' && yn != 'N') || clear_yn == 1) && ynEntryCount > 0);
+        if (yn == 'N') 
         {
-            return ;
+            printf("\n*** CẢM ƠN QUÝ KHÁCH ĐÃ SỬ DỤNG DỊCH VỤ ***\n\n");
+            return;
         }
     }
 }
