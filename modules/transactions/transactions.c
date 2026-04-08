@@ -96,7 +96,7 @@ long long chonsotiengui(node target, node myAccount)
     if (i == 0) return 0;
     else if (i == 7)
     {
-        printf("Hạn mức tối đa là : %lld VND\n\n", hanmuctoida);
+        printf("Hạn mức tối đa là : %s VND\n\n", insert_cham(hanmuctoida));
 
         int tempEntry = 3;
         long long temp;
@@ -230,7 +230,7 @@ long long chonsotienchuyen()
     if (i == 0) return 0;
     else if (i == 7)
     {
-        printf("Hạn mức tối đa là : %lld VND\n\n", hanmuctoida);
+        printf("Hạn mức tối đa là : %s VND\n\n", "10.000.000");
 
         int tempEntry = 3;
         long long temp;
@@ -356,7 +356,7 @@ long long chonsotienrut()
     if (i == 0) return 0;
     else if (i == 7)
     {
-        printf("Hạn mức tối đa là : %lld VND\n\n", hanmuctoida);
+        printf("Hạn mức tối đa là : %s VND\n\n", "10.000.000");
 
         int tempEntry = 3;
         long long temp;
