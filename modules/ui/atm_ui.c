@@ -85,6 +85,21 @@ void menu(node root, node myAccount)
                 printf("\n Đã hủy / Kết thúc giao dịch. \n");
                 return; 
         }
+        printf("\n Bạn có muốn tiếp tục giao dịch không? (Y/N)  :");
+        char yn;
+        scanf("%c", &yn);
+        int clear_yn = clear_buffer();
+        while ((yn != 'Y' && yn != 'N') || clear_yn ==1)
+        {
+            printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ chọn 'Y' hoặc 'N'. ***\n");
+            printf("Bạn có muốn tiếp tục giao dịch không? (Y/N)  :");
+            scanf("%c", &yn);
+            clear_yn = clear_buffer();
+        }
+        if (yn=='N')
+        {
+            return ;
+        }
     }
 }
 
@@ -157,6 +172,10 @@ void GuestLogin(node root,char *shutdown )
 				{
 					clear_buffer();
 				}
+                if (strcmp(temp ->Data -> Pin, mapin ) !=0)
+                {
+                    printf("\n*** Mã Pin không chính xác! ***\n");
+                }
             } while (strcmp(temp ->Data -> Pin, mapin ) !=0 && pinEntryCount>0);
 
             if (strcmp(temp ->Data -> Pin, mapin) ==0) 
