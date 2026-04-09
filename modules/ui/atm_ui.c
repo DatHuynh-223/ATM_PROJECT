@@ -3,6 +3,7 @@
 //Menu
 void menu(node root, node myAccount)
 {
+    system("cls");
     char *option[] = {"0. Hủy giao dịch","1. Gửi tiền", "2. Chuyển tiền", "3. Rút tiền", "4. Xem tài khoản"};
     int optionCount = sizeof(option)/ sizeof(option[0]);
     

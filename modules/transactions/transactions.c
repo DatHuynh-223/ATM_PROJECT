@@ -459,47 +459,49 @@ void guitien(node root, node myAccount)
                 char message[81]; 
                 int message_Entry_Count = 3;
                 int clear_msg = 0;
-
-                do
+                if (myAccount != targetAccount)
                 {
-                    if (clear_msg == 1) printf("\n*** QUÁ 80 KÍ TỰ ***\n\n");
+                    do
+                    {
+                        if (clear_msg == 1) printf("\n*** QUÁ 80 KÍ TỰ ***\n\n");
 
-                    if (message_Entry_Count == 3)
-                    {
-                        printf("Nhập lời nhắn với 80 kí tự: ");
-                    }
-                    else
-                    {
-                        printf("Nhập lời nhắn với 80 kí tự (Bạn còn %d lần nhập): ", message_Entry_Count);
-                    }
-                    
-                    message_Entry_Count -= 1;
-                    if (fgets(message,sizeof(message),stdin)==NULL) continue;
-                    int len=strlen(message);
-                    if (message[len-1]=='\n')
-                    {
-                        message[len-1]='\0';
-                        len--;
-                    }
-                    else
-                    {
-                        clear_msg = clear_buffer();
-                    } 
-                    if (len>80)
-                    {
-                        if (message_Entry_Count>0) printf("Nhập quá 80 kí tự ,vui lòng nhập lại !!!");
+                        if (message_Entry_Count == 3)
+                        {
+                            printf("Nhập lời nhắn với 80 kí tự: ");
+                        }
                         else
                         {
-                            printf("Đã quá số lần nhập -.-");
+                            printf("Nhập lời nhắn với 80 kí tự (Bạn còn %d lần nhập): ", message_Entry_Count);
+                        }
+                        
+                        message_Entry_Count -= 1;
+                        if (fgets(message,sizeof(message),stdin)==NULL) continue;
+                        int len=strlen(message);
+                        if (message[len-1]=='\n')
+                        {
+                            message[len-1]='\0';
+                            len--;
+                        }
+                        else
+                        {
+                            clear_msg = clear_buffer();
+                        } 
+                        if (len>80)
+                        {
+                            if (message_Entry_Count>0) printf("Nhập quá 80 kí tự ,vui lòng nhập lại !!!");
+                            else
+                            {
+                                printf("Đã quá số lần nhập -.-");
+                            }
                         }
                     }
-                }
-                while (clear_msg == 1 && message_Entry_Count > 0);
+                    while (clear_msg == 1 && message_Entry_Count > 0);
 
-                if (clear_msg == 1)
-                {
-                    printf("\n*** QUÁ SỐ LẦN NHẬP LỜI NHẮN. HỦY GIAO DỊCH ***\n\n");
-                    return;
+                    if (clear_msg == 1)
+                    {
+                        printf("\n*** QUÁ SỐ LẦN NHẬP LỜI NHẮN. HỦY GIAO DỊCH ***\n\n");
+                        return;
+                    }
                 }
 
                 if (admin_index >= GIAODICHPHIEN)
@@ -524,7 +526,7 @@ void guitien(node root, node myAccount)
                         char sotien[30];
                         strcpy(sotien,insert_cham(sotiengui));
 
-                        sprintf(myAccount->Data->TransactionHistory[current_index], "%s|SD: %llu|+%s VND|ND: %s", myAccount->Data->AccountNumber ,myAccount->Data->Balance,sotien, message);
+                        sprintf(myAccount->Data->TransactionHistory[current_index], "%s|SD: %llu|+%s VND|ND: Gui tien tai ATM", myAccount->Data->AccountNumber ,myAccount->Data->Balance,sotien);
                         strcpy(TransactionList[admin_index], myAccount->Data->TransactionHistory[current_index]);
                         fprintf(f ,"%d. Số tài khoản: %s\n", admin_index + 1, TransactionList[admin_index]);
                         fflush(f);  
@@ -560,12 +562,12 @@ void guitien(node root, node myAccount)
                     char sotien[30];
                     strcpy(sotien,insert_cham(sotiengui));
 
-                    sprintf(myAccount->Data->TransactionHistory[myAccount_current_index], "%s|SD: %llu|ND: Gửi %s VND đến tài khoản %s", myAccount->Data->AccountNumber,myAccount->Data->Balance, sotien, targetAccount->Data->AccountNumber);
-                    sprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%s VND|ND: %s", targetAccount->Data->AccountNumber, targetAccount->Data->Balance,sotien, message);
+                    sprintf(myAccount->Data->TransactionHistory[myAccount_current_index], "%s|SD: %llu|GUI %s VND|DEN %s|ND: %s", myAccount->Data->AccountNumber,myAccount->Data->Balance, sotien, targetAccount->Data->AccountNumber,message);
+                    sprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%s VND|TU: %s|ND: %s", targetAccount->Data->AccountNumber, targetAccount->Data->Balance,sotien, myAccount->Data->AccountNumber, myAccount ->Data ->AccountNumber ,message);
 
                     strcpy(TransactionList[admin_index], myAccount->Data->TransactionHistory[myAccount_current_index]);
                     fprintf(f ,"%d. Số tài khoản: %s\n", admin_index + 1, TransactionList[admin_index]);
-
+                    fflush(f); 
                     admin_index +=1;
                     myAccount->Data->TransactionCount += 1;
                     targetAccount->Data->TransactionCount += 1;
