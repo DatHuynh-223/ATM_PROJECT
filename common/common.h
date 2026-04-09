@@ -13,7 +13,7 @@
 #define MAX_PIN_LEN 11          //có thể thay đổi nếu cần thiết (dư 1 kí \0)
 #define MAX_DAILY_TRANSACTION 10 //tùy vào ý của thầy cô
 #define MAX_TRANSACTION_LEN 51    // giới hạn độ dài tin nhắn mỗi giao dịch (dư 1 kí \0)
-#define INFORM_LEN 175           //Thõa được số lượng từ trong message
+#define INFORM_LEN 201           //Thõa được số lượng từ trong message
 #define GIAODICHPHIEN 100        // Tổng giao dịch trong một phiên làm việc của ATM
 
 // 3. Khai báo biến toàn cục (Sử dụng từ khóa extern)

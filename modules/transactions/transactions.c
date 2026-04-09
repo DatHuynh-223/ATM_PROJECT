@@ -802,8 +802,8 @@ void chuyentien(node root, node myAccount)
                     char sotien[30];
                     strcpy(sotien,insert_cham(sotienchuyen));
 
-                    sprintf(myAccount->Data->TransactionHistory[myAccount_current_index], "%s|SD: %llu|-%s VND|ND: %s", myAccount->Data->AccountNumber ,myAccount->Data->Balance ,sotien, message);
-                    sprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%s VND|ND: %s", targetAccount->Data->AccountNumber ,targetAccount->Data->Balance,sotien, message);
+                    sprintf(myAccount->Data->TransactionHistory[myAccount_current_index], "%s|SD: %llu|-%s VND|DEN: %s|ND: %s", myAccount->Data->AccountNumber ,myAccount->Data->Balance ,sotien, targetAccount ->Data ->AccountNumber ,message);
+                    sprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%s VND|TU: %s|ND: %s", targetAccount->Data->AccountNumber ,targetAccount->Data->Balance,sotien, myAccount->Data ->AccountNumber ,message);
 
                     strcpy(TransactionList[admin_index], myAccount->Data->TransactionHistory[myAccount_current_index]);
                     fprintf(f ,"%d. Số tài khoản: %s\n", admin_index + 1, TransactionList[admin_index]);
