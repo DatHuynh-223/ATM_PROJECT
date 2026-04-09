@@ -146,7 +146,7 @@ long long chonsotienchuyen()
     int i = 0;
     int clear = 0;
     int moneyEntryCount = 3;
-    char choose[100];
+    char choose[2];
 
     printf("\nCHỈ NHẬN MỆNH GIÁ 50.000 VND, 100.000 VND, 200.000 VND, 500.000 VND\n\n");
 
