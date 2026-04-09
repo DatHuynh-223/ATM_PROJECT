@@ -357,7 +357,11 @@ void khoidong(node root)
             printf("==========================================================================================================================================================\n\n");
             printf("* %50sCHÀO MỪNG QUÝ KHÁCH ĐẾN VỚI NGÂN HÀNG 3 THÀNH VIÊN%50s*\n\n"," "," ");
             printf("==========================================================================================================================================================\n\n");
-
+            FILE *day=fopen("data/day.txt","r");
+            int day_trade=1;
+            fscanf(day,"%d",&day_trade);
+            fclose(day);
+            printf("\n\n NGÀY %d GIAO DỊCH \n\n",day_trade);
             GuestLogin(root,&shutdown);
     
         } while (shutdown != 'Y');

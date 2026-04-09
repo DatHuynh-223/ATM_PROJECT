@@ -38,5 +38,23 @@ int main()
         printf("Vui lòng kiểm tra file 'account.txt'!\n");
     }
     update_File(root);
+    FILE *f = fopen("data/day.txt","r");
+    int day_trade;
+    if (f != NULL)
+    {
+        fscanf(f,"%d",&day_trade);
+        fclose(f);
+    }
+    else
+    {
+        day_trade = 1; // Default if file not found
+    }
+    create_file(day_trade);
+    FILE *f1=fopen("data/day.txt","w");
+    if (f1 != NULL)
+    {
+        fprintf(f1,"%d",day_trade+1);
+        fclose(f1);
+    }
     return 0;
 }

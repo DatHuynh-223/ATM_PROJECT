@@ -16,4 +16,7 @@ void insert(char *s,char ch ,int pos,int n);
 
 char* insert_cham(long long n);
 
+void create_file(int day_trade);
+
+
 #endif

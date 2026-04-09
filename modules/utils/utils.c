@@ -54,3 +54,22 @@ char* insert_cham(long long n)
 	}
 	return s;
 }
+
+
+// tạo file giao dịch cuối ngày
+void create_file(int day_trade)
+{
+	FILE *src,*dest;
+	src=fopen("data/today's trade.txt","r");
+	char filename[50];
+	sprintf(filename,"data/Transactions/Day %d.txt",day_trade);
+	dest=fopen(filename,"a");
+	char ch;
+	while ((ch= fgetc(src)) != EOF)
+	{
+		fputc(ch,dest);
+	}
+	fclose(src);
+	fclose(dest);
+	return;
+}
