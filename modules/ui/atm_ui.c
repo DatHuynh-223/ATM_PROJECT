@@ -9,8 +9,8 @@ void menu(node root, node myAccount)
     while (1)
     {
         printf("\n--- MENU GIAO DỊCH ---\n");
-        for (int i = 0; i < optionCount; i++) printf("%s\n", option[i]);
-        
+        for (int i = 1; i < optionCount; i++) printf("%s\n", option[i]);
+        printf("%s\n", option[0]);
         int menuEntryCount = 3;
         int choice = -1;
         char input[1000];
@@ -83,9 +83,10 @@ void menu(node root, node myAccount)
             case 0: 
             default:
                 printf("\n Đã hủy / Kết thúc giao dịch. \n");
+                system("cls");
                 return; 
         }
-        char yn='0';
+        char yn;
         int ynEntryCount = 3;
         int clear_yn;
         do 
@@ -125,9 +126,11 @@ void menu(node root, node myAccount)
         } while (((yn != 'Y' && yn != 'N') || clear_yn == 1) && ynEntryCount > 0);
         if (yn == 'N') 
         {
+
             printf("\n*** CẢM ƠN QUÝ KHÁCH ĐÃ SỬ DỤNG DỊCH VỤ ***\n\n");
             return;
         }
+        system("cls");
     }
 }
 
@@ -232,7 +235,7 @@ void GuestLogin(node root,char *shutdown )
 //Hàm đăng nhập với vai trò Lập trình viên
 void AdministratorLogin(char *shutdown)
 {
-    printf(" \n\n=====================================================================MỪNG NGÀI TRỞ LẠI=====================================================================\n\n");
+    printf(" \n\n=====================================================================CHÀO MỪNG ADMIN=====================================================================\n\n");
     char admin_pin[7] = "000000";
     char Pin_Entry[7];
     int Pin_Entry_Count = 3;
@@ -337,6 +340,7 @@ void khoidong(node root)
     } while ((strcmp(pass, admin_pass) != 0 || clear != 0) && passEntryCount > 0);
     if (strcmp(pass, admin_pass) == 0 && clear == 0)
     {
+        system("cls");
         printf("\n\n[===========================================================KHỞI ĐỘNG THÀNH CÔNG HỆ THỐNG ===========================================================]\n\n");
         KT=1;
     }
@@ -348,6 +352,7 @@ void khoidong(node root)
     {
         do
         {
+            system("cls");
             printf("==========================================================================================================================================================\n\n");
             printf("* %50sCHÀO MỪNG QUÝ KHÁCH ĐẾN VỚI NGÂN HÀNG 3 THÀNH VIÊN%50s*\n\n"," "," ");
             printf("==========================================================================================================================================================\n\n");
@@ -355,6 +360,7 @@ void khoidong(node root)
             GuestLogin(root,&shutdown);
     
         } while (shutdown != 'Y');
+        system("cls");
         printf("\n*** MÁY ĐANG TẮT... CẢM ƠN QUÝ KHÁCH ĐÃ SỬ DỤNG DỊCH VỤ ***\n\n");
     }
     else{

@@ -20,7 +20,7 @@ long long chonsotiengui(node target, node myAccount)
     int j = 0;
     for (j = 0; j < 8; j++)
     {
-        if (j == 0) printf("%d. Quay về menu        ", j);
+        if (j == 0) printf("%d. Hủy giao dịch hiện tại        ", j);
         else if (j == 7) printf("%d. Số khác\n\n", j);
         else
         {
@@ -153,7 +153,7 @@ long long chonsotienchuyen()
         int j = 0;
         for (j = 0; j < 8; j++)
         {
-            if (j == 0) printf("%d. Quay về menu        ", j);
+            if (j == 0) printf("%d. Hủy giao dịch hiện tại        ", j);
             else if (j == 7) printf("%d. Số khác\n\n", j);
             else
             {
@@ -226,7 +226,6 @@ long long chonsotienchuyen()
         }
 
     } while (moneyEntryCount>0);
-
     if (i == 0) return 0;
     else if (i == 7)
     {
@@ -279,7 +278,7 @@ long long chonsotienrut()
     int j = 0;
     for (j = 0; j < 8; j++)
     {
-        if (j == 0) printf("%d. Quay về menu        ", j);
+        if (j == 0) printf("%d. Hủy giao dịch hiện tại        ", j);
         else if (j == 7) printf("%d. Số khác\n\n", j);
         else
         {
