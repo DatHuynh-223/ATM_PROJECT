@@ -414,7 +414,7 @@ long long chonsotienrut()
 //Chức năng gửi tiền
 void guitien(node root, node myAccount)
 {
-    FILE *f =  fopen("data/output.txt", "a");
+    FILE *f =  fopen("data/today's trade.txt", "a");
     char account[MAX_ACC_LEN];
     char yesno = 'Y';
     int AccountEntryCount = 3 ;
@@ -630,7 +630,7 @@ void guitien(node root, node myAccount)
 //Chức năng chuyển tiền
 void chuyentien(node root, node myAccount)
 {
-    FILE *f =  fopen("data/output.txt", "a");
+    FILE *f =  fopen("data/today's trade.txt", "a");
     char account[MAX_ACC_LEN];
     char yesno = 'Y';
     int AccountEntryCount = 3 ;
@@ -874,7 +874,7 @@ void chuyentien(node root, node myAccount)
 //Chức năng rút tiền
 void ruttien(node root, node myAccount)
 {
-    FILE *f =  fopen("data/output.txt", "a");
+    FILE *f =  fopen("data/today's trade.txt", "a");
     long long sotienrut = chonsotienrut();
 
     if (sotienrut == 0) return;

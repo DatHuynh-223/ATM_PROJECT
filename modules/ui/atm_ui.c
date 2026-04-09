@@ -297,7 +297,7 @@ void AdministratorLogin(char *shutdown)
 void khoidong(node root)
 {
     // xóa sạch output khi bắt đàau chạy 
-    FILE *f = fopen("data/output.txt", "w");
+    FILE *f = fopen("data/today's trade.txt", "w");
     if (f != NULL) {
         fclose(f); // Mở ra bằng "w" để xóa sạch rồi đóng lại ngay
     }
