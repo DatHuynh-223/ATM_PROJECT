@@ -1,0 +1,5 @@
+1. Số tài khoản: 1234|SD: 201010000|+100.000 VND|ND: Gui tien tai ATM
+2. Số tài khoản: 1234|SD: 200910000|-100.000 VND|DEN: 12345|ND: chuyển tiền đi chơi
+3. Số tài khoản: 1234|SD: 199910000|-1.000.000 VND| ND: Rút tiền tại ATM
+4. Số tài khoản: 12|SD: 266250000|+3.000.000 VND|ND: Gui tien tai ATM
+5. Số tài khoản: 12|SD: 266150000|-100.000 VND|DEN: 1234|ND: đóng học phí
