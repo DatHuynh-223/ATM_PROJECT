@@ -16,9 +16,7 @@
 #define INFORM_LEN 201           //Thõa được số lượng từ trong message
 #define GIAODICHPHIEN 100        // Tổng giao dịch trong một phiên làm việc của ATM
 
-// 3. Khai báo biến toàn cục (Sử dụng từ khóa extern)
-// 'extern' báo cho trình biên dịch biết biến này tồn tại ở đâu đó, 
-// giúp các file khác nhau có thể dùng chung một danh sách giao dịch.
+
 extern char TransactionList[GIAODICHPHIEN][INFORM_LEN];
 extern int admin_index;
 

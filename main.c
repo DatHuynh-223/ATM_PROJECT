@@ -40,15 +40,7 @@ int main()
     update_File(root);
     FILE *f = fopen("data/day.txt","r");
     int day_trade;
-    if (f != NULL)
-    {
-        fscanf(f,"%d",&day_trade);
-        fclose(f);
-    }
-    else
-    {
-        day_trade = 1; // Default if file not found
-    }
+    day_trade=1;
     create_file(day_trade);
     FILE *f1=fopen("data/day.txt","w");
     if (f1 != NULL)
