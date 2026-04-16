@@ -145,26 +145,26 @@ long long chonsotienchuyen()
     char in[8][100]={"00","100.000","200.000","500.000","1.000.000","2.000.000","3.000.000","00"};
     int i = 0;
     int clear = 0;
-    int moneyEntryCount = 3;
+    int moneyEntryCount = 2;
     char choose[2];
 
-    printf("\nCHỈ NHẬN MỆNH GIÁ 50.000 VND, 100.000 VND, 200.000 VND, 500.000 VND\n\n");
 
-        int j = 0;
-        for (j = 0; j < 8; j++)
+    printf("\n");
+    int j = 0;
+    for (j = 0; j < 8; j++)
+    {
+        if (j == 0) printf("%d. Hủy giao dịch hiện tại        ", j);
+        else if (j == 7) printf("%d. Số khác\n\n", j);
+        else
         {
-            if (j == 0) printf("%d. Hủy giao dịch hiện tại        ", j);
-            else if (j == 7) printf("%d. Số khác\n\n", j);
-            else
-            {
-                printf("%d. %s VND       ",j,in[j]);
-                if (j == 2 || j == 5) printf("\n\n");
-            }
+            printf("%d. %s VND       ",j,in[j]);
+            if (j == 2 || j == 5) printf("\n\n");
         }
+    }
 
     do
     {
-        if (moneyEntryCount == 3)
+        if (moneyEntryCount == 2)
         {
             printf("Chọn số tiền bạn muốn chuyển: ");
         }
@@ -179,7 +179,7 @@ long long chonsotienchuyen()
         if (choose[0]=='\n')
         {
             moneyEntryCount -= 1;
-            if (moneyEntryCount > 0) printf("\n*** Bạn chưa nhập gì! ***\n");
+            if (moneyEntryCount >= 0) printf("\n*** Bạn chưa nhập gì! ***\n");
             continue;
         }
         
@@ -199,7 +199,7 @@ long long chonsotienchuyen()
         if (len > 1 || clear == 1)
         {
             moneyEntryCount -= 1;
-            if (moneyEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng CHỈ NHẬP 1 SỐ. ***\n");
+            if (moneyEntryCount >= 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng CHỈ NHẬP 1 SỐ. ***\n");
             continue; 
         }
         
@@ -211,13 +211,13 @@ long long chonsotienchuyen()
         else
         {
             moneyEntryCount -= 1;
-            if (moneyEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
+            if (moneyEntryCount >= 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
         }
         if (i < 0 || i > 7 || clear == 1)
         {
             moneyEntryCount -= 1;
             
-            if (moneyEntryCount == 0)
+            if (moneyEntryCount == -1)
             {
                 printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
                 return 0;
@@ -225,7 +225,7 @@ long long chonsotienchuyen()
             printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
         }
 
-    } while (moneyEntryCount>0);
+    } while (moneyEntryCount>=0);
     if (i == 0) return 0;
     else if (i == 7)
     {
@@ -273,8 +273,8 @@ long long chonsotienrut()
     char in[8][100]={"00","100.000","200.000","500.000","1.000.000","2.000.000","3.000.000","00"};
     int i = 0;
     int clear = 0;
-    int moneyEntryCount = 3;
-    char choose[100];
+    int moneyEntryCount = 2;
+    char choose[2];
     int j = 0;
     for (j = 0; j < 8; j++)
     {
@@ -289,7 +289,7 @@ long long chonsotienrut()
     do 
     {
 
-        if (moneyEntryCount == 3)
+        if (moneyEntryCount == 2)
         {
             printf("Nhập lựa chọn của bạn : ");
         }
@@ -324,7 +324,7 @@ long long chonsotienrut()
         if (len > 1 || clear == 1)
         {
             moneyEntryCount -= 1;
-            if (moneyEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng CHỈ NHẬP 1 SỐ. ***\n");
+            if (moneyEntryCount >= 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng CHỈ NHẬP 1 SỐ. ***\n");
             continue; 
         }
         
@@ -336,7 +336,7 @@ long long chonsotienrut()
         else
         {
             moneyEntryCount -= 1;
-            if (moneyEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
+            if (moneyEntryCount >= 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
         }
 
         if (i < 0 || i > 7 || clear == 1)
@@ -345,8 +345,8 @@ long long chonsotienrut()
             printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
         }
 
-    } while (moneyEntryCount > 0);
-    if (moneyEntryCount == 0)
+    } while (moneyEntryCount >= 0);
+    if (moneyEntryCount == -1)
             {
                 printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
                 return 0;
