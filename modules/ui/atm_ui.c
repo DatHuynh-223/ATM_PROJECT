@@ -18,9 +18,13 @@ void menu(node root, node myAccount)
         
         while (menuEntryCount > 0)
         {
-            if (menuEntryCount == 3)    printf("Nhập sự lựa chọn của bạn: ");
-            else                        printf("Nhập lại (Bạn còn %d lần): ", menuEntryCount);
-            
+            if (menuEntryCount == 4)    
+                        printf("Nhập sự lựa chọn của bạn: ");
+            else if (menuEntryCount<4 && menuEntryCount>1)       
+                        printf("Nhập lại (Bạn còn %d lần): ", menuEntryCount);
+            else
+                        printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+                        printf("Nhập sự lựa chọn của bạn: ");
             if (fgets(input,sizeof(input),stdin)==NULL) continue;
             
             if (input[0]=='\n')
@@ -185,10 +189,22 @@ void GuestLogin(node root,char *shutdown )
         {
             KT=1;
             char mapin[MAX_PIN_LEN];
-            int pinEntryCount = 3;
+            int pinEntryCount = 4;
             do
             {
-                printf("Vui lòng nhập mã Pin (Bạn còn %d lần nhập): ", pinEntryCount);
+                if (pinEntryCount==4)
+                {
+                    printf("Vui lòng nhập mã Pin của bạn: ");
+                }
+                else if (pinEntryCount < 4 && pinEntryCount > 1)
+                {
+                    printf("Vui lòng nhập lại mã Pin của bạn (Bạn còn %d lần nhập): ", pinEntryCount);
+                }
+                else 
+                {
+                    printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+                    printf("Vui lòng nhập lại mã Pin của bạn : ", pinEntryCount);
+                }
                 pinEntryCount-=1;
                 if (fgets(mapin,sizeof(mapin),stdin)==NULL) 
                 {
@@ -239,18 +255,17 @@ void AdministratorLogin(char *shutdown)
     printf(" \n\n=====================================================================CHÀO MỪNG ADMIN=====================================================================\n\n");
     char admin_pin[7] = "000000";
     char Pin_Entry[7];
-    int Pin_Entry_Count = 3;
+    int Pin_Entry_Count = 4;
     int clear;
 
-    //Nhập mã bảo mật
     do 
     {
-        if (Pin_Entry_Count ==0)
+        if (Pin_Entry_Count ==1)
         {
             printf("\n *** Đây lần cuối để nhập mã bảo mật! ***\n");
             printf("Vui lòng nhập mã bảo mật của Admin : ");
         }
-        else if (Pin_Entry_Count ==3)
+        else if (Pin_Entry_Count ==4)
         {
             printf("Vui lòng nhập mã bảo mật của Admin : ");
         }
@@ -299,7 +314,7 @@ void khoidong(node root)
     // xóa sạch output khi bắt đàau chạy 
     FILE *f = fopen("data/today's trade.txt", "w");
     if (f != NULL) {
-        fclose(f); // Mở ra bằng "w" để xóa sạch rồi đóng lại ngay
+        fclose(f);
     }
     char shutdown = 'N';
     int clear=0;
@@ -310,9 +325,19 @@ void khoidong(node root)
     printf("\n\n[=========================================================NHẬP MÃ BẢO MẬT CỦA ADMIN ĐỂ KHỞI ĐỘNG ATM========================================================= ]\n\n");
     do 
     {
-        if (passEntryCount <3) printf("*****  Vui lòng nhập lại mã bảo mật! *****\n");
-         passEntryCount -= 1;
-        printf("Vui lòng nhập mã bảo mật của Admin (Bạn còn %d lần nhập): ", passEntryCount);
+        if (passEntryCount==3)
+            printf("Vui lòng nhập mã bảo mật của Admin : ");
+        else if (passEntryCount <3 && passEntryCount >0) 
+        {
+            printf("*****  Vui lòng nhập lại mã bảo mật! *****\n");
+            printf("Vui lòng nhập mã bảo mật của Admin (Bạn còn %d lần nhập): ", passEntryCount);
+        }
+        else 
+        {
+            printf("\n *** Đây lần cuối để nhập mã bảo mật! ***\n");
+            printf("Vui lòng nhập mã bảo mật của Admin : ");
+        }
+        passEntryCount -= 1;
 		if (fgets(pass,sizeof(pass),stdin)==NULL) 
         {
             printf("\n*** Bạn chưa nhập gì. ***\n");
