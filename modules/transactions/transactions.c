@@ -35,9 +35,14 @@ long long chonsotiengui(node target, node myAccount)
         {
             printf("Nhập lựa chọn của bạn : ");
         }
-        else
+        else if (moneyEntryCount > 1)
         {
             printf("Nhập lại lựa chọn của bạn  (Bạn còn %d lần): ", moneyEntryCount);
+        }
+        else
+        {
+            printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+            printf("Nhập lựa chọn của bạn : ");
         }
         
         
@@ -81,12 +86,6 @@ long long chonsotiengui(node target, node myAccount)
             if (moneyEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
         }
 
-        if (i < 0 || i > 7 || clear == 1)
-        {
-            moneyEntryCount -= 1;
-            printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
-        }
-
     } while (moneyEntryCount > 0);
     if (moneyEntryCount == 0)
             {
@@ -106,9 +105,14 @@ long long chonsotiengui(node target, node myAccount)
             {
                 printf("Vui lòng nhập bội số của 50.000 VND: ");
             }
-            else
+            else if (tempEntry > 1)
             {
                 printf("Vui lòng nhập bội số của 50.000 VND (Bạn còn %d lần): ", tempEntry);
+            }
+            else
+            {
+                printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+                printf("Vui lòng nhập bội số của 50.000 VND: ");
             }
             
             scanf(" %lld", &temp);
@@ -146,7 +150,7 @@ long long chonsotienchuyen()
     int i = 0;
     int clear = 0;
     int moneyEntryCount = 2;
-    char choose[2];
+    char choose[100];
 
 
     printf("\n");
@@ -168,9 +172,14 @@ long long chonsotienchuyen()
         {
             printf("Chọn số tiền bạn muốn chuyển: ");
         }
-        else
+        else if (moneyEntryCount > 0)
         {
             printf("Chọn số tiền bạn muốn chuyển (Bạn còn %d lần): ", moneyEntryCount);
+        }
+        else
+        {
+            printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+            printf("Chọn số tiền bạn muốn chuyển: ");
         }
         
         
@@ -213,17 +222,6 @@ long long chonsotienchuyen()
             moneyEntryCount -= 1;
             if (moneyEntryCount >= 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
         }
-        if (i < 0 || i > 7 || clear == 1)
-        {
-            moneyEntryCount -= 1;
-            
-            if (moneyEntryCount == -1)
-            {
-                printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
-                return 0;
-            }
-            printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
-        }
 
     } while (moneyEntryCount>=0);
     if (i == 0) return 0;
@@ -239,9 +237,14 @@ long long chonsotienchuyen()
             {
                 printf("Vui lòng nhập bội số của 50.000 VND: ");
             }
-            else
+            else if (tempEntry > 1)
             {
                 printf("Vui lòng nhập bội số của 50.000 VND (Bạn còn %d lần): ", tempEntry);
+            }
+            else
+            {
+                printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+                printf("Vui lòng nhập bội số của 50.000 VND: ");
             }
             
             scanf(" %lld", &temp);
@@ -274,7 +277,7 @@ long long chonsotienrut()
     int i = 0;
     int clear = 0;
     int moneyEntryCount = 2;
-    char choose[2];
+    char choose[100];
     int j = 0;
     for (j = 0; j < 8; j++)
     {
@@ -293,9 +296,14 @@ long long chonsotienrut()
         {
             printf("Nhập lựa chọn của bạn : ");
         }
+        else if (moneyEntryCount < 2 && moneyEntryCount > 0)
+        {
+            printf("Nhập lại lựa chọn của bạn (Bạn còn %d lần): ", moneyEntryCount);
+        }
         else
         {
-            printf("Nhập lại lựa chọn của bạn  (Bạn còn %d lần): ", moneyEntryCount);
+            printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+            printf("Nhập lựa chọn của bạn  : ");
         }
         
         
@@ -339,12 +347,6 @@ long long chonsotienrut()
             if (moneyEntryCount >= 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
         }
 
-        if (i < 0 || i > 7 || clear == 1)
-        {
-            moneyEntryCount -= 1;
-            printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
-        }
-
     } while (moneyEntryCount >= 0);
     if (moneyEntryCount == -1)
             {
@@ -357,21 +359,26 @@ long long chonsotienrut()
     {
         printf("Hạn mức tối đa là : %s VND\n\n", "10.000.000");
 
-        int tempEntry = 3;
+        int tempEntry = 4;
         long long temp;
         char *tempstr=(char*)malloc(sizeof(char)*21);
         do
         {
-            if (tempEntry == 3)
+            if (tempEntry == 4)
             {
                 printf("Vui lòng nhập bội số của 50.000 VND: ");
             }
-            else
+            else if (tempEntry < 4 && tempEntry > 1)
             {
                 printf("Vui lòng nhập bội số của 50.000 VND (Bạn còn %d lần): ", tempEntry);
             }
+            else
+            {
+                printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+                printf("Vui lòng nhập bội số của 50.000 VND: ");
+            }
             
-            if (fgets(tempstr, sizeof(tempstr), stdin) == NULL) 
+            if (fgets(tempstr, 21, stdin) == NULL) 
             {
                 tempEntry--;
                 continue;
@@ -425,9 +432,14 @@ void guitien(node root, node myAccount)
         {
             printf("Nhập số tài khoản bạn muốn gửi tiền: ");
         }
-        else
+        else if (AccountEntryCount > 1)
         {
             printf("Nhập số tài khoản bạn muốn gửi tiền (Bạn còn %d lần nhập): ", AccountEntryCount);
+        }
+        else
+        {
+            printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+            printf("Nhập số tài khoản bạn muốn gửi tiền: ");
         }
         
         AccountEntryCount -= 1;
@@ -469,9 +481,14 @@ void guitien(node root, node myAccount)
                         {
                             printf("Nhập lời nhắn với 80 kí tự: ");
                         }
-                        else
+                        else if (message_Entry_Count > 1)
                         {
                             printf("Nhập lời nhắn với 80 kí tự (Bạn còn %d lần nhập): ", message_Entry_Count);
+                        }
+                        else
+                        {
+                            printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+                            printf("Nhập lời nhắn với 80 kí tự: ");
                         }
                         
                         message_Entry_Count -= 1;
@@ -563,7 +580,7 @@ void guitien(node root, node myAccount)
                     strcpy(sotien,insert_cham(sotiengui));
 
                     sprintf(myAccount->Data->TransactionHistory[myAccount_current_index], "%s|SD: %llu|GUI %s VND|DEN %s|ND: %s", myAccount->Data->AccountNumber,myAccount->Data->Balance, sotien, targetAccount->Data->AccountNumber,message);
-                    sprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%s VND|TU: %s|ND: %s", targetAccount->Data->AccountNumber, targetAccount->Data->Balance,sotien, myAccount->Data->AccountNumber, myAccount ->Data ->AccountNumber ,message);
+                    sprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%s VND|TU: %s|ND: %s", targetAccount->Data->AccountNumber, targetAccount->Data->Balance,sotien, myAccount->Data->AccountNumber, message);
 
                     strcpy(TransactionList[admin_index], myAccount->Data->TransactionHistory[myAccount_current_index]);
                     fprintf(f ,"%d. Số tài khoản: %s\n", admin_index + 1, TransactionList[admin_index]);
@@ -592,9 +609,14 @@ void guitien(node root, node myAccount)
                 {
                     printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
                 }
-                else
+                else if (ynEntryCount > 1)
                 {
                     printf("Bạn muốn nhập lại Số tài khoản không? [Y/N] (Bạn còn %d lần): ", ynEntryCount);
+                }
+                else
+                {
+                    printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
                 }
                 if (scanf("%c", &yesno) != 1) 
                 {
@@ -641,9 +663,14 @@ void chuyentien(node root, node myAccount)
         {
             printf("Nhập số tài khoản bạn muốn chuyển tiền: ");
         }
-        else
+        else if (AccountEntryCount > 1)
         {
             printf("Nhập số tài khoản bạn muốn chuyển tiền (Bạn còn %d lần nhập): ", AccountEntryCount);
+        }
+        else
+        {
+            printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+            printf("Nhập số tài khoản bạn muốn chuyển tiền: ");
         }
         
         AccountEntryCount -= 1;
@@ -678,9 +705,14 @@ void chuyentien(node root, node myAccount)
                 {
                     printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
                 }
-                else
+                else if (ynEntryCount > 1)
                 {
                     printf("Bạn muốn nhập lại Số tài khoản không? [Y/N] (Bạn còn %d lần): ", ynEntryCount);
+                }
+                else
+                {
+                    printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
                 }
                 if (scanf("%c", &yesno) != 1) 
                 {
@@ -730,9 +762,14 @@ void chuyentien(node root, node myAccount)
                     {
                         printf("Nhập lời nhắn với 80 kí tự: ");
                     }
-                    else
+                    else if (message_Entry_Count > 1)
                     {
                         printf("Nhập lời nhắn với 80 kí tự (Bạn còn %d lần nhập): ", message_Entry_Count);
+                    }
+                    else
+                    {
+                        printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+                        printf("Nhập lời nhắn với 80 kí tự: ");
                     }
                     
                     message_Entry_Count -= 1;
@@ -833,9 +870,14 @@ void chuyentien(node root, node myAccount)
                 {
                     printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
                 }
-                else
+                else if (ynEntryCount > 1)
                 {
                     printf("Bạn muốn nhập lại Số tài khoản không? [Y/N] (Bạn còn %d lần): ", ynEntryCount);
+                }
+                else
+                {
+                    printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
                 }
                 if (scanf("%c", &yesno) != 1) 
                 {
@@ -961,9 +1003,14 @@ void xemtaikhoan(node myAccount)
         {
             printf("\nNhập lựa chọn của bạn : ");
         }
-        else
+        else if (accEntryCount > 1)
         {
             printf("Nhập lại lựa chọn của bạn  (Bạn còn %d lần): ", accEntryCount);
+        }
+        else
+        {
+            printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+            printf("Nhập lựa chọn của bạn : ");
         }
         
         
@@ -1005,12 +1052,6 @@ void xemtaikhoan(node myAccount)
         {
             accEntryCount -= 1;
             if (accEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 2. ***\n\n");
-        }
-
-        if (choice < 0 || choice     > 2 || clear == 1)
-        {
-            accEntryCount -= 1;
-            printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
         }
 
     } while (accEntryCount > 0);

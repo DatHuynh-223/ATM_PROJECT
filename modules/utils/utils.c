@@ -61,9 +61,15 @@ void create_file(int day_trade)
 {
 	FILE *src,*dest;
 	src=fopen("data/today's trade.txt","r");
+	if (src == NULL) return;
 	char filename[50];
 	sprintf(filename,"data/Transactions/Day %d.txt",day_trade);
 	dest=fopen(filename,"a");
+	if (dest == NULL)
+	{
+		fclose(src);
+		return;
+	}
 	char ch;
 	while ((ch= fgetc(src)) != EOF)
 	{

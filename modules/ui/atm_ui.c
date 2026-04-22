@@ -24,7 +24,7 @@ void menu(node root, node myAccount)
                         printf("Nhập lại (Bạn còn %d lần): ", menuEntryCount);
             else
             { 
-                          printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
+                        printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
                         printf("Nhập sự lựa chọn của bạn: ");
             }
             if (fgets(input,sizeof(input),stdin)==NULL) continue;
@@ -303,12 +303,10 @@ void AdministratorLogin(char *shutdown)
         {
             printf("\n*** Mã bảo mật không chính xác! ***\n");
         }
-    } while ((strcmp(Pin_Entry, admin_pin) != 0 || clear != 0) && Pin_Entry_Count >= 0); //Tránh trường hợp người dùng nhập dư kí tự khiến buffer hiểu lầm rằng còn lần nhập nhưng thực tế đã hết lần nhập
+    } while ((strcmp(Pin_Entry, admin_pin) != 0 || clear != 0) && Pin_Entry_Count >= 0);
 
-    //Kiểm tra mã bảo mật
     if (strcmp(Pin_Entry, admin_pin) == 0 && clear == 0)
     {
-        //Chuyển thành shutdown
         (*shutdown) = 'Y';
     }
     else
@@ -326,6 +324,7 @@ void khoidong(node root)
     if (f != NULL) {
         fclose(f);
     }
+    system("cls");
     char shutdown = 'N';
     int clear=0;
     int passEntryCount = 4;
@@ -394,8 +393,11 @@ void khoidong(node root)
             printf("==========================================================================================================================================================\n\n");
             FILE *day=fopen("data/day.txt","r");
             int day_trade=1;
-            fscanf(day,"%d",&day_trade);
-            fclose(day);
+            if (day != NULL)
+            {
+                fscanf(day,"%d",&day_trade);
+                fclose(day);
+            }
             printf("\n\n NGÀY %d GIAO DỊCH \n\n",day_trade);
             GuestLogin(root,&shutdown);
     
