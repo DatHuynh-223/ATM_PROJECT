@@ -1,2 +1,0 @@
-1. Số tài khoản: 1234|SD: 201210000|+100.000 VND|ND: Gui tien tai ATM
-2. Số tài khoản: 1234|SD: 201010000|-200.000 VND|DEN: 12|ND: hihi

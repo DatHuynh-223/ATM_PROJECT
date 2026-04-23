@@ -1,424 +1,118 @@
 #include "transactions.h"
 // Các hàm hỗ trợ chọn số tiền
 
-//Hàm chọn số tiền gửi đi
-long long chonsotiengui(node target, node myAccount)
-{
-    long long hanmuctoida;
-    if (target == myAccount) hanmuctoida = 200000000;
-    else hanmuctoida = 100000000;
-    
-    long long arr[8] = {0 ,100000, 200000, 500000, 1000000, 2000000, 3000000, 0};
-    char in[8][100]={"00","100.000","200.000","500.000","1.000.000","2.000.000","3.000.000","00"};
+long long chonsotienchung(long long hanmuctoida, const char* thongbao, int solanchon_toida, int solannhap_toida) {
+    long long arr[8] = {0, 100000, 200000, 500000, 1000000, 2000000, 3000000, 0};
+    char in[8][100] = {"00", "100.000", "200.000", "500.000", "1.000.000", "2.000.000", "3.000.000", "00"};
+    char luachon[100];
     int i = 0;
     int clear = 0;
-    int moneyEntryCount = 3;
-    char choose[100];
+    int solanchon_cl = solanchon_toida;
 
-    printf("\nCHỈ NHẬN MỆNH GIÁ 50.000 VND, 100.000 VND, 200.000 VND, 500.000 VND\n\n");
-        
-    int j = 0;
-    for (j = 0; j < 8; j++)
-    {
+    printf("\n%s\n\n", thongbao);
+    for (int j = 0; j < 8; j++) {
         if (j == 0) printf("%d. Hủy giao dịch hiện tại        ", j);
         else if (j == 7) printf("%d. Số khác\n\n", j);
-        else
-        {
-            printf("%d. %s VND       ",j,in[j]);
+        else {
+            printf("%d. %s VND       ", j, in[j]);
             if (j == 2 || j == 5) printf("\n\n");
         }
     }
-    do 
-    {
 
-        if (moneyEntryCount == 3)
-        {
-            printf("Nhập lựa chọn của bạn : ");
-        }
-        else if (moneyEntryCount > 1)
-        {
-            printf("Nhập lại lựa chọn của bạn  (Bạn còn %d lần): ", moneyEntryCount);
-        }
-        else
-        {
-            printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-            printf("Nhập lựa chọn của bạn : ");
-        }
-        
-        
-        if (fgets(choose,sizeof(choose),stdin)==NULL) continue;
-        
-        if (choose[0]=='\n')
-        {
-            moneyEntryCount -= 1;
-            if (moneyEntryCount > 0) printf("\n*** Bạn chưa nhập gì! ***\n");
+    do {
+        if (solanchon_cl == solanchon_toida) printf("Nhập lựa chọn của bạn : ");
+        else if (solanchon_cl > 1) printf("Nhập lại lựa chọn của bạn (Bạn còn %d lần): ", solanchon_cl);
+        else printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\nNhập lựa chọn của bạn : ");
+
+        if (fgets(luachon, sizeof(luachon), stdin) == NULL) continue;
+        if (luachon[0] == '\n') {
+            solanchon_cl--;
+            if (solanchon_cl > 0) printf("\n*** Bạn chưa nhập gì! ***\n");
             continue;
         }
-        
-        int len = strlen(choose);
-        clear = 0;
-        
-        if (choose[len-1]=='\n') 
-        {
-            choose[len-1]='\0';
-            len--;
-        }
-        else 
-        {
-            clear = clear_buffer(); 
-        }
-    
-        if (len > 1 || clear == 1)
-        {
-            moneyEntryCount -= 1;
-            if (moneyEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng CHỈ NHẬP 1 SỐ. ***\n");
-            continue; 
-        }
-        
-        if (choose[0]>='0' && choose[0] <='7')
-        {
-            i = choose[0]-'0';
-            break; 
-        }
-        else
-        {
-            moneyEntryCount -= 1;
-            if (moneyEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
+
+        int len = strlen(luachon);
+        if (luachon[len - 1] == '\n') {
+            luachon[--len] = '\0';
+            clear = 0;
+        } else clear = clear_buffer();
+
+        if (len > 1 || clear == 1 || luachon[0] < '0' || luachon[0] > '7') {
+            solanchon_cl--;
+            if (solanchon_cl > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n");
+            continue;
         }
 
-    } while (moneyEntryCount > 0);
-    if (moneyEntryCount == 0)
-            {
-                printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
-                return 0;
-            }
-    if (i == 0) return 0;
-    else if (i == 7)
-    {
-        printf("Hạn mức tối đa là : %s VND\n\n", insert_cham(hanmuctoida));
+        i = luachon[0] - '0';
+        break;
+    } while (solanchon_cl > 0);
 
-        int tempEntry = 3;
-        long long temp;
-        do
-        {
-            if (tempEntry == 3)
-            {
-                printf("Vui lòng nhập bội số của 50.000 VND: ");
-            }
-            else if (tempEntry > 1)
-            {
-                printf("Vui lòng nhập bội số của 50.000 VND (Bạn còn %d lần): ", tempEntry);
-            }
-            else
-            {
-                printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-                printf("Vui lòng nhập bội số của 50.000 VND: ");
-            }
-            
-            scanf(" %lld", &temp);
-            clear = clear_buffer();
-
-            if (temp % 50000 != 0 || temp > hanmuctoida || temp <= 0 || clear == 1)
-            {
-                tempEntry -= 1;
-                
-                if (tempEntry == 0)
-                {
-                    printf("\n*** QUÁ SỐ LẦN NHẬP. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
-                    return 0;
-                }
-                printf("\n*** Số tiền không hợp lệ! ***\n\n");
-            }
-        } while (temp % 50000 != 0 || temp > hanmuctoida || temp <= 0 || clear == 1);
-        return temp;
-    }
-    else if (i<0 || i>7 || clear == 1)
-    {
+    if (solanchon_cl == 0) {
         printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
         return 0;
     }
-    else return arr[i];
-}
 
-//Hàm chọn số tiền chuyển đi
-long long chonsotienchuyen()
-{
-    long long hanmuctoida = 100000000;
-    
-    long long arr[8] = {0 ,100000, 200000, 500000, 1000000, 2000000, 3000000, 0};
-    char in[8][100]={"00","100.000","200.000","500.000","1.000.000","2.000.000","3.000.000","00"};
-    int i = 0;
-    int clear = 0;
-    int moneyEntryCount = 2;
-    char choose[100];
-
-
-    printf("\n");
-    int j = 0;
-    for (j = 0; j < 8; j++)
-    {
-        if (j == 0) printf("%d. Hủy giao dịch hiện tại        ", j);
-        else if (j == 7) printf("%d. Số khác\n\n", j);
-        else
-        {
-            printf("%d. %s VND       ",j,in[j]);
-            if (j == 2 || j == 5) printf("\n\n");
-        }
-    }
-
-    do
-    {
-        if (moneyEntryCount == 2)
-        {
-            printf("Chọn số tiền bạn muốn chuyển: ");
-        }
-        else if (moneyEntryCount > 0)
-        {
-            printf("Chọn số tiền bạn muốn chuyển (Bạn còn %d lần): ", moneyEntryCount);
-        }
-        else
-        {
-            printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-            printf("Chọn số tiền bạn muốn chuyển: ");
-        }
-        
-        
-        if (fgets(choose,sizeof(choose),stdin)==NULL) continue;
-        
-        if (choose[0]=='\n')
-        {
-            moneyEntryCount -= 1;
-            if (moneyEntryCount >= 0) printf("\n*** Bạn chưa nhập gì! ***\n");
-            continue;
-        }
-        
-        int len = strlen(choose);
-        clear = 0;
-        
-        if (choose[len-1]=='\n') 
-        {
-            choose[len-1]='\0';
-            len--;
-        }
-        else 
-        {
-            clear = clear_buffer(); 
-        }
-    
-        if (len > 1 || clear == 1)
-        {
-            moneyEntryCount -= 1;
-            if (moneyEntryCount >= 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng CHỈ NHẬP 1 SỐ. ***\n");
-            continue; 
-        }
-        
-        if (choose[0]>='0' && choose[0] <='7')
-        {
-            i = choose[0]-'0';
-            break; 
-        }
-        else
-        {
-            moneyEntryCount -= 1;
-            if (moneyEntryCount >= 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
-        }
-
-    } while (moneyEntryCount>=0);
     if (i == 0) return 0;
-    else if (i == 7)
-    {
-        printf("Hạn mức tối đa là : %s VND\n\n", "10.000.000");
+    if (i != 7) return arr[i];
 
-        int tempEntry = 3;
-        long long temp;
-        do
-        {
-            if (tempEntry == 3)
-            {
-                printf("Vui lòng nhập bội số của 50.000 VND: ");
-            }
-            else if (tempEntry > 1)
-            {
-                printf("Vui lòng nhập bội số của 50.000 VND (Bạn còn %d lần): ", tempEntry);
-            }
-            else
-            {
-                printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-                printf("Vui lòng nhập bội số của 50.000 VND: ");
-            }
-            
-            scanf(" %lld", &temp);
-            clear = clear_buffer();
+    printf("Hạn mức tối đa là : %s VND\n\n", insert_cham(hanmuctoida));
+    int solannhap_cl = solannhap_toida;
+    long long sotien = 0;
+    char chuoitien[30];
 
-            if (temp % 50000 != 0 || temp > hanmuctoida || temp <= 0 || clear == 1)
-            {
-                tempEntry -= 1;
-                
-                if (tempEntry == 0)
-                {
-                    printf("\n*** QUÁ SỐ LẦN NHẬP. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
-                    return 0;
-                }
-                printf("\n*** Số tiền không hợp lệ! ***\n\n");
-            }
-        } while (temp % 50000 != 0 || temp > hanmuctoida || temp <= 0 || clear == 1);
-        return temp;
-    }
-    else return arr[i];
-}
+    do {
+        if (solannhap_cl == solannhap_toida) printf("Vui lòng nhập bội số của 50.000 VND: ");
+        else if (solannhap_cl > 1) printf("Vui lòng nhập bội số của 50.000 VND (Bạn còn %d lần): ", solannhap_cl);
+        else printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\nVui lòng nhập bội số của 50.000 VND: ");
 
-//Hàm chọn số tiền rút
-long long chonsotienrut()
-{
-    long long hanmuctoida = 10000000;
-    
-    long long arr[8] = {0 ,100000, 200000, 500000, 1000000, 2000000, 3000000, 0};
-    char in[8][100]={"00","100.000","200.000","500.000","1.000.000","2.000.000","3.000.000","00"};
-    int i = 0;
-    int clear = 0;
-    int moneyEntryCount = 2;
-    char choose[100];
-    int j = 0;
-    for (j = 0; j < 8; j++)
-    {
-        if (j == 0) printf("%d. Hủy giao dịch hiện tại        ", j);
-        else if (j == 7) printf("%d. Số khác\n\n", j);
-        else
-        {
-            printf("%d. %s VND       ",j,in[j]);
-            if (j == 2 || j == 5) printf("\n\n");
-        }
-    }
-    do 
-    {
-
-        if (moneyEntryCount == 2)
-        {
-            printf("Nhập lựa chọn của bạn : ");
-        }
-        else if (moneyEntryCount < 2 && moneyEntryCount > 0)
-        {
-            printf("Nhập lại lựa chọn của bạn (Bạn còn %d lần): ", moneyEntryCount);
-        }
-        else
-        {
-            printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-            printf("Nhập lựa chọn của bạn  : ");
-        }
-        
-        
-        if (fgets(choose,sizeof(choose),stdin)==NULL) continue;
-        
-        if (choose[0]=='\n')
-        {
-            moneyEntryCount -= 1;
-            if (moneyEntryCount > 0) printf("\n*** Bạn chưa nhập gì! ***\n");
+        if (fgets(chuoitien, sizeof(chuoitien), stdin) == NULL) continue;
+        if (chuoitien[0] == '\n') {
+            solannhap_cl--;
+            if (solannhap_cl > 0) printf("\n*** Bạn chưa nhập gì! ***\n");
             continue;
         }
-        
-        int len = strlen(choose);
-        clear = 0;
-        
-        if (choose[len-1]=='\n') 
-        {
-            choose[len-1]='\0';
-            len--;
-        }
-        else 
-        {
-            clear = clear_buffer(); 
-        }
-    
-        if (len > 1 || clear == 1)
-        {
-            moneyEntryCount -= 1;
-            if (moneyEntryCount >= 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng CHỈ NHẬP 1 SỐ. ***\n");
-            continue; 
-        }
-        
-        if (choose[0]>='0' && choose[0] <='7')
-        {
-            i = choose[0]-'0';
-            break; 
-        }
-        else
-        {
-            moneyEntryCount -= 1;
-            if (moneyEntryCount >= 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n\n");
-        }
 
-    } while (moneyEntryCount >= 0);
-    if (moneyEntryCount == -1)
-            {
-                printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+        int len = strlen(chuoitien);
+        if (chuoitien[len - 1] == '\n') {
+            chuoitien[--len] = '\0';
+            clear = 0;
+        } else clear = clear_buffer();
+
+        sotien = atoll(chuoitien);
+        if (sotien % 50000 != 0 || sotien > hanmuctoida || sotien <= 0 || clear == 1) {
+            solannhap_cl--;
+            if (solannhap_cl == 0) {
+                printf("\n*** QUÁ SỐ LẦN NHẬP. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
                 return 0;
             }
-            
-    if (i == 0) return 0;
-    else if (i == 7)
-    {
-        printf("Hạn mức tối đa là : %s VND\n\n", "10.000.000");
+            printf("\n*** Số tiền không hợp lệ! ***\n\n");
+        } else return sotien;
 
-        int tempEntry = 4;
-        long long temp;
-        char *tempstr=(char*)malloc(sizeof(char)*21);
-        do
-        {
-            if (tempEntry == 4)
-            {
-                printf("Vui lòng nhập bội số của 50.000 VND: ");
-            }
-            else if (tempEntry < 4 && tempEntry > 1)
-            {
-                printf("Vui lòng nhập bội số của 50.000 VND (Bạn còn %d lần): ", tempEntry);
-            }
-            else
-            {
-                printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-                printf("Vui lòng nhập bội số của 50.000 VND: ");
-            }
-            
-            if (fgets(tempstr, 21, stdin) == NULL) 
-            {
-                tempEntry--;
-                continue;
-            }
-            if (tempstr[0] == '\n') 
-            {
-                tempEntry--;
-                if (tempEntry > 0) printf("\n*** Bạn chưa nhập gì! ***\n");
-                continue;
-            }
-            int len = strlen(tempstr);
-            if (tempstr[len-1] == '\n') 
-            {
-                tempstr[len-1] = '\0';
-            }
-            else
-            {
-                clear = clear_buffer();
-            }
-            temp = atoll(tempstr);
-            if (temp % 50000 != 0 || temp > hanmuctoida || temp <= 0 || clear == 1)
-            {
-                tempEntry -= 1;
-                
-                if (tempEntry == 0)
-                {
-                    printf("\n*** QUÁ SỐ LẦN NHẬP. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
-                    return 0;
-                }
-                printf("\n*** Số tiền không hợp lệ! ***\n\n");
-            }
-        } while (temp % 50000 != 0 || temp > hanmuctoida || temp <= 0 || clear == 1);
-        return temp;
-    }
-    else return arr[i];
+    } while (solannhap_cl > 0);
+
+    return 0;
 }
+
+
+long long chonsotiengui(node target, node myAccount)
+{
+    long long hanmuctoida = (target == myAccount) ? 200000000 : 100000000;
+    return chonsotienchung(hanmuctoida, "CHỈ NHẬN MỆNH GIÁ 50.000 VND, 100.000 VND, 200.000 VND, 500.000 VND", 3, 3);
+}
+
+long long chonsotienchuyen()
+{
+    return chonsotienchung(100000000, "Chọn số tiền bạn muốn chuyển:", 3, 3);
+}
+
+long long chonsotienrut()
+{
+    return chonsotienchung(10000000, "Chọn số tiền bạn muốn rút:", 3, 3);
+}
+
  
 // Các hàm thực thi giao dịch chính
 
-//Chức năng gửi tiền
 void guitien(node root, node myAccount)
 {
     FILE *f =  fopen("data/today's trade.txt", "a");
@@ -649,7 +343,6 @@ void guitien(node root, node myAccount)
     fclose(f);
 }
 
-//Chức năng chuyển tiền
 void chuyentien(node root, node myAccount)
 {
     FILE *f =  fopen("data/today's trade.txt", "a");
@@ -913,7 +606,6 @@ void chuyentien(node root, node myAccount)
     fclose(f);
 }
 
-//Chức năng rút tiền
 void ruttien(node root, node myAccount)
 {
     FILE *f =  fopen("data/today's trade.txt", "a");
@@ -981,7 +673,6 @@ void ruttien(node root, node myAccount)
     fclose(f);
 }
 
-//Chức năng xem tài khoản
 void xemtaikhoan(node myAccount)
 {
     char *option[] = {"0. Hủy giao dịch","1. Xem số dư", "2. Xem lịch sử giao dịch"};
@@ -1046,6 +737,7 @@ void xemtaikhoan(node myAccount)
         if (choose[0]>='0' && choose[0] <='2')
         {
             choice= choose[0]-'0';
+            free(choose);
             break; 
         }
         else

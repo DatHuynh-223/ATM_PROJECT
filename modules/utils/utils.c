@@ -20,10 +20,10 @@ int la_chuoi_so_hop_le(char *str) {
             return 0; // Trả về 0 (False) nếu phát hiện bất kì thứ gì không phải số từ 0-9
         }
     }
-    return 1; // Hợp lệ
+    return 1; 
 }
 
-//them ki tu vao vi tri pos
+
 void insert(char *s,char ch ,int pos,int n)
 {
 	if (pos >n || pos <0) return ;
@@ -55,8 +55,6 @@ char* insert_cham(long long n)
 	return s;
 }
 
-
-// tạo file giao dịch cuối ngày
 void create_file(int day_trade)
 {
 	FILE *src,*dest;
