@@ -3,144 +3,156 @@
 //Menu
 void menu(node root, node myAccount)
 {
-    system("cls");
-    char *option[] = {"0. Thoát","1. Gửi tiền", "2. Chuyển tiền", "3. Rút tiền", "4. Xem tài khoản"};
+    SetConsoleOutputCP(65001);
+    SetConsoleCP(65001);
+    
+    char *option[] = {"0. Thoát", "1. Gửi tiền", "2. Chuyển tiền", "3. Rút tiền", "4. Xem tài khoản"};
     int optionCount = sizeof(option)/ sizeof(option[0]);
     
     while (1)
     {
-        printf("\n--- MENU GIAO DỊCH ---\n");
-        for (int i = 1; i < optionCount; i++) printf("%s\n", option[i]);
-        printf("%s\n", option[0]);
         int menuEntryCount = 4;
         int choice = -1;
-        char input[1000];
+        char input[100];
+        int clear = 0;
         
         while (menuEntryCount > 0)
         {
-            if (menuEntryCount == 4)    
-                        printf("Nhập sự lựa chọn của bạn: ");
-            else if (menuEntryCount<4 && menuEntryCount>1)       
-                        printf("Nhập lại (Bạn còn %d lần): ", menuEntryCount);
-            else
-            { 
-                        printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-                        printf("Nhập sự lựa chọn của bạn: ");
-            }
-            if (fgets(input,sizeof(input),stdin)==NULL) continue;
+            system("cls");
+            printf("\n\n");
+            printf("\t\t\t╔════════════════════════════════════════════════════════╗\n"); 
+            printf("\t\t\t║                     MENU GIAO DỊCH                     ║\n");
+            printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
             
-            if (input[0]=='\n')
-            {
+            for (int i = 1; i < optionCount; i++) {
+                printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(option[i]), option[i]);
+            }
+            printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(option[0]), option[0]);
+            printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
+            
+            char *msg;
+            if (menuEntryCount == 4) msg = "Vui lòng chọn chức năng từ 0 đến 4";
+            else if (menuEntryCount > 1) {
+                static char buf[100];
+                sprintf(buf, "Lựa chọn sai! Bạn còn %d lần nhập", menuEntryCount);
+                msg = buf;
+            } else msg = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
+
+            printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(msg), msg);
+            printf("\t\t\t║  Nhập lựa chọn của bạn: [   ]                          ║\n");
+            printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+            
+    
+            printf("\033[2A\r\t\t\t\033[28C");
+
+            if (fgets(input, sizeof(input), stdin) == NULL) continue;
+            
+            if (input[0] == '\n') {
                 menuEntryCount--;
-                if (menuEntryCount > 0) printf("\n*** Bạn chưa nhập gì. Vui lòng nhập từ 0 đến 4! ***\n");
                 continue;
             }
             
             int len = strlen(input);
-            int clear = 0;
-            
-            if (input[len-1] == '\n')
-            {
-                input[len-1] = '\0';
+            clear = 0;
+            if (input[len - 1] == '\n') {
+                input[len - 1] = '\0';
                 len--;
-            }
-            else
-            {
+            } else {
                 clear = clear_buffer(); 
             }
             
-            if (len > 1 || clear == 1)
+            if (len > 1 || clear == 1 || input[0] < '0' || input[0] > '4') 
+                {
+                    menuEntryCount--;
+                    continue; 
+                }
+            
+            choice = input[0] - '0';
+            break;
+        }
+        if (menuEntryCount == 0) 
             {
-                menuEntryCount--;
-                if (menuEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng CHỈ NHẬP 1 SỐ. ***\n");
+                printf("\n\n\n\t\t\t*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+                return; 
+            }
+            
+        printf("\n\n");
+        
+
+        switch (choice) {
+            case 1: guitien(root, myAccount); break;
+            case 2: chuyentien(root, myAccount); break;
+            case 3: ruttien(root, myAccount); break;
+            case 4: xemtaikhoan(myAccount); break;
+            case 0: 
+            default:
+                printf("\t\tĐã hủy / Kết thúc giao dịch. \n");
+                return; 
+        }
+        
+    
+        char yn_input[100];
+        int ynEntryCount = 3;
+        int clear_yn;
+        char yn = 'X';
+        
+        while (ynEntryCount > 0) {
+            printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+            printf("\t\t\t║              BẠN CÓ MUỐN TIẾP TỤC GIAO DỊCH KHÔNG?     ║\n");
+            printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
+            
+            char *yn_msg;
+            if (ynEntryCount == 3) yn_msg = "Nhập Y (Có) hoặc N (Không)";
+            else if (ynEntryCount > 1) {
+                static char yn_buf[100];
+                sprintf(yn_buf, "Lựa chọn sai! Bạn còn %d lần nhập", ynEntryCount);
+                yn_msg = yn_buf;
+            } else yn_msg = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
+
+            printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(yn_msg), yn_msg);
+            printf("\t\t\t║  Lựa chọn của bạn: [   ]                               ║\n");
+            printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+            
+            printf("\033[2A\r\t\t\t\033[23C"); 
+
+            if (fgets(yn_input, sizeof(yn_input), stdin) == NULL) continue;
+            if (yn_input[0] == '\n') { ynEntryCount--; printf("\n\n"); continue; } 
+            
+            int len = strlen(yn_input);
+            clear_yn = 0;
+            if (yn_input[len - 1] == '\n') {
+                yn_input[len - 1] = '\0';
+                len--;
+            } else {
+                clear_yn = clear_buffer(); 
+            }
+            
+            if (len > 1 || clear_yn == 1) {
+                ynEntryCount--; 
+                printf("\n\n");
                 continue; 
             }
             
-            if (input[0] >= '0' && input[0] <= '4')
-            {
-                choice = input[0] - '0';
+            yn = yn_input[0];
+            if (yn == 'Y' || yn == 'y' || yn == 'N' || yn == 'n') {
+                printf("\n\n"); 
                 break;
             }
-            else
-            {
-                menuEntryCount--;
-                if (menuEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ chọn từ 0 đến 4. ***\n");
-            }
+            
+            ynEntryCount--;
+            printf("\n\n");
         }
         
-        if ((menuEntryCount == 1) && (choice < 0 || choice > 4)) {
-            printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
-            return; 
-        }
-    
-        switch (choice)
-        {
-            case 1: 
-                guitien(root, myAccount); 
-                break;
-            case 2: 
-                chuyentien(root, myAccount); 
-                break;
-            case 3: 
-                ruttien(root, myAccount); 
-                break;
-            case 4: 
-                xemtaikhoan(myAccount); 
-                break;
-            case 0: 
-            default:
-                printf("\n Đã hủy / Kết thúc giao dịch. \n");
-                system("cls");
-                return; 
-        }
-        char yn;
-        int ynEntryCount = 3;
-        int clear_yn;
-        do 
-        {
-            if (ynEntryCount == 3)
-            {
-                printf("Bạn có muốn thực hiện giao dịch khác không? [Y/N]: ");
-            }
-            else
-            {
-                printf("Bạn có muốn thực hiện giao dịch khác không? [Y/N] (Bạn còn %d lần): ", ynEntryCount);
-            }
-            if (scanf("%c", &yn) != 1) 
-            {
-                printf("\n *** Nhập không hợp lệ! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
-                ynEntryCount--;
-                continue; 
-            }
-            if (yn=='\n')
-            {
-                printf("\n *** Bạn chưa nhập gì! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
-                ynEntryCount--;
-                continue;
-            } 
-            clear_yn = clear_buffer();
-
-            if ((yn != 'Y' && yn != 'N') || clear_yn == 1)
-            {
-                ynEntryCount -= 1;
-                if (ynEntryCount == 0)
-                {
-                    printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
-                    return;
-                }
-                printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
-            }
-        } while (((yn != 'Y' && yn != 'N') || clear_yn == 1) && ynEntryCount > 0);
-        if (yn == 'N') 
-        {
-
-            printf("\n*** CẢM ƠN QUÝ KHÁCH ĐÃ SỬ DỤNG DỊCH VỤ ***\n\n");
+        if (ynEntryCount == 0) {
+            printf("\n\t\t\t*** QUÁ SỐ LẦN NHẬP. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
             return;
         }
-        system("cls");
+        if (yn == 'N' || yn == 'n') {
+            printf("\n\t\t\t*** CẢM ƠN QUÝ KHÁCH ĐÃ SỬ DỤNG DỊCH VỤ ***\n\n");
+            return;
+        }
     }
 }
-
 //Hàm đăng nhập với vai trò khách
 void GuestLogin(node root,char *shutdown )
 {
@@ -151,26 +163,32 @@ void GuestLogin(node root,char *shutdown )
     int KT=0;
     do 
     {
-        if (KT) loginCount=4;
-        if (loginCount == 4)
-            printf("Vui lòng nhập Số tài khoản của bạn: ");
-        else if (loginCount < 4 && loginCount > 1)
-            printf("Vui lòng nhập lại Số tài khoản của bạn (Bạn còn %d lần nhập tài khoản): ", loginCount);
-        else
-        {
-            printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-            printf("Vui lòng nhập lại Số tài khoản của bạn: ");
-        }
+        if (KT) loginCount = 4;
+        man_hinh_chao_mung();
+        printf("\n\n\t\t\t╔════════════════════════════════════════════════════════════╗\n");
+        printf("\t\t\t║        VUI LÒNG ĐĂNG NHẬP ĐỂ BẮT ĐẦU GIAO DỊCH             ║\n");
+        printf("\t\t\t╠════════════════════════════════════════════════════════════╣\n");
+        char *msg;
+        if (loginCount == 4) msg = "";
+        else if (loginCount > 1) {
+            static char buf[100];
+            sprintf(buf, "Tài khoản sai! Bạn còn %d lần nhập", loginCount);
+            msg = buf;
+        } else msg = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
+
+        printf("\t\t\t║  %-*s║\n", 58 + tinhOffset(msg), msg);
+        printf("\t\t\t║  Số tài khoản: [                  ]                        ║\n");
+        printf("\t\t\t╚════════════════════════════════════════════════════════════╝\n");
+        printf("\033[2A\r\t\t\t\033[19C"); 
+
         loginCount -= 1;
 
         if (fgets(target,sizeof(target),stdin)==NULL) 
         {
-            printf("\n*** Bạn chưa nhập gì. Vui lòng nhập Số tài khoản! ***\n");
             continue;
         }
         if (target[0]=='\n')	
         {
-            printf("\n*** Bạn chưa nhập gì. Vui lòng nhập Số tài khoản! ***\n");
             continue;
         }
         int len = strlen(target);
@@ -198,29 +216,32 @@ void GuestLogin(node root,char *shutdown )
         if (temp != NULL)
         {
             KT=1;
-            char mapin[MAX_PIN_LEN];
+            char mapin[10];
             int pinEntryCount = 4;
             do
             {
-                if (pinEntryCount==4)
+                system("cls");
+                printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+                printf("\t\t\t║                  XÁC THỰC TÀI KHOẢN                    ║\n");
+                printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
+                    
+                char *pin_msg;
+                if (pinEntryCount == 4) pin_msg = "Vui lòng nhập mã PIN (6 số)";
+                else if (pinEntryCount > 1) 
                 {
-                    printf("Vui lòng nhập mã Pin của bạn: ");
+                    static char p_buf[100];
+                    sprintf(p_buf, "Sai mã PIN! Bạn còn %d lần nhập", pinEntryCount);
+                    pin_msg = p_buf;
                 }
-                else if (pinEntryCount < 4 && pinEntryCount > 1)
-                {
-                    printf("Vui lòng nhập lại mã Pin của bạn (Bạn còn %d lần nhập): ", pinEntryCount);
-                }
-                else 
-                {
-                    printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-                    printf("Vui lòng nhập lại mã Pin của bạn : ");
-                }
+                 else pin_msg = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
+
+                printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(pin_msg), pin_msg);
+                printf("\t\t\t║  (O:hiện mã) Mã PIN:                                   ║\n");
+                printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+                printf("\033[2A\r\t\t\t\033[23C");
                 pinEntryCount-=1;
-                if (fgets(mapin,sizeof(mapin),stdin)==NULL) 
-                {
-                    printf("\n*** Bạn chưa nhập gì. Vui lòng nhập Số tài khoản! ***\n");
-                    continue;
-                }
+                nhap_mk(mapin, 10);
+                if (strlen(mapin) == 0) continue;
                 int len=strlen(mapin);
                 if (mapin[len-1]=='\n')
                 {
@@ -230,64 +251,71 @@ void GuestLogin(node root,char *shutdown )
 				{
 					clear_buffer();
 				}
-                if (strcmp(temp ->Data -> Pin, mapin ) !=0)
-                {
-                    printf("\n*** Mã Pin không chính xác! ***\n");
-                }
             } while (strcmp(temp ->Data -> Pin, mapin ) !=0 && pinEntryCount>0);
 
             if (strcmp(temp ->Data -> Pin, mapin) ==0) 
             {
-                printf("\nVào menu\n\n");
+                printf("\n\n");
                 menu(root, temp);
                 return;
             }
 
             if (pinEntryCount == 0) 
             {
-                printf("\n\n*** HẾT SỐ LẦN NHẬP MÃ PIN ***\n\n");
+                printf("\n\n\t\t\t*** HẾT SỐ LẦN NHẬP MÃ PIN! ***\n\n");
+                Sleep(2000);
                 return;
             }
         }
         else
         {
-            printf("\n\n*** Không tìm thấy Số tài khoản ***\n\n");
+            printf("\n\n\t\t\t*** KHÔNG TÌM THẤY SỐ TÀI KHOẢN ***\n\n");
+            Sleep(1500);
+            return;
         } 
         }
     } while ( loginCount > 0);
 
-    if (loginCount == 1) printf("** QUÁ SỐ LẦN NHẬP TÀI KHOẢN **\n\n");
+    if (loginCount == 0)
+    {
+        printf("\n\t\t\t*** QUÁ SỐ LẦN NHẬP TÀI KHOẢN. KHÓA TẠM THỜI! ***\n\n");
+        Sleep(2000);
+    }
 }
 
 //Hàm đăng nhập với vai trò Lập trình viên
 void AdministratorLogin(char *shutdown)
 {
-    printf(" \n\n=====================================================================CHÀO MỪNG ADMIN=====================================================================\n\n");
     char admin_pin[7] = "000000";
-    char Pin_Entry[7];
+    char Pin_Entry[10];
     int Pin_Entry_Count = 4;
-    int clear;
+    int clear=0;
 
     do 
     {
-        if (Pin_Entry_Count ==1)
-        {
-            printf("\n *** Đây lần cuối để nhập mã bảo mật! ***\n");
-            printf("Vui lòng nhập mã bảo mật của Admin : ");
-        }
-        else if (Pin_Entry_Count ==4)
-        {
-            printf("Vui lòng nhập mã bảo mật của Admin : ");
-        }
-        else
-        {
-            printf("Vui lòng nhập mã bảo mật của Admin (Bạn còn %d lần nhập): ",Pin_Entry_Count);
-        }
+        clear=0;
+        system("cls");
+        printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+        printf("\t\t\t║                 CHÀO MỪNG QUẢN TRỊ VIÊN                ║\n");
+        printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
+        
+        char *msg;
+        if (Pin_Entry_Count == 4) msg = "Vui lòng nhập mã bảo mật Admin để tắt máy";
+        else if (Pin_Entry_Count > 1) {
+            static char a[100];
+            sprintf(a, "Sai mã bảo mật! Bạn còn %d lần nhập", Pin_Entry_Count);
+            msg = a;
+        } else msg = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
+
+        printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(msg), msg);
+        printf("\t\t\t║  (O:hiện mã) Mã bảo mật:                               ║\n");
+        printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+        printf("\033[2A\r\t\t\t\033[27C");
         Pin_Entry_Count -= 1;
-		if (fgets(Pin_Entry,sizeof(Pin_Entry),stdin)==NULL) continue;
+		nhap_mk(Pin_Entry, 10); 
+        if (strlen(Pin_Entry) == 0) continue;
         if (Pin_Entry[0]=='\n')	
         {
-            printf("\n*** Bạn chưa nhập gì. ***\n");
             continue;
         }
         int len = strlen(Pin_Entry);
@@ -301,7 +329,7 @@ void AdministratorLogin(char *shutdown)
         }
         if (strcmp(Pin_Entry, admin_pin) != 0)
         {
-            printf("\n*** Mã bảo mật không chính xác! ***\n");
+                continue;
         }
     } while ((strcmp(Pin_Entry, admin_pin) != 0 || clear != 0) && Pin_Entry_Count >= 0);
 
@@ -311,7 +339,8 @@ void AdministratorLogin(char *shutdown)
     }
     else
     {
-        printf("*** QUÁ SỐ LẦN NHẬP MÃ BẢO MẬT ***\n\n");
+        printf("\n\n\t\t\t*** QUÁ SỐ LẦN NHẬP MÃ BẢO MẬT. ! ***\n\n");
+        Sleep(2000);
     }
     return;
 }
@@ -328,33 +357,33 @@ void khoidong(node root)
     char shutdown = 'N';
     int clear=0;
     int passEntryCount = 4;
-    char pass[7];
+    char pass[10];
     char admin_pass[7]="000000";
     int KT=0;
-    printf("\n\n[=========================================================NHẬP MÃ BẢO MẬT CỦA ADMIN ĐỂ KHỞI ĐỘNG ATM========================================================= ]\n\n");
     do 
     {
-        if (passEntryCount==4)
-            printf("Vui lòng nhập mã bảo mật của Admin : ");
-        else if (passEntryCount <4 && passEntryCount >1) 
-        {
-            printf("*****  Vui lòng nhập lại mã bảo mật! *****\n");
-            printf("Vui lòng nhập mã bảo mật của Admin (Bạn còn %d lần nhập): ", passEntryCount);
-        }
-        else 
-        {
-            printf("\n *** Đây lần cuối để nhập mã bảo mật! ***\n");
-            printf("Vui lòng nhập mã bảo mật của Admin : ");
-        }
+        system("cls");
+        printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+        printf("\t\t\t║                      HỆ THỐNG ATM                      ║\n");
+        printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
+        
+        char *msg;
+        if (passEntryCount == 4) msg = "Vui lòng nhập mã bảo mật Admin để bật máy";
+        else if (passEntryCount > 1) {
+            static char b[100];
+            sprintf(b, "Sai mã bảo mật! Còn %d lần nhập", passEntryCount);
+            msg = b;
+        } else msg = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
+
+        printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(msg), msg);
+        printf("\t\t\t║  (O:hiện mã) Mã bảo mật:                               ║\n");
+        printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+        printf("\033[2A\r\t\t\t\033[27C");
         passEntryCount -= 1;
-		if (fgets(pass,sizeof(pass),stdin)==NULL) 
-        {
-            printf("\n*** Bạn chưa nhập gì. ***\n");
-            continue;
-        }
+        nhap_mk(pass, 10);
+        if (strlen(pass) == 0) continue;
         if (pass[0]=='\n')	
         {
-            printf("\n*** Bạn chưa nhập gì. ***\n");
             continue;
         }
         int len = strlen(pass);
@@ -368,7 +397,6 @@ void khoidong(node root)
         }
         if (strlen(pass)<6 || strcmp(pass, admin_pass) != 0 ) 
         {
-            printf("\n*** Mã bảo mật không chính xác . ***\n");
             continue;
         }
         
@@ -376,36 +404,26 @@ void khoidong(node root)
     if (strcmp(pass, admin_pass) == 0 && clear == 0)
     {
         system("cls");
-        printf("\n\n[===========================================================KHỞI ĐỘNG THÀNH CÔNG HỆ THỐNG ===========================================================]\n\n");
+        printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+        printf("\t\t\t║           >>> KHỞI ĐỘNG HỆ THỐNG THÀNH CÔNG <<<        ║\n");
+        printf("\t\t\t╚════════════════════════════════════════════════════════╝\n\n");
         KT=1;
+        Sleep(1500);
     }
     else
     {
-        printf("*** \n\nQUÁ SỐ LẦN NHẬP MÃ BẢO MẬT ***~\n\n");
+        printf("\n\n\t\t\t*** QUÁ SỐ LẦN NHẬP MÃ BẢO MẬT. SHUTTING DOWN... ***\n\n");
     }
     if (KT)
     {
         do
         {
-            system("cls");
-            printf("==========================================================================================================================================================\n\n");
-            printf("* %50sCHÀO MỪNG QUÝ KHÁCH ĐẾN VỚI NGÂN HÀNG 3 THÀNH VIÊN%50s*\n\n"," "," ");
-            printf("==========================================================================================================================================================\n\n");
-            FILE *day=fopen("data/day.txt","r");
-            int day_trade=1;
-            if (day != NULL)
-            {
-                fscanf(day,"%d",&day_trade);
-                fclose(day);
-            }
-            printf("\n\n NGÀY %d GIAO DỊCH \n\n",day_trade);
             GuestLogin(root,&shutdown);
     
         } while (shutdown != 'Y');
         system("cls");
-        printf("\n*** MÁY ĐANG TẮT... CẢM ƠN QUÝ KHÁCH ĐÃ SỬ DỤNG DỊCH VỤ ***\n\n");
-    }
-    else{
-        printf("\n*** TỰ ĐỘNG TẮT MÁY ĐỂ BẢO MẬT ***\n\n");
+        printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+        printf("\t\t\t║          MÁY ĐANG TẮT... CẢM ƠN QUÝ KHÁCH!             ║\n");
+        printf("\t\t\t╚════════════════════════════════════════════════════════╝\n\n");
     }
 }

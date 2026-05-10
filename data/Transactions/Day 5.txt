@@ -1,0 +1,2 @@
+1. Số tài khoản: 1234|SD: 97810000|-200.000 VND|DEN: 12|ND: xin ch
+2. Số tài khoản: 12|SD: 263650000|-200.000 VND|DEN: 12345|ND: yesno == 'N') return;

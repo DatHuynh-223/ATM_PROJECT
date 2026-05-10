@@ -15,5 +15,4 @@ void guitien(node root, node myAccount);
 void chuyentien(node root, node myAccount);
 void ruttien(node root, node myAccount);
 void xemtaikhoan(node myAccount);
-
 #endif

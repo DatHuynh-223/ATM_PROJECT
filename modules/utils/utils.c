@@ -54,6 +54,14 @@ char* insert_cham(long long n)
 	}
 	return s;
 }
+int tinhOffset(const char *s) {
+    int offset = 0;
+    while (*s) {
+        if ((*s & 0xc0) == 0x80) offset++; 
+        s++;
+    }
+    return offset;
+}
 
 void create_file(int day_trade)
 {
@@ -76,4 +84,83 @@ void create_file(int day_trade)
 	fclose(src);
 	fclose(dest);
 	return;
+}
+
+void them_cach(const char* r, char* s) {
+    int len=strlen(r);
+	int j=0;
+	for (int i=0;i<len;i++)
+	{
+		s[j++]=r[i];
+		if ((len-i-1)%3==0 && i != len-1)
+		{
+			s[j++]=' ';
+		}
+	}
+	s[j]='\0';
+}
+
+
+void man_hinh_chao_mung() {
+    system("cls");
+    printf("\n\n\n\n\n");
+    printf("\t\t\t╔════════════════════════════════════════════════════════════╗\n");
+    printf("\t\t\t║                                                            ║\n");
+    printf("\t\t\t║                    HỆ THỐNG GIAO DỊCH ATM                  ║\n");
+    printf("\t\t\t║                                                            ║\n");
+    printf("\t\t\t║  ████████╗██████╗ ██╗     ██████╗ ██████╗ ██████╗ ███████╗ ║\n");
+    printf("\t\t\t║  ╚══██╔══╝██╔══██╗██║    ██╔════╝██╔═══██╗██╔══██╗██╔════╝ ║\n");
+    printf("\t\t\t║     ██║   ██████╔╝██║    ██║     ██║   ██║██████╔╝█████╗   ║\n");
+    printf("\t\t\t║     ██║   ██╔══██╗██║    ██║     ██║   ██║██╔══██╗██╔══╝   ║\n");
+    printf("\t\t\t║     ██║   ██║  ██║██║    ╚██████╗╚██████╔╝██║  ██║███████╗ ║\n");
+    printf("\t\t\t║     ╚═╝   ╚═╝  ╚═╝╚═╝     ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝ ║\n");
+    printf("\t\t\t║                                                            ║\n");
+    printf("\t\t\t║                    TRI-CORE BANKING SYSTEM                 ║\n");
+    printf("\t\t\t║                                                            ║\n");
+    printf("\t\t\t╚════════════════════════════════════════════════════════════╝\n");
+    
+    printf("\n\n\n");
+}
+
+void nhap_mk(char *pw,int n)
+{
+	int i=0;
+	char ch =0;
+	while (1)
+	{
+		ch=_getch();
+		if (ch=='\r')
+		{
+			pw[i++] = '\n';
+            pw[i] = '\0';
+			break;
+		}
+		else if (ch=='O' || ch=='o')
+		{
+			if (i>0)
+			{
+				pw[i]='\0';
+				printf("%s",pw);
+				Sleep(1000);
+				for(int j=0;j<i;j++)
+				{
+					printf("\b \b");
+				}
+			}
+		}
+		else if (ch=='\b')
+		{
+			if (i>0)
+			{
+				i--;
+			}
+		}
+		else if (ch>='0' && ch<='9' && i < n-2)
+		{
+			pw[i++]=ch;
+			printf("*");
+			Sleep(150);
+			printf("\b \b");
+		}
+	}
 }

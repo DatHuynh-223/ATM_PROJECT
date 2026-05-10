@@ -16,7 +16,13 @@ void insert(char *s,char ch ,int pos,int n);
 
 char* insert_cham(long long n);
 
+int tinhOffset(const char *s);
+
 void create_file(int day_trade);
 
+void them_cach(const char* r, char* s);  
 
+void man_hinh_chao_mung();
+
+void nhap_mk(char *pw,int n);
 #endif

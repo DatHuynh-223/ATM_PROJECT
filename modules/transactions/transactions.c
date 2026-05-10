@@ -1,98 +1,131 @@
 #include "transactions.h"
 // Các hàm hỗ trợ chọn số tiền
 
+
 long long chonsotienchung(long long hanmuctoida, const char* thongbao, int solanchon_toida, int solannhap_toida) {
+    SetConsoleOutputCP(65001); //
     long long arr[8] = {0, 100000, 200000, 500000, 1000000, 2000000, 3000000, 0};
-    char in[8][100] = {"00", "100.000", "200.000", "500.000", "1.000.000", "2.000.000", "3.000.000", "00"};
     char luachon[100];
-    int i = 0;
-    int clear = 0;
+    int i = 0, clear = 0;
     int solanchon_cl = solanchon_toida;
 
-    printf("\n%s\n\n", thongbao);
-    for (int j = 0; j < 8; j++) {
-        if (j == 0) printf("%d. Hủy giao dịch hiện tại        ", j);
-        else if (j == 7) printf("%d. Số khác\n\n", j);
-        else {
-            printf("%d. %s VND       ", j, in[j]);
-            if (j == 2 || j == 5) printf("\n\n");
-        }
-    }
+    while (solanchon_cl > 0) {
+        system("cls");
+        printf("\n\n\t\t  %s\n\n", thongbao);
+        
+        printf("\t\t\t╔════════════════════════════════════════════════════════╗\n");
+        
+        // Đã đếm thủ công khoảng trắng để tổng chiều ngang bằng đúng 56
+        printf("\t\t\t║ 1. 100.000 VND            ║ 2. 200.000 VND             ║\n");
+        printf("\t\t\t║ 3. 500.000 VND            ║ 4. 1.000.000 VND           ║\n");
+        printf("\t\t\t║ 5. 2.000.000 VND          ║ 6. 3.000.000 VND           ║\n");
+        printf("\t\t\t║ 7. Số khác                ║ 0. Hủy giao dịch           ║\n");
+        printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
 
-    do {
-        if (solanchon_cl == solanchon_toida) printf("Nhập lựa chọn của bạn : ");
-        else if (solanchon_cl > 1) printf("Nhập lại lựa chọn của bạn (Bạn còn %d lần): ", solanchon_cl);
-        else printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\nNhập lựa chọn của bạn : ");
+        char *msg;
+        if (solanchon_cl == solanchon_toida) msg = "Vui lòng chọn số từ 0 đến 7";
+        else if (solanchon_cl > 1) {
+            static char buf[100];
+            sprintf(buf, "Lựa chọn sai! Bạn còn %d lần nhập", solanchon_cl);
+            msg = buf;
+        } else msg = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
+
+        printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(msg), msg);
+        printf("\t\t\t║  Nhập lựa chọn của bạn: [   ]                          ║\n");
+        printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+        
+        printf("\033[2A\r\t\t\t\033[28C"); 
 
         if (fgets(luachon, sizeof(luachon), stdin) == NULL) continue;
-        if (luachon[0] == '\n') {
-            solanchon_cl--;
-            if (solanchon_cl > 0) printf("\n*** Bạn chưa nhập gì! ***\n");
-            continue;
-        }
-
+        if (luachon[0] == '\n') { solanchon_cl--; continue; }
+        
         int len = strlen(luachon);
-        if (luachon[len - 1] == '\n') {
-            luachon[--len] = '\0';
-            clear = 0;
-        } else clear = clear_buffer();
+        if (luachon[len - 1] == '\n') { luachon[--len] = '\0'; clear = 0; }
+        else clear = clear_buffer();
 
         if (len > 1 || clear == 1 || luachon[0] < '0' || luachon[0] > '7') {
-            solanchon_cl--;
-            if (solanchon_cl > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 7. ***\n");
-            continue;
+            solanchon_cl--; continue;
         }
-
-        i = luachon[0] - '0';
-        break;
-    } while (solanchon_cl > 0);
-
-    if (solanchon_cl == 0) {
-        printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
-        return 0;
+        i = luachon[0] - '0'; break;
     }
 
-    if (i == 0) return 0;
-    if (i != 7) return arr[i];
+    if (solanchon_cl == 0) return 0;
+    if (i == 0) { printf("\n\n"); return 0; }
+    if (i != 7) { printf("\n\n"); return arr[i]; }
 
-    printf("Hạn mức tối đa là : %s VND\n\n", insert_cham(hanmuctoida));
     int solannhap_cl = solannhap_toida;
-    long long sotien = 0;
-    char chuoitien[30];
+    while (solannhap_cl > 0) {
+        system("cls");
+        char hanmuc_full[100];
+        sprintf(hanmuc_full, "Hạn mức tối đa: %s VND", insert_cham(hanmuctoida));
 
-    do {
-        if (solannhap_cl == solannhap_toida) printf("Vui lòng nhập bội số của 50.000 VND: ");
-        else if (solannhap_cl > 1) printf("Vui lòng nhập bội số của 50.000 VND (Bạn còn %d lần): ", solannhap_cl);
-        else printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\nVui lòng nhập bội số của 50.000 VND: ");
+        printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+   
+        printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(hanmuc_full), hanmuc_full);
+        printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
 
-        if (fgets(chuoitien, sizeof(chuoitien), stdin) == NULL) continue;
-        if (chuoitien[0] == '\n') {
-            solannhap_cl--;
-            if (solannhap_cl > 0) printf("\n*** Bạn chưa nhập gì! ***\n");
-            continue;
-        }
+        char *info;
+        if (solannhap_cl == solannhap_toida) info = "Vui lòng nhập bội số của 50.000 VND";
+        else if (solannhap_cl > 1) {
+            static char buf2[100];
+            sprintf(buf2, "Số tiền không hợp lệ! Còn %d lần", solannhap_cl);
+            info = buf2;
+        } else info = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
 
+        printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(info), info);
+        printf("\t\t\t║  Số tiền: [                  ] VND                     ║\n");
+        printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+        
+    
+        printf("\033[2A\r\t\t\t\033[14C"); 
+
+        char chuoitien[30] = "";
+        char formatted[50] = "";
+        int idx = 0;
+        
+        while(1)
+            {
+                char ch=_getch();
+                if (ch == '\r') break;
+                else if (ch=='\b')
+                {
+                    if (idx>0)
+                    {
+                        idx--;
+                        chuoitien[idx]='\0';
+                    }
+                }
+                else if (ch>='0' && ch<='9')
+                {
+                    if (idx < 15) 
+                    {
+                        chuoitien[idx++] = ch;
+                        chuoitien[idx] = '\0';
+                    }
+                }
+                else continue;
+                them_cach(chuoitien,formatted);
+                printf("\r\t\t\t\033[14C%-18s", formatted);
+                printf("\r\t\t\t\033[%dC", 14 + (int)strlen(formatted));
+            }
+        if (chuoitien[0] == '\n') { solannhap_cl--; continue; }
+        
         int len = strlen(chuoitien);
-        if (chuoitien[len - 1] == '\n') {
-            chuoitien[--len] = '\0';
-            clear = 0;
-        } else clear = clear_buffer();
+        if (chuoitien[len-1] == '\n') { 
+            chuoitien[--len] = '\0'; 
+            clear = 0; }
+        else clear = clear_buffer();
 
-        sotien = atoll(chuoitien);
+        long long sotien = atoll(chuoitien);
         if (sotien % 50000 != 0 || sotien > hanmuctoida || sotien <= 0 || clear == 1) {
             solannhap_cl--;
-            if (solannhap_cl == 0) {
-                printf("\n*** QUÁ SỐ LẦN NHẬP. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
-                return 0;
-            }
-            printf("\n*** Số tiền không hợp lệ! ***\n\n");
-        } else return sotien;
-
-    } while (solannhap_cl > 0);
-
+        } else {
+            printf("\n\n"); 
+            return sotien;
+        }
+    }
     return 0;
 }
-
 
 long long chonsotiengui(node target, node myAccount)
 {
@@ -122,19 +155,24 @@ void guitien(node root, node myAccount)
 
     do 
     {
-        if (AccountEntryCount == 3)
-        {
-            printf("Nhập số tài khoản bạn muốn gửi tiền: ");
-        }
-        else if (AccountEntryCount > 1)
-        {
-            printf("Nhập số tài khoản bạn muốn gửi tiền (Bạn còn %d lần nhập): ", AccountEntryCount);
-        }
-        else
-        {
-            printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-            printf("Nhập số tài khoản bạn muốn gửi tiền: ");
-        }
+        system("cls");
+        printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+        printf("\t\t\t║                 GỬI TIỀN VÀO TÀI KHOẢN                 ║\n");
+        printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
+        
+        char *msg;
+        if (AccountEntryCount == 3) msg = "Vui lòng nhập số tài khoản bạn muốn gửi";
+        else if (AccountEntryCount > 1) {
+            static char buf[100];
+            sprintf(buf, "Tài khoản sai! Bạn còn %d lần nhập", AccountEntryCount);
+            msg = buf;
+        } else msg = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
+
+        printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(msg), msg);
+        printf("\t\t\t║  Số tài khoản: [                  ]                    ║\n");
+        printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+        
+        printf("\033[2A\r\t\t\t\033[19C");
         
         AccountEntryCount -= 1;
 
@@ -142,7 +180,6 @@ void guitien(node root, node myAccount)
         int len=strlen(account);
         if (account[0]=='\n')
         {
-            printf("**** Bạn chưa nhập gì cả! **** \n");
             continue;
         }
         if (account[len-1]=='\n')
@@ -169,22 +206,23 @@ void guitien(node root, node myAccount)
                 {
                     do
                     {
-                        if (clear_msg == 1) printf("\n*** QUÁ 80 KÍ TỰ ***\n\n");
-
-                        if (message_Entry_Count == 3)
-                        {
-                            printf("Nhập lời nhắn với 80 kí tự: ");
-                        }
-                        else if (message_Entry_Count > 1)
-                        {
-                            printf("Nhập lời nhắn với 80 kí tự (Bạn còn %d lần nhập): ", message_Entry_Count);
-                        }
-                        else
-                        {
-                            printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-                            printf("Nhập lời nhắn với 80 kí tự: ");
-                        }
+                        system("cls");
+                        printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+                        printf("\t\t\t║                     NHẬP LỜI NHẮN                      ║\n");
+                        printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
                         
+                        char *msg2;
+                        if (clear_msg == 1) msg2 = "QUÁ 80 KÍ TỰ! Vui lòng nhập lại";
+                        else if (message_Entry_Count == 3) msg2 = "Nhập lời nhắn (Tối đa 80 kí tự)";
+                        else if (message_Entry_Count > 1) {
+                            static char buf2[100];
+                            sprintf(buf2, "Lỗi! Bạn còn %d lần nhập", message_Entry_Count);
+                            msg2 = buf2;
+                        } else msg2 = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
+
+                        printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(msg2), msg2);
+                        printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+                        printf("\t\t\t  >> ");
                         message_Entry_Count -= 1;
                         if (fgets(message,sizeof(message),stdin)==NULL) continue;
                         int len=strlen(message);
@@ -197,33 +235,25 @@ void guitien(node root, node myAccount)
                         {
                             clear_msg = clear_buffer();
                         } 
-                        if (len>80)
-                        {
-                            if (message_Entry_Count>0) printf("Nhập quá 80 kí tự ,vui lòng nhập lại !!!");
-                            else
-                            {
-                                printf("Đã quá số lần nhập -.-");
-                            }
-                        }
                     }
                     while (clear_msg == 1 && message_Entry_Count > 0);
 
                     if (clear_msg == 1)
                     {
-                        printf("\n*** QUÁ SỐ LẦN NHẬP LỜI NHẮN. HỦY GIAO DỊCH ***\n\n");
+                        printf("\n\t\t\t*** QUÁ SỐ LẦN NHẬP LỜI NHẮN. HỦY GIAO DỊCH ***\n\n");
                         return;
                     }
                 }
 
                 if (admin_index >= GIAODICHPHIEN)
                 {
-                    printf("\n*** QUÁ SỐ LẦN GIAO DỊCH PHIÊN ***\n\n");
+                    printf("\n\t\t\t*** QUÁ SỐ LẦN GIAO DỊCH PHIÊN ***\n\n"); return;
                     return;
                 }
 
                 if (myAccount->Data->TransactionCount  >= MAX_DAILY_TRANSACTION)
                 {
-                    printf("\n*** QUÁ SỐ LẦN GIAO DỊCH TRONG NGÀY ***\n\n");
+                    printf("\n\t\t\t*** QUÁ SỐ LẦN GIAO DỊCH TRONG NGÀY ***\n\n");
                     return;
                 }
                 
@@ -244,12 +274,14 @@ void guitien(node root, node myAccount)
                         admin_index +=1;
                         myAccount->Data->TransactionCount += 1;
 
-                        printf("\n\n>>> GIAO DỊCH THÀNH CÔNG\n\n");
-                        return;
+                        printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+                        printf("\t\t\t║             >>> GIAO DỊCH THÀNH CÔNG <<<               ║\n");
+                        printf("\t\t\t╚════════════════════════════════════════════════════════╝\n\n");
+                        return; 
                     }
                     else
                     {
-                        printf("\n>>>\n\nGIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA TRONG LỊCH SỬ GIAO DỊCH\n\n");
+                        printf("\n\t\t\t***GIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA TRONG LỊCH SỬ GIAO DỊCH ***\n\n"); 
                         return;
                     }
                 }
@@ -257,12 +289,12 @@ void guitien(node root, node myAccount)
                 {
                     if (myAccount->Data->TransactionCount >= MAX_TRANSACTION_LEN)
                     {
-                        printf("\n>>>\n\nGIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA ĐỐI VỚI TÀI KHOẢN CỦA BẠN\n\n");
+                        printf("\n\t\t\t***GIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA ĐỐI VỚI TÀI KHOẢN CỦA BẠN ***\n\n");
                         return;
                     }
                     if (targetAccount->Data->TransactionCount >= MAX_TRANSACTION_LEN)
                     {
-                        printf("\n>>>\n\nGIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA ĐỐI VỚI TÀI KHOẢN GỬI ĐẾN\n\n");
+                        printf("\n\t\t\t***GIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA ĐỐI VỚI TÀI KHOẢN GỬI ĐẾN ***\n\n");
                         return;
                     }
 
@@ -283,15 +315,15 @@ void guitien(node root, node myAccount)
                     myAccount->Data->TransactionCount += 1;
                     targetAccount->Data->TransactionCount += 1;
 
-                    printf("\n\n>>> GIAO DỊCH THÀNH CÔNG\n\n");
+                    printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+                    printf("\t\t\t║             >>> GIAO DỊCH THÀNH CÔNG <<<               ║\n");
+                    printf("\t\t\t╚════════════════════════════════════════════════════════╝\n\n");
                     return;
                 }
             }
         }
         else
         {
-            printf("\n\n*** Không tìm thấy Số tài khoản ***\n\n");
-            
             if (AccountEntryCount == 0) break;
 
             int clear_yn;
@@ -299,19 +331,20 @@ void guitien(node root, node myAccount)
 
             do 
             {
-                if (ynEntryCount == 3)
-                {
-                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
-                }
-                else if (ynEntryCount > 1)
-                {
-                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N] (Bạn còn %d lần): ", ynEntryCount);
-                }
-                else
-                {
-                    printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
-                }
+                char *msg_yn;
+                printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+                printf("\t\t\t║            KHÔNG TÌM THẤY TÀI KHOẢN ĐÍCH!              ║\n");
+                printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
+                if (ynEntryCount == 3) msg_yn = "Bạn có muốn nhập lại STK không? (Y/N)";
+                else if (ynEntryCount > 1) {
+                    static char buf_yn[100];
+                    sprintf(buf_yn, "Lỗi! Bạn còn %d lần nhập (Y/N)", ynEntryCount);
+                    msg_yn = buf_yn;
+                } else msg_yn = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
+                printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(msg_yn), msg_yn);
+                printf("\t\t\t║  Lựa chọn: [   ]                                       ║\n");
+                printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+                printf("\033[2A\r\t\t\t\033[15C");
                 if (scanf("%c", &yesno) != 1) 
                 {
                     ynEntryCount--;
@@ -329,17 +362,17 @@ void guitien(node root, node myAccount)
                     ynEntryCount -= 1;
                     if (ynEntryCount == 0)
                     {
-                        printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+                        printf("\n\n\t\t\t*** QUÁ SỐ LẦN NHẬP. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n"); return;
                         return;
                     }
-                    printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
+                    printf("\n\n\t\t\t*** Lựa chọn không hợp lệ! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
                 }
             } while (((yesno != 'Y' && yesno != 'N') || clear_yn == 1) && ynEntryCount > 0);
             if (yesno == 'N') return;
         }
     } while (yesno == 'Y' && AccountEntryCount > 0);
     
-    if (AccountEntryCount == 0) printf("\n*** QUÁ SỐ LẦN NHẬP TÀI KHOẢN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+    if (AccountEntryCount == 0) printf("\n\t\t\t*** QUÁ SỐ LẦN NHẬP TÀI KHOẢN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
     fclose(f);
 }
 
@@ -352,26 +385,30 @@ void chuyentien(node root, node myAccount)
 
     do 
     {
-        if (AccountEntryCount == 3)
-        {
-            printf("Nhập số tài khoản bạn muốn chuyển tiền: ");
-        }
-        else if (AccountEntryCount > 1)
-        {
-            printf("Nhập số tài khoản bạn muốn chuyển tiền (Bạn còn %d lần nhập): ", AccountEntryCount);
-        }
-        else
-        {
-            printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-            printf("Nhập số tài khoản bạn muốn chuyển tiền: ");
-        }
+        system("cls");
+        printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+        printf("\t\t\t║                  CHUYỂN KHOẢN                          ║\n");
+        printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
+        
+        char *msg;
+        if (AccountEntryCount == 3) msg = "Vui lòng nhập số tài khoản nhận tiền";
+        else if (AccountEntryCount > 1) {
+            static char buf[100];
+            sprintf(buf, "Tài khoản sai! Bạn còn %d lần nhập", AccountEntryCount);
+            msg = buf;
+        } else msg = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
+
+        printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(msg), msg);
+        printf("\t\t\t║  Số tài khoản: [                  ]                    ║\n");
+        printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+        
+        printf("\033[2A\r\t\t\t\033[19C");
         
         AccountEntryCount -= 1;
         if (fgets(account,sizeof(account),stdin)==NULL) continue;
         int len=strlen(account);
         if (account[0]=='\n')
         {
-            printf("**** Bạn chưa nhập gì cả! **** \n");
             continue;
         }
         if (account[len-1]=='\n')
@@ -385,7 +422,7 @@ void chuyentien(node root, node myAccount)
 
         if (strcmp(account, myAccount->Data->AccountNumber) == 0)
         {
-            printf("\n*** TRÙNG LẶP TÀI KHOẢN NGUỒN ***\n\n");
+            printf("\n\n\t\t\t*** TRÙNG LẶP TÀI KHOẢN NGUỒN ***\n\n");
             
             if (AccountEntryCount == 0) break;
 
@@ -394,19 +431,18 @@ void chuyentien(node root, node myAccount)
 
             do 
             {
-                if (ynEntryCount == 3)
-                {
-                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
-                }
-                else if (ynEntryCount > 1)
-                {
-                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N] (Bạn còn %d lần): ", ynEntryCount);
-                }
-                else
-                {
-                    printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
-                }
+                printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+                char *msg_yn;
+                if (ynEntryCount == 3) msg_yn = "Bạn có muốn nhập lại STK không? (Y/N)";
+                else if (ynEntryCount > 1) {
+                    static char buf_yn[100];
+                    sprintf(buf_yn, "Lỗi! Bạn còn %d lần nhập (Y/N)", ynEntryCount);
+                    msg_yn = buf_yn;
+                } else msg_yn = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
+                printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(msg_yn), msg_yn);
+                printf("\t\t\t║  Lựa chọn: [   ]                                       ║\n");
+                printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+                printf("\033[2A\r\t\t\t\033[15C");
                 if (scanf("%c", &yesno) != 1) 
                 {
                     ynEntryCount--;
@@ -424,10 +460,10 @@ void chuyentien(node root, node myAccount)
                     ynEntryCount -= 1;
                     if (ynEntryCount == 0)
                     {
-                        printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+                        printf("\n\n\t\t\t*** QUÁ SỐ LẦN NHẬP. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
                         return;
                     }
-                    printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
+                    printf("\n\n\t\t\t***Lựa chọn không hợp lệ! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
                 }
             } while (((yesno != 'Y' && yesno != 'N') || clear_yn == 1) && ynEntryCount > 0);
             
@@ -448,79 +484,73 @@ void chuyentien(node root, node myAccount)
                     int clear_msg = 0;
 
                     do
-                {
-                    if (clear_msg == 1) printf("\n*** QUÁ 80 KÍ TỰ ***\n\n");
+                    {
+                        system("cls");
+                        printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+                        printf("\t\t\t║                     NHẬP LỜI NHẮN                      ║\n");
+                        printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
+                        
+                        char *msg2;
+                        if (clear_msg == 1) msg2 = "QUÁ 80 KÍ TỰ! Vui lòng nhập lại";
+                        else if (message_Entry_Count == 3) msg2 = "Nhập lời nhắn (Tối đa 80 kí tự, không dấu)";
+                        else if (message_Entry_Count > 1) {
+                            static char buf2[100];
+                            sprintf(buf2, "Lỗi! Bạn còn %d lần nhập", message_Entry_Count);
+                            msg2 = buf2;
+                        } else msg2 = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
 
-                    if (message_Entry_Count == 3)
-                    {
-                        printf("Nhập lời nhắn với 80 kí tự: ");
-                    }
-                    else if (message_Entry_Count > 1)
-                    {
-                        printf("Nhập lời nhắn với 80 kí tự (Bạn còn %d lần nhập): ", message_Entry_Count);
-                    }
-                    else
-                    {
-                        printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-                        printf("Nhập lời nhắn với 80 kí tự: ");
-                    }
+                        printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(msg2), msg2);
+                        printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+                        printf("\t\t\t  >> ");
                     
-                    message_Entry_Count -= 1;
-                    if (fgets(message,sizeof(message),stdin)==NULL) continue;
-                    int len=strlen(message);
-                    if (message[len-1]=='\n')
-                    {
-                        message[len-1]='\0';
-                        len--;
-                    }
-                    else
-                    {
-                        clear_msg = clear_buffer();
-                    } 
-                    if (len>80)
-                    {
-                        if (message_Entry_Count>0) printf("Nhập quá 80 kí tự ,vui lòng nhập lại !!!");
+                        message_Entry_Count -= 1;
+                        if (fgets(message,sizeof(message),stdin)==NULL) continue;
+                        int len=strlen(message);
+                        if (message[len-1]=='\n')
+                        {
+                            message[len-1]='\0';
+                            len--;
+                        }
                         else
                         {
-                            printf("Đã quá số lần nhập -.-");
-                        }
+                            clear_msg = clear_buffer();
+                        } 
                     }
-                }
                 while (clear_msg == 1 && message_Entry_Count > 0);
 
                     if (clear_msg == 1)
                     {
-                        printf("\n*** QUÁ SỐ LẦN NHẬP LỜI NHẮN. HỦY GIAO DỊCH ***\n\n");
+                        printf("\n\t\t\t*** QUÁ SỐ LẦN NHẬP LỜI NHẮN. HỦY GIAO DỊCH ***\n\n");
                         return;
                     }
 
                     if (myAccount->Data->Balance < sotienchuyen)
                     {
-                        printf("\n*** SỐ DƯ TÀI KHOẢN KHÔNG ĐỦ ĐỂ THỰC HIỆN GIAO DỊCH ***\n\n");
+                        printf("\n\t\t\t*** SỐ DƯ TÀI KHOẢN KHÔNG ĐỦ ĐỂ THỰC HIỆN GIAO DỊCH ***\n\n");
                         return;
                     }
 
                     if (admin_index >= GIAODICHPHIEN)
                     {
-                        printf("\n*** QUÁ SỐ LẦN GIAO DỊCH PHIÊN ***\n\n");
+                        printf("\n\t\t\t*** QUÁ SỐ LẦN GIAO DỊCH PHIÊN ***\n\n");
                         return;
                     }
 
                     if (myAccount->Data->TransactionCount >= MAX_DAILY_TRANSACTION)
                     {
-                        printf("\n*** QUÁ SỐ LẦN GIAO DỊCH TRONG NGÀY ***\n\n");
+                        printf("\n\t\t\t*** QUÁ SỐ LẦN GIAO DỊCH TRONG NGÀY ***\n\n");
                         return;
                     }
 
                     if (myAccount->Data->TransactionCount >= MAX_TRANSACTION_LEN)
                     {
-                        printf("\n>>>\n\nGIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA ĐỐI VỚI TÀI KHOẢN CỦA BẠN\n\n");
+                        printf("\n\t\t\t*** GIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA ĐỐI VỚI TÀI KHOẢN CỦA BẠN ***\n\n");
                         return;
                     }
 
                     if (targetAccount->Data->TransactionCount >= MAX_TRANSACTION_LEN)
                     {
-                        printf("\n>>>\n\nGIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA ĐỐI VỚI TÀI KHOẢN GỬI ĐẾN\n\n");
+                        printf("\n\t\t\t*** GIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA ĐỐI VỚI TÀI KHOẢN GỬI ĐẾN ***\n\n");
                         return;
                     }
 
@@ -544,57 +574,53 @@ void chuyentien(node root, node myAccount)
                     myAccount->Data->TransactionCount += 1;
                     targetAccount->Data->TransactionCount += 1;
 
-                    printf("\n\n>>> GIAO DỊCH THÀNH CÔNG\n\n");
+                    printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+                    printf("\t\t\t║             >>> GIAO DỊCH THÀNH CÔNG <<<               ║\n");
+                    printf("\t\t\t╚════════════════════════════════════════════════════════╝\n\n");
                     return;
                 }
             }
             else
-            {
-                printf("\n\n*** Không tìm thấy Số tài khoản ***\n\n");
-                
+            {  
                 if (AccountEntryCount == 0) break;
-
                 int clear_yn;
                 int ynEntryCount = 3;
 
                 do 
-            {
-                if (ynEntryCount == 3)
                 {
-                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
-                }
-                else if (ynEntryCount > 1)
-                {
-                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N] (Bạn còn %d lần): ", ynEntryCount);
-                }
-                else
-                {
-                    printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-                    printf("Bạn muốn nhập lại Số tài khoản không? [Y/N]: ");
-                }
-                if (scanf("%c", &yesno) != 1) 
-                {
-                    ynEntryCount--;
-                    continue; 
-                }
-                if (yesno=='\n')
-                {
-                    ynEntryCount--;
-                    continue;
-                } 
-                clear_yn = clear_buffer();
-
-                if ((yesno != 'Y' && yesno != 'N') || clear_yn == 1)
-                {
-                    ynEntryCount -= 1;
-                    if (ynEntryCount == 0)
+                    system("cls");
+                    printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+                    printf("\t\t\t║            KHÔNG TÌM THẤY TÀI KHOẢN ĐÍCH!              ║\n");
+                    printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
+                    char *msg_yn;
+                    if (ynEntryCount == 3) msg_yn = "Bạn có muốn nhập lại STK không? (Y/N)";
+                    else msg_yn = "Lựa chọn sai! Nhập lại (Y/N)";
+                    printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(msg_yn), msg_yn);
+                    printf("\t\t\t║  Lựa chọn: [   ]                                       ║\n");
+                    printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+                    printf("\033[2A\r\t\t\t\033[15C");
+                    if (scanf("%c", &yesno) != 1) 
                     {
-                        printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
-                        return;
+                        ynEntryCount--;
+                        continue; 
                     }
-                    printf("\n*** Lựa chọn không hợp lệ! Vui lòng chỉ nhập Y hoặc N. ***\n\n");
-                }
-            } while (((yesno != 'Y' && yesno != 'N') || clear_yn == 1) && ynEntryCount > 0);
+                    if (yesno=='\n')
+                    {
+                        ynEntryCount--;
+                        continue;
+                    } 
+                    clear_yn = clear_buffer();
+
+                    if ((yesno != 'Y' && yesno != 'N') || clear_yn == 1)
+                    {
+                        ynEntryCount -= 1;
+                        if (ynEntryCount == 0)
+                        {
+                            printf("\n\n\t\t\t*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+                            return;
+                        }
+                    }
+                } while (((yesno != 'Y' && yesno != 'N') || clear_yn == 1) && ynEntryCount > 0);
 
                 
                 if (yesno == 'N') return;
@@ -602,7 +628,7 @@ void chuyentien(node root, node myAccount)
         }
     } while (yesno == 'Y' && AccountEntryCount > 0);
     
-    if (AccountEntryCount == 0) printf("\n*** QUÁ SỐ LẦN NHẬP TÀI KHOẢN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+    if (AccountEntryCount == 0) printf("\n\t\t\t*** QUÁ SỐ LẦN NHẬP TÀI KHOẢN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
     fclose(f);
 }
 
@@ -623,21 +649,21 @@ void ruttien(node root, node myAccount)
         //Kiểm tra số tiền tài khoản nguồn
         if (myAccount ->Data ->Balance < sotienrut)
         {
-            printf("* SỐ DƯ TÀI KHOẢN KHÔNG ĐỦ ĐỂ THỰC HIỆN GIAO DỊCH ***\n\n");
+            printf("\n\n\t\t\t*** SỐ DƯ TÀI KHOẢN KHÔNG ĐỦ ĐỂ THỰC HIỆN GIAO DỊCH ***\n\n");
             return;
         }
 
         //Kiểm tra số lần giao dịch phiên
         if (admin_index >= GIAODICHPHIEN)
         {
-            printf("* QUÁ SỐ LẦN GIAO DỊCH PHIÊN ***\n\n");
+            printf("\n\n\t\t\t*** QUÁ SỐ LẦN GIAO DỊCH PHIÊN ***\n\n");
             return;
         }
 
         //Kiểm tra số lần giao dịch trong ngày
         if (myAccount-> Data->TransactionCount  >= MAX_DAILY_TRANSACTION)
         {
-            printf("* QUÁ SỐ LẦN GIAO DỊCH TRONG NGÀY ***\n\n");
+            printf("\n\n\t\t\t*** QUÁ SỐ LẦN GIAO DỊCH TRONG NGÀY ***\n\n");
             return;
         }
         
@@ -645,7 +671,7 @@ void ruttien(node root, node myAccount)
         //Kiểm tra số lần giao dịch đối với lịch sử My Account
         if (myAccount ->Data ->TransactionCount >= MAX_TRANSACTION_LEN)
         {
-            printf(">>>\n\nGIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA TRONG LỊCH SỰ GIAO DỊCH ĐỐI VỚI TÀI KHOẢN CỦA BẠN\n\n");
+            printf("\n\n\t\t\t*** GIAO DỊCH THẤT BẠI: VƯỢT QUÁ SỐ LẦN GIAO DỊCH TỐI ĐA TRONG LỊCH SỰ GIAO DỊCH ĐỐI VỚI TÀI KHOẢN CỦA BẠN ***\n\n");
             return;
         }
 
@@ -667,7 +693,9 @@ void ruttien(node root, node myAccount)
         //Cộng số lần giao dịch
         myAccount-> Data-> TransactionCount += 1;
 
-        printf("\n\n>>> GIAO DỊCH THÀNH CÔNG\n\n");
+        printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+        printf("\t\t\t║             >>> GIAO DỊCH THÀNH CÔNG <<<               ║\n");
+        printf("\t\t\t╚════════════════════════════════════════════════════════╝\n\n");
         return;
     }
     fclose(f);
@@ -682,27 +710,29 @@ void xemtaikhoan(node myAccount)
     int accEntryCount = 3;
     char *choose = (char*)malloc(sizeof(char)*21);
     printf("\n");
-    int i;
-    for (i = 0; i< optionCount; i+=1)
-    {
-        printf("%s  ",option[i]);
-    }
     do 
     {
+        system("cls");
+        printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+        printf("\t\t\t║                  THÔNG TIN TÀI KHOẢN                   ║\n");
+        printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
+        printf("\t\t\t║ 1. Xem số dư hiện tại                                  ║\n");
+        printf("\t\t\t║ 2. Xem lịch sử giao dịch                               ║\n");
+        printf("\t\t\t║ 0. Quay lại menu chính                                 ║\n");
+        printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
 
-        if (accEntryCount == 3)
-        {
-            printf("\nNhập lựa chọn của bạn : ");
-        }
-        else if (accEntryCount > 1)
-        {
-            printf("Nhập lại lựa chọn của bạn  (Bạn còn %d lần): ", accEntryCount);
-        }
-        else
-        {
-            printf("\n*** Đây là lần nhập cuối cùng !!! ***\n\n");
-            printf("Nhập lựa chọn của bạn : ");
-        }
+        char *msg;
+        if (accEntryCount == 3) msg = "Vui lòng chọn chức năng từ 0 đến 2";
+        else if (accEntryCount > 1) {
+            static char buf[100];
+            sprintf(buf, "Lựa chọn sai! Bạn còn %d lần nhập", accEntryCount);
+            msg = buf;
+        } else msg = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
+
+        printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(msg), msg);
+        printf("\t\t\t║  Nhập lựa chọn của bạn: [   ]                          ║\n");
+        printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+        printf("\033[2A\r\t\t\t\033[28C"); 
         
         
         if (fgets(choose,sizeof(choose),stdin)==NULL) continue;
@@ -710,7 +740,6 @@ void xemtaikhoan(node myAccount)
         if (choose[0]=='\n')
         {
             accEntryCount -= 1;
-            if (accEntryCount > 0) printf("\n*** Bạn chưa nhập gì! ***\n");
             continue;
         }
         
@@ -730,7 +759,6 @@ void xemtaikhoan(node myAccount)
         if (len > 1 || clear == 1)
         {
             accEntryCount -= 1;
-            if (accEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng CHỈ NHẬP 1 SỐ. ***\n");
             continue; 
         }
         
@@ -743,38 +771,42 @@ void xemtaikhoan(node myAccount)
         else
         {
             accEntryCount -= 1;
-            if (accEntryCount > 0) printf("\n*** Lựa chọn không hợp lệ! Vui lòng chọn số từ 0 đến 2. ***\n\n");
+             continue;
         }
 
     } while (accEntryCount > 0);
     if (accEntryCount == 0)
             {
-                printf("\n*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
+                printf("\n\n\t\t\t*** QUÁ SỐ LẦN NHẬP LỰA CHỌN. TỰ ĐỘNG HỦY GIAO DỊCH ***\n\n");
                 return ;
             }
-
+    printf("\n\n");
     if (choice == 1)
     {
-        printf("\nSố dư hiện tại: %llu\n\n", myAccount->Data->Balance);
+        system("cls");
+        char sodu_str[100];
+        sprintf(sodu_str, "SỐ DƯ HIỆN TẠI: %s VND", insert_cham(myAccount->Data->Balance));
+        printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+        printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(sodu_str), sodu_str);
+        printf("\t\t\t╚════════════════════════════════════════════════════════╝\n\n");
         return;
     }
     else if (choice == 2)
     {
-        printf("\n");
-        int index;
-        int max_transaction_history = myAccount->Data->TransactionCount;
+        system("cls");
+        int max_history = myAccount->Data->TransactionCount;
+        printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
+        printf("\t\t\t║                   LỊCH SỬ GIAO DỊCH                    ║\n");
+        printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
         
-        if (max_transaction_history == 0) 
-        {
-            printf("Bạn chưa giao dịch trước đây\n\n");
-        }
-        else
-        {
-            for (index = 0; index < max_transaction_history; index +=1)
-            {
-                printf("%d. %s\n\n", index+1, myAccount->Data->TransactionHistory[index]);
+        if (max_history == 0) {
+            printf("\t\t\t║  Bạn chưa có giao dịch nào trước đây                   ║\n");
+        } else {
+            for (int index = 0; index < max_history; index += 1) {
+                printf("\t\t\t  [%d]. %s\n", index+1, myAccount->Data->TransactionHistory[index]);
             }
         }
+        printf("\t\t\t╚════════════════════════════════════════════════════════╝\n\n");
         return;
     }
     else if (choice == 0)
