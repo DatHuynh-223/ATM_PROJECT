@@ -94,7 +94,7 @@ void them_cach(const char* r, char* s) {
 		s[j++]=r[i];
 		if ((len-i-1)%3==0 && i != len-1)
 		{
-			s[j++]=' ';
+			s[j++]='.';
 		}
 	}
 	s[j]='\0';
@@ -139,12 +139,17 @@ void nhap_mk(char *pw,int n)
 		{
 			if (i>0)
 			{
+                for(int j=0; j<i; j++) {
+                    printf("\b \b");
+                }
 				pw[i]='\0';
 				printf("%s",pw);
-				Sleep(1000);
-				for(int j=0;j<i;j++)
-				{
+				Sleep(1000); 
+				for(int j=0; j<i; j++) {
 					printf("\b \b");
+				}
+                for(int j=0; j<i; j++) {
+					printf("*");
 				}
 			}
 		}
@@ -153,14 +158,13 @@ void nhap_mk(char *pw,int n)
 			if (i>0)
 			{
 				i--;
+                printf("\b \b");
 			}
 		}
-		else if (ch>='0' && ch<='9' && i < n-2)
+		else if (ch>='0' && ch<='9' && i < 6)
 		{
 			pw[i++]=ch;
-			printf("*");
-			Sleep(150);
-			printf("\b \b");
+			printf("*"); 
 		}
 	}
 }
