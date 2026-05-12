@@ -18,8 +18,8 @@ char* insert_cham(long long n);
 
 int tinhOffset(const char *s);
 
-void create_file(int day_trade);
-
+void cr_file(char *filename);
+char * today();
 void them_cach(const char* r, char* s);  
 
 void man_hinh_chao_mung();

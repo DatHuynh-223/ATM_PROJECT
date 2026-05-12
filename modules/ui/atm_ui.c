@@ -349,10 +349,6 @@ void AdministratorLogin(char *shutdown)
 void khoidong(node root)
 {
     // xóa sạch output khi bắt đàau chạy 
-    FILE *f = fopen("data/today's trade.txt", "w");
-    if (f != NULL) {
-        fclose(f);
-    }
     system("cls");
     char shutdown = 'N';
     int clear=0;
@@ -418,6 +414,8 @@ void khoidong(node root)
     {
         do
         {
+            char *today_str = today();
+            cr_file(today_str);
             GuestLogin(root,&shutdown);
     
         } while (shutdown != 'Y');

@@ -8,6 +8,7 @@
 #include <windows.h>
 #include <ctype.h> // Cần cho hàm kiểm tra số isdigit()
 #include <conio.h>
+#include <time.h>
 
 // 2. Các hằng số cấu hình hệ thống (Dễ dàng thay đổi sau này)
 #define MAX_ACC_LEN 21           //có thể thay đổi nếu cần thiết (dư 1 kí \0)

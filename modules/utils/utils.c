@@ -63,29 +63,22 @@ int tinhOffset(const char *s) {
     return offset;
 }
 
-void create_file(int day_trade)
+char * today()
 {
-	FILE *src,*dest;
-	src=fopen("data/today's trade.txt","r");
-	if (src == NULL) return;
-	char filename[50];
-	sprintf(filename,"data/Transactions/Day %d.txt",day_trade);
-	dest=fopen(filename,"a");
-	if (dest == NULL)
-	{
-		fclose(src);
-		return;
-	}
-	char ch;
-	while ((ch= fgetc(src)) != EOF)
-	{
-		fputc(ch,dest);
-	}
-	fclose(src);
-	fclose(dest);
-	return;
+	time_t rt;
+	time(&rt);
+	struct tm *info=localtime(&rt);
+	static char b[100];
+	strftime(b,100,"%A,%d-%m-%Y",info);
+	return b;
 }
-
+void cr_file(char *filename)
+{
+	char b[100];
+	sprintf(b,"data/Transactions/%s",filename);
+	FILE *f=fopen(b,"w");
+	fclose(f);
+}
 void them_cach(const char* r, char* s) {
     int len=strlen(r);
 	int j=0;

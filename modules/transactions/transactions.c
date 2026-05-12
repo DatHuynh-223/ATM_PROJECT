@@ -14,8 +14,6 @@ long long chonsotienchung(long long hanmuctoida, const char* thongbao, int solan
         printf("\n\n\t\t  %s\n\n", thongbao);
         
         printf("\t\t\t╔════════════════════════════════════════════════════════╗\n");
-        
-        // Đã đếm thủ công khoảng trắng để tổng chiều ngang bằng đúng 56
         printf("\t\t\t║ 1. 100.000 VND            ║ 2. 200.000 VND             ║\n");
         printf("\t\t\t║ 3. 500.000 VND            ║ 4. 1.000.000 VND           ║\n");
         printf("\t\t\t║ 5. 2.000.000 VND          ║ 6. 3.000.000 VND           ║\n");
@@ -108,6 +106,8 @@ long long chonsotienchung(long long hanmuctoida, const char* thongbao, int solan
                 printf("\r\t\t\t\033[14C%-18s", formatted);
                 printf("\r\t\t\t\033[%dC", 14 + (int)strlen(formatted));
             }
+        chuoitien[idx++]='\n';
+        chuoitien[idx]='\0';
         if (chuoitien[0] == '\n') { solannhap_cl--; continue; }
         
         int len = strlen(chuoitien);
@@ -148,7 +148,9 @@ long long chonsotienrut()
 
 void guitien(node root, node myAccount)
 {
-    FILE *f =  fopen("data/today's trade.txt", "a");
+    char filename[50];
+    sprintf(filename,"data/Transactions/%s",today());
+    FILE *f=fopen(filename,"a");
     char account[MAX_ACC_LEN];
     char yesno = 'Y';
     int AccountEntryCount = 3 ;
@@ -378,7 +380,9 @@ void guitien(node root, node myAccount)
 
 void chuyentien(node root, node myAccount)
 {
-    FILE *f =  fopen("data/today's trade.txt", "a");
+    char filename[50];
+    sprintf(filename,"data/Transactions/%s",today());
+    FILE *f=fopen(filename,"a");
     char account[MAX_ACC_LEN];
     char yesno = 'Y';
     int AccountEntryCount = 3 ;
@@ -634,7 +638,9 @@ void chuyentien(node root, node myAccount)
 
 void ruttien(node root, node myAccount)
 {
-    FILE *f =  fopen("data/today's trade.txt", "a");
+    char filename[50];
+    sprintf(filename,"data/Transactions/%s",today());
+    FILE *f=fopen(filename,"a");
     long long sotienrut = chonsotienrut();
 
     if (sotienrut == 0) return;
