@@ -412,10 +412,10 @@ void khoidong(node root)
     }
     if (KT)
     {
+        char *today_str = today();
+        cr_file(today_str);
         do
         {
-            char *today_str = today();
-            cr_file(today_str);
             GuestLogin(root,&shutdown);
     
         } while (shutdown != 'Y');

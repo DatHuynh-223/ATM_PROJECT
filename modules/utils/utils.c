@@ -75,8 +75,8 @@ char * today()
 void cr_file(char *filename)
 {
 	char b[100];
-	sprintf(b,"data/Transactions/%s",filename);
-	FILE *f=fopen(b,"w");
+	sprintf(b,"data/Transactions/%s.txt",filename);
+	FILE *f=fopen(b,"w+");
 	fclose(f);
 }
 void them_cach(const char* r, char* s) {
