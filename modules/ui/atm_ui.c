@@ -191,6 +191,8 @@ void GuestLogin(node root,char *shutdown )
         {
             continue;
         }
+
+
         int len = strlen(target);
         if (target[len - 1] == '\n') 
         {
@@ -200,6 +202,8 @@ void GuestLogin(node root,char *shutdown )
         {
             clear_buffer();
         }
+
+        
         if (strcmp(target,stk_Admin)==0)
         {
             KT=1;
@@ -349,6 +353,7 @@ void AdministratorLogin(char *shutdown)
 void khoidong(node root)
 {
     // xóa sạch output khi bắt đàau chạy 
+    //In ô nhập mã khởi động 
     system("cls");
     char shutdown = 'N';
     int clear=0;
@@ -371,7 +376,7 @@ void khoidong(node root)
             msg = b;
         } else msg = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
 
-        printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(msg), msg);
+        printf("\t\t\t║  %-*s║\n", 54+tinhOffset(msg) , msg);
         printf("\t\t\t║  (O:hiện mã) Mã bảo mật:                               ║\n");
         printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
         printf("\033[2A\r\t\t\t\033[27C");
@@ -397,6 +402,8 @@ void khoidong(node root)
         }
         
     } while ((strcmp(pass, admin_pass) != 0 || clear != 0) && passEntryCount > 0);
+
+    //kiểm tra mã khởi động 
     if (strcmp(pass, admin_pass) == 0 && clear == 0)
     {
         system("cls");
@@ -410,6 +417,8 @@ void khoidong(node root)
     {
         printf("\n\n\t\t\t*** QUÁ SỐ LẦN NHẬP MÃ BẢO MẬT. SHUTTING DOWN... ***\n\n");
     }
+
+
     if (KT)
     {
         char *today_str = today();
