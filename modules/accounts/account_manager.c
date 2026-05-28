@@ -54,7 +54,7 @@ node CreateTree (node root, node a)
 //Hàm đọc file
 node input(node root)
 {
-    FILE *f = fopen("data/account.txt", "r");
+    FILE *f = fopen("data/account.dat", "r");
 
     if (f == NULL)
     {
@@ -133,7 +133,7 @@ void ghiFile(node root ,FILE *f)
 // cap nhat file input vao cuoi ngay
 void update_File(node root)
 {
-    FILE *f = fopen("data/account.txt", "w");
+    FILE *f = fopen("data/account.dat", "w");
     ghiFile(root, f);
     fclose(f);
     

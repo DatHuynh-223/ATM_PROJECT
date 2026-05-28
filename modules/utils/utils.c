@@ -75,7 +75,7 @@ char * today()
 void cr_file(char *filename)
 {
 	char b[100];
-	sprintf(b,"data/Transactions/%s.txt",filename);
+	sprintf(b,"data/Transactions/%s.dat",filename);
 	FILE *f=fopen(b,"w+");
 	fclose(f);
 }

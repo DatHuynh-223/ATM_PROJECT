@@ -149,7 +149,7 @@ long long chonsotienrut()
 void guitien(node root, node myAccount)
 {
     char filename[50];
-    sprintf(filename,"data/Transactions/%s.txt",today());
+    sprintf(filename,"data/Transactions/%s.dat",today());
     FILE *f=fopen(filename,"a");
     char account[MAX_ACC_LEN];
     char yesno = 'Y';
@@ -383,7 +383,7 @@ void guitien(node root, node myAccount)
 void chuyentien(node root, node myAccount)
 {
     char filename[50];
-    sprintf(filename,"data/Transactions/%s.txt",today());
+    sprintf(filename,"data/Transactions/%s.dat",today());
     FILE *f=fopen(filename,"a");
     char account[MAX_ACC_LEN];
     char yesno = 'Y';
@@ -643,7 +643,7 @@ void chuyentien(node root, node myAccount)
 void ruttien(node root, node myAccount)
 {
     char filename[50];
-    sprintf(filename,"data/Transactions/%s.txt",today());
+    sprintf(filename,"data/Transactions/%s.dat",today());
     FILE *f=fopen(filename,"a");
     long long sotienrut = chonsotienrut();
 
