@@ -498,7 +498,7 @@ void chuyentien(node root, node myAccount)
                         
                         char *msg2;
                         if (clear_msg == 1) msg2 = "QUÁ 80 KÍ TỰ! Vui lòng nhập lại";
-                        else if (message_Entry_Count == 3) msg2 = "Nhập lời nhắn (Tối đa 80 kí tự, không dấu)";
+                        else if (message_Entry_Count == 3) msg2 = "Nhập lời nhắn (Tối đa 80 kí tự)";
                         else if (message_Entry_Count > 1) {
                             static char buf2[100];
                             sprintf(buf2, "Lỗi! Bạn còn %d lần nhập", message_Entry_Count);

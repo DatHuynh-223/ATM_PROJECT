@@ -161,3 +161,43 @@ void nhap_mk(char *pw,int n)
 		}
 	}
 }
+
+void display_about()
+{
+	system("cls");
+    printf("\n\n");
+    printf("\t\t\t╔════════════════════════════════════════════════════════╗\n");
+    printf("\t\t\t║                 THÔNG TIN HỆ THỐNG ATM                 ║\n");
+    printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
+	char *lines[] = {
+        "Tên dự án : Xây dựng ứng dụng thực hiện giao",
+        "            dịch trên máy ATM sử dụng cấu trúc",
+        "            dữ liệu Cây nhị phân tìm kiếm.",
+        "",
+        "Mã đề tài : 701, 602",
+        "Giảng viên: Trần Hồ Thủy Tiên",
+        "",
+        "Thực hiện : Thái Nhật Hoàng Ân (MSV: 102250053)",
+        "            Huỳnh Tiến Đạt     (MSV: 102250058)",
+        "            Lê Viết Huy        (MSV: 102250071)",
+        "",
+        "Mô tả     : Quản lý tài khoản và giao dịch",
+        "            bằng cấu trúc Cây nhị phân tìm kiếm (BST).",
+        "",
+        "Chức năng : - Đăng nhập Khách và Quản trị viên (Admin)",
+        "            - Rút tiền, Gửi tiền, Chuyển khoản",
+        "            - Tra cứu số dư và Lịch sử giao dịch",
+        "            - Cập nhật và lưu trữ dữ liệu file .dat",
+        "",
+        "Phiên bản : 1.0.0",
+        "Ngày HT   : ... / ... / ......"
+		};
+		int len=sizeof(lines)/sizeof(lines[0]);
+		for (int i=0;i<len;i++)
+		{
+			printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(lines[i]), lines[i]);
+		}
+	printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
+		
+
+}

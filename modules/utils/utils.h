@@ -25,4 +25,6 @@ void them_cach(const char* r, char* s);
 void man_hinh_chao_mung();
 
 void nhap_mk(char *pw,int n);
+
+void display_about();
 #endif
