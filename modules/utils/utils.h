@@ -27,4 +27,5 @@ void man_hinh_chao_mung();
 void nhap_mk(char *pw,int n);
 
 void display_about();
+void in_tg(int sec);
 #endif

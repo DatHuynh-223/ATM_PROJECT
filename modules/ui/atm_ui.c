@@ -240,9 +240,9 @@ void GuestLogin(node root,char *shutdown )
                  else pin_msg = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
 
                 printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(pin_msg), pin_msg);
-                printf("\t\t\t║  (O:hiện mã) Mã PIN:                                   ║\n");
+                printf("\t\t\t║  (O:hiện) Mã PIN:                                      ║\n");
                 printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
-                printf("\033[2A\r\t\t\t\033[23C");
+                printf("\033[2A\r\t\t\t\033[20C");
                 pinEntryCount-=1;
                 nhap_mk(mapin, 10);
                 if (strlen(mapin) == 0) continue;
@@ -267,15 +267,14 @@ void GuestLogin(node root,char *shutdown )
             if (pinEntryCount == 0) 
             {
                 printf("\n\n\t\t\t*** HẾT SỐ LẦN NHẬP MÃ PIN! ***\n\n");
-                Sleep(2000);
+                Sleep(1500);
                 return;
             }
         }
         else
         {
             printf("\n\n\t\t\t*** KHÔNG TÌM THẤY SỐ TÀI KHOẢN ***\n\n");
-            Sleep(1500);
-            return;
+            Sleep(1000);
         } 
         }
     } while ( loginCount > 0);
@@ -283,7 +282,7 @@ void GuestLogin(node root,char *shutdown )
     if (loginCount == 0)
     {
         printf("\n\t\t\t*** QUÁ SỐ LẦN NHẬP TÀI KHOẢN. KHÓA TẠM THỜI! ***\n\n");
-        Sleep(2000);
+        in_tg(2);
     }
 }
 
@@ -312,9 +311,9 @@ void AdministratorLogin(char *shutdown)
         } else msg = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
 
         printf("\t\t\t║  %-*s║\n", 54 + tinhOffset(msg), msg);
-        printf("\t\t\t║  (O:hiện mã) Mã bảo mật:                               ║\n");
+        printf("\t\t\t║  (O:hiện) Mã bảo mật:                                  ║\n");
         printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
-        printf("\033[2A\r\t\t\t\033[27C");
+        printf("\033[2A\r\t\t\t\033[25C");
         Pin_Entry_Count -= 1;
 		nhap_mk(Pin_Entry, 10); 
         if (strlen(Pin_Entry) == 0) continue;
@@ -344,7 +343,7 @@ void AdministratorLogin(char *shutdown)
     else
     {
         printf("\n\n\t\t\t*** QUÁ SỐ LẦN NHẬP MÃ BẢO MẬT. ! ***\n\n");
-        Sleep(2000);
+        in_tg(2);
     }
     return;
 }
@@ -378,9 +377,9 @@ void khoidong(node root)
         } else msg = "*** ĐÂY LÀ LẦN NHẬP CUỐI CÙNG !!! ***";
 
         printf("\t\t\t║  %-*s║\n", 54+tinhOffset(msg) , msg);
-        printf("\t\t\t║  (O:hiện mã) Mã bảo mật:                               ║\n");
+        printf("\t\t\t║  (O:hiện) Mã bảo mật:                                  ║\n");
         printf("\t\t\t╚════════════════════════════════════════════════════════╝\n");
-        printf("\033[2A\r\t\t\t\033[27C");
+        printf("\033[2A\r\t\t\t\033[25C");
         passEntryCount -= 1;
         nhap_mk(pass, 10);
         if (strlen(pass) == 0) continue;
