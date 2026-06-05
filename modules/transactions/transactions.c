@@ -11,6 +11,7 @@ long long chonsotienchung(long long hanmuctoida, const char* thongbao, int solan
 
     while (solanchon_cl > 0) {
         system("cls");
+        memset(luachon, 0, sizeof(luachon));
         printf("\n\n\t\t  %s\n\n", thongbao);
         
         printf("\t\t\t╔════════════════════════════════════════════════════════╗\n");
@@ -158,6 +159,7 @@ void guitien(node root, node myAccount)
     do 
     {
         system("cls");
+        memset(account, 0, sizeof(account)); 
         printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
         printf("\t\t\t║                 GỬI TIỀN VÀO TÀI KHOẢN                 ║\n");
         printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
@@ -198,7 +200,11 @@ void guitien(node root, node myAccount)
         {
             long long sotiengui = chonsotiengui(targetAccount, myAccount);
 
-            if (sotiengui == 0) return;
+            if (sotiengui == 0)
+            {
+                fclose(f);
+                return ;
+            }
             else if  (sotiengui != 0)
             {
                 char message[81]; 
@@ -269,7 +275,7 @@ void guitien(node root, node myAccount)
                         char sotien[30];
                         strcpy(sotien,insert_cham(sotiengui));
 
-                        sprintf(myAccount->Data->TransactionHistory[current_index], "%s|SD: %llu|+%s VND|ND: Gui tien tai ATM", myAccount->Data->AccountNumber ,myAccount->Data->Balance,sotien);
+                        snprintf(myAccount->Data->TransactionHistory[current_index], MAX_TRANSACTION_LEN, "%s|SD: %llu|+%s VND|ND: Gui tien tai ATM", myAccount->Data->AccountNumber ,myAccount->Data->Balance,sotien);
                         strcpy(TransactionList[admin_index], myAccount->Data->TransactionHistory[current_index]);
                         char info[100];
                         sprintf(info, "%s|%llu|+%s", myAccount->Data->AccountNumber ,myAccount->Data->Balance,sotien);
@@ -309,8 +315,8 @@ void guitien(node root, node myAccount)
                     char sotien[30];
                     strcpy(sotien,insert_cham(sotiengui));
 
-                    sprintf(myAccount->Data->TransactionHistory[myAccount_current_index], "%s|SD: %llu|GUI %s VND|DEN %s|ND: %s", myAccount->Data->AccountNumber,myAccount->Data->Balance, sotien, targetAccount->Data->AccountNumber,message);
-                    sprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%s VND|TU: %s|ND: %s", targetAccount->Data->AccountNumber, targetAccount->Data->Balance,sotien, myAccount->Data->AccountNumber, message);
+                    snprintf(myAccount->Data->TransactionHistory[myAccount_current_index], MAX_TRANSACTION_LEN, "%s|SD: %llu|GUI %s VND|DEN %s|ND: %s", myAccount->Data->AccountNumber,myAccount->Data->Balance, sotien, targetAccount->Data->AccountNumber,message);
+                    snprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], MAX_TRANSACTION_LEN, "%s|SD: %llu|+%s VND|TU: %s|ND: %s", targetAccount->Data->AccountNumber, targetAccount->Data->Balance,sotien, myAccount->Data->AccountNumber, message);
 
                     strcpy(TransactionList[admin_index], myAccount->Data->TransactionHistory[myAccount_current_index]);
                     fprintf(f ,"%d. Số tài khoản: %s\n", admin_index + 1, TransactionList[admin_index]);
@@ -527,6 +533,7 @@ void chuyentien(node root, node myAccount)
                     if (clear_msg == 1)
                     {
                         printf("\n\t\t\t*** QUÁ SỐ LẦN NHẬP LỜI NHẮN. HỦY GIAO DỊCH ***\n\n");
+                        fclose(f);
                         return;
                     }
 
@@ -725,6 +732,7 @@ void xemtaikhoan(node myAccount)
     do 
     {
         system("cls");
+        memset(choose, 0, sizeof(choose));
         printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
         printf("\t\t\t║                  THÔNG TIN TÀI KHOẢN                   ║\n");
         printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");

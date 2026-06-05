@@ -18,6 +18,7 @@ void menu(node root, node myAccount)
         
         while (menuEntryCount > 0)
         {
+            memset(input, 0, sizeof(input));
             system("cls");
             printf("\n\n");
             printf("\t\t\t╔════════════════════════════════════════════════════════╗\n"); 
@@ -97,6 +98,7 @@ void menu(node root, node myAccount)
         char yn = 'X';
         
         while (ynEntryCount > 0) {
+            memset(yn_input, 0, sizeof(yn_input));
             printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
             printf("\t\t\t║              BẠN CÓ MUỐN TIẾP TỤC GIAO DỊCH KHÔNG?     ║\n");
             printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
@@ -164,6 +166,7 @@ void GuestLogin(node root,char *shutdown )
     do 
     {
         if (KT) loginCount = 4;
+        memset(target, 0, sizeof(target));
         man_hinh_chao_mung();
         printf("\n\n\t\t\t╔════════════════════════════════════════════════════════════╗\n");
         printf("\t\t\t║        VUI LÒNG ĐĂNG NHẬP ĐỂ BẮT ĐẦU GIAO DỊCH             ║\n");
@@ -225,6 +228,7 @@ void GuestLogin(node root,char *shutdown )
             do
             {
                 system("cls");
+                memset(mapin, 0, sizeof(mapin));
                 printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
                 printf("\t\t\t║                  XÁC THỰC TÀI KHOẢN                    ║\n");
                 printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
@@ -297,6 +301,7 @@ void AdministratorLogin(char *shutdown)
     do 
     {
         clear=0;
+        memset(Pin_Entry, 0, sizeof(Pin_Entry)); 
         system("cls");
         printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
         printf("\t\t\t║                 CHÀO MỪNG QUẢN TRỊ VIÊN                ║\n");
@@ -363,6 +368,7 @@ void khoidong(node root)
     do 
     {
         system("cls");
+        memset(pass, 0, sizeof(pass)); 
         display_about();
         printf("\n\n\t\t\t╔════════════════════════════════════════════════════════╗\n");
         printf("\t\t\t║                      HỆ THỐNG ATM                      ║\n");
