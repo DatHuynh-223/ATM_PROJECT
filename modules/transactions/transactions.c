@@ -275,7 +275,7 @@ void guitien(node root, node myAccount)
                         char sotien[30];
                         strcpy(sotien,insert_cham(sotiengui));
 
-                        snprintf(myAccount->Data->TransactionHistory[current_index], MAX_TRANSACTION_LEN, "%s|SD: %llu|+%s VND|ND: Gui tien tai ATM", myAccount->Data->AccountNumber ,myAccount->Data->Balance,sotien);
+                        sprintf(myAccount->Data->TransactionHistory[current_index], "%s|SD: %llu|+%s VND|ND: Gui tien tai ATM", myAccount->Data->AccountNumber ,myAccount->Data->Balance,sotien);
                         strcpy(TransactionList[admin_index], myAccount->Data->TransactionHistory[current_index]);
                         char info[100];
                         sprintf(info, "%s|%llu|+%s", myAccount->Data->AccountNumber ,myAccount->Data->Balance,sotien);
@@ -315,8 +315,8 @@ void guitien(node root, node myAccount)
                     char sotien[30];
                     strcpy(sotien,insert_cham(sotiengui));
 
-                    snprintf(myAccount->Data->TransactionHistory[myAccount_current_index], MAX_TRANSACTION_LEN, "%s|SD: %llu|GUI %s VND|DEN %s|ND: %s", myAccount->Data->AccountNumber,myAccount->Data->Balance, sotien, targetAccount->Data->AccountNumber,message);
-                    snprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], MAX_TRANSACTION_LEN, "%s|SD: %llu|+%s VND|TU: %s|ND: %s", targetAccount->Data->AccountNumber, targetAccount->Data->Balance,sotien, myAccount->Data->AccountNumber, message);
+                    sprintf(myAccount->Data->TransactionHistory[myAccount_current_index], "%s|SD: %llu|GUI %s VND|DEN %s|ND: %s", myAccount->Data->AccountNumber,myAccount->Data->Balance, sotien, targetAccount->Data->AccountNumber,message);
+                    sprintf(targetAccount->Data->TransactionHistory[targetAccount_current_index], "%s|SD: %llu|+%s VND|TU: %s|ND: %s", targetAccount->Data->AccountNumber, targetAccount->Data->Balance,sotien, myAccount->Data->AccountNumber, message);
 
                     strcpy(TransactionList[admin_index], myAccount->Data->TransactionHistory[myAccount_current_index]);
                     fprintf(f ,"%d. Số tài khoản: %s\n", admin_index + 1, TransactionList[admin_index]);
