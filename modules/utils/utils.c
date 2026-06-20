@@ -171,8 +171,7 @@ void display_about()
     printf("\t\t\t╠════════════════════════════════════════════════════════╣\n");
 	char *lines[] = {
         "Tên dự án : Xây dựng ứng dụng thực hiện giao",
-        "            dịch trên máy ATM sử dụng cấu trúc",
-        "            dữ liệu Cây nhị phân tìm kiếm.",
+        "            dịch trên máy ATM ",
         "",
         "Mã đề tài : 701, 602",
         "Giảng viên: Trần Hồ Thủy Tiên",
