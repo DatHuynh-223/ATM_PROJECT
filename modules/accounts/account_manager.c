@@ -75,14 +75,10 @@ node input(node root)
         int so_luong_doc = sscanf(buffer, " %49s %19s %llu %49s", stk, pin, &balance, thong_tin_thua);
 
         // 1. Kiểm tra xem có đủ 3 thông tin không (Đề phòng dòng bị thiếu)
-        if (so_luong_doc < 3) {
+        if (so_luong_doc < 3 || so_luong_doc > 3) {
             continue; // Bỏ qua, sang dòng tiếp theo
         }
 
-        // Kiểm tra thừa thông tin không
-        if (so_luong_doc > 3) {
-            continue;
-        }
 
         // 2. Kiểm tra Số tài khoản và PIN có bị lẫn chữ cái không
         if (!la_chuoi_so_hop_le(stk) || !la_chuoi_so_hop_le(pin)) {
@@ -90,11 +86,7 @@ node input(node root)
         }
 
         // 3. Kiểm tra độ dài (Ví dụ quy định STK không quá 14 số, PIN bằng 6 số)
-        if (strlen(stk) > MAX_ACC_LEN-1) {
-            continue;
-        }
-
-        if (strlen(pin) > MAX_PIN_LEN-1) {
+        if (strlen(stk) > MAX_ACC_LEN-1 ||strlen(pin) > MAX_PIN_LEN-1) {
             continue;
         }
 
