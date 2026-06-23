@@ -162,7 +162,7 @@ void nhap_mk(char *pw,int n)
 	}
 }
 
-void display_about()
+	void display_about()
 {
 	system("cls");
     printf("\n\n");
@@ -188,8 +188,8 @@ void display_about()
         "            - Tra cứu số dư và Lịch sử giao dịch",
         "            - Cập nhật và lưu trữ dữ liệu file .dat",
         "",
-        "Phiên bản : 1.0.0",
-        "Ngày HT   : ... / ... / ......"
+        "Phiên bản : 2.0.0",
+        "Ngày HT   : 23 / 6 / 2026"
 		};
 		int len=sizeof(lines)/sizeof(lines[0]);
 		for (int i=0;i<len;i++)
