@@ -206,6 +206,7 @@ void in_tg(int sec)
 	for (int i=sec;i>0;i--)
 	{
 		printf("\r\t\t\t*** Vui lòng chờ %d giây ***",i);
+		fflush(stdout);
 		Sleep(1000);
 	}
 }

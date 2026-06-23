@@ -271,7 +271,7 @@ void GuestLogin(node root,char *shutdown )
             if (pinEntryCount == 0) 
             {
                 printf("\n\n\t\t\t*** HẾT SỐ LẦN NHẬP MÃ PIN! ***\n\n");
-                Sleep(1500);
+                in_tg(5);
                 return;
             }
         }
